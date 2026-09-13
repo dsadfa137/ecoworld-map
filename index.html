@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>에코월드 · 걸음 따라 3D 지도</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.30.0/mapbox-gl.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 system-ui,sans-serif;color:#21424c;background:#eef6f4}main{display:grid;grid-template-columns:330px 1fr;min-height:100dvh}aside{padding:24px;background:#fff;z-index:1}h1{font-size:24px;margin:0 0 5px}h2{font-size:17px;margin:24px 0 8px}p{margin:10px 0}.small{font-size:14px;color:#536e75}label{display:block;margin:12px 0 5px}input:not([type=checkbox]),button{width:100%;font:inherit;padding:11px;border-radius:10px;border:1px solid #b8ced2}button{background:#09796d;color:white;border:0;cursor:pointer;margin:5px 0}button.secondary{background:#e7f1f2;color:#21424c}button:disabled{opacity:.5;cursor:default}:focus-visible{outline:3px solid #eaaa33;outline-offset:2px}#map{min-height:70dvh;position:relative}#empty{padding:40px;text-align:center}#status,#dataStatus{background:#edf6f3;padding:12px;border-radius:10px;overflow-wrap:anywhere}#status[data-error=true]{background:#fff0e5}.blue-dot{width:20px;height:20px;background:#1887f7;border:3px solid white;border-radius:50%;box-shadow:0 0 0 7px #1887f72a,0 2px 7px #18384a50}.blue-dot.stale{background:#7b8c97;box-shadow:0 0 0 7px #7b8c972a}#metrics{font-size:14px;white-space:pre-line;font-variant-numeric:tabular-nums}a{color:#087969}@media(max-width:720px){main{display:flex;flex-direction:column}aside{padding:18px}#map{height:65dvh;min-height:450px}h1{font-size:21px}}
+</style></head><body><main><aside>
+<h1>에코월드 산책 지도</h1><p class="small">3D 벡터 지도 · 실외 GPS 프로토타입</p>
+<form id="connect"><label for="token">Mapbox 공개 토큰 (pk.…)</label><input id="token" type="password" autocomplete="off" placeholder="Mapbox 공개 토큰 입력" required><button id="open">지도 열기</button></form>
+<p id="status" role="status" aria-live="polite">토큰을 입력하면 지도를 불러옵니다.</p>
+<button id="start" disabled>내 위치 추적 시작</button><button id="stop" class="secondary" disabled>추적 중지</button>
+<label><input type="checkbox" id="follow" checked> 내 위치 따라가기</label>
+<p id="metrics">위치 수신 대기</p>
+<h2>우리 시설 데이터</h2><label for="file">GeoJSON 파일 불러오기</label><input id="file" type="file" accept=".json,.geojson,application/geo+json,application/json">
+<p id="dataStatus" class="small">직접 등록한 데이터 없음 · 기본 벡터 지도를 표시합니다.</p>
+<button id="home" class="secondary" disabled>에코월드 주변 보기</button>
+<p class="small">등록한 보행로에만 위치를 보정합니다. 광장·길 밖·불확실한 위치는 GPS 원위치를 표시합니다. 좌표·파일·토큰은 별도 서버에 저장하지 않습니다. 지도 로딩 시 Mapbox와 통신합니다.</p>
+<details><summary>실행 조건과 제한</summary><p class="small">HTTPS 또는 localhost에서 실행하고 위치 권한을 허용하세요. 기기의 갱신 주기는 고정되지 않습니다. 화면을 켜고 실외에서 시험하세요.</p><p class="small">Mapbox 무료 사용량 초과 시 과금될 수 있습니다. 계정 사용량과 토큰의 허용 URL을 확인하세요. 지도 데이터의 건물 높이·위치는 현장 검증이 필요합니다.</p><p class="small">작은 시설 데이터용입니다. 파일은 2MB, 1,000개 시설, 전체 20,000개 좌표 이하를 지원합니다. 보행로 교차점은 같은 좌표와 같은 level을 공유해야 연결됩니다.</p></details>
+</aside><section id="map" aria-label="에코월드 실외 3D 지도"><div id="empty">지도와 현재 위치가 여기에 표시됩니다.</div></section></main>
+<script>
+'use strict';
+// 선택: 공개 토큰을 입력해 둘 수 있습니다. sk. 비밀 토큰은 사용하지 않습니다.
+const MAPBOX_PUBLIC_TOKEN = '';
+// 조사한 FeatureCollection을 여기에 넣으면 파일 선택 없이 단일 HTML로 배포됩니다.
+const EMBEDDED_GEOJSON = {type:'FeatureCollection',features:[]};
+const HOME = [128.0658,36.6409]; // 사용자 제공 근사 좌표, 측량 기준점이 아닙니다.
+const $=id=>document.getElementById(id);
+let map,ready=false,dot,watchId=null,epoch=0,raf=0,displayed=null,previous=null,lastFix=0,lastTimestamp=0;
+let data=EMBEDDED_GEOJSON,graph;
+const EMPTY={type:'FeatureCollection',features:[]};
+// ---- CORE: 시설 규모에서 사용하는 지역 평면 좌표(미터). 측량/장거리 용도가 아닙니다. ----
+const R=6371008.8,DEG=Math.PI/180,COS=Math.cos(HOME[1]*DEG);
+const xy=p=>[(p[0]-HOME[0])*DEG*R*COS,(p[1]-HOME[1])*DEG*R];
+const ll=p=>[HOME[0]+p[0]/(DEG*R*COS),HOME[1]+p[1]/(DEG*R)];
+const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+const mix=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
+function validate(fc){
+ if(!fc||fc.type!=='FeatureCollection'||!Array.isArray(fc.features)||fc.features.length>1000)throw Error('FeatureCollection 형식과 시설 수를 확인하세요.');
+ const ids=new Set();let count=0,pathSegments=0;
+ for(const f of fc.features){
+  if(f.type!=='Feature'||!f.geometry||!f.properties)throw Error('geometry와 properties가 필요합니다.');
+  const p=f.properties,g=f.geometry,expected={building:'Polygon',plaza:'Polygon',green:'Polygon',water:'Polygon',path:'LineString',poi:'Point'}[p.type];
+  if(!expected||g.type!==expected)throw Error('type별 geometry: building/plaza/green/water=Polygon, path=LineString, poi=Point');
+  if(typeof p.id!=='string'||!p.id||ids.has(p.id))throw Error('고유한 문자열 properties.id가 필요합니다.');ids.add(p.id);
+  if(typeof p.name!=='string'||p.name.length>100)throw Error('100자 이하 name이 필요합니다.');
+  if(p.color!==undefined&&!/^#[0-9a-f]{6}$/i.test(p.color))throw Error('color는 #RRGGBB 형식입니다.');
+  if(p.level!==undefined&&!Number.isFinite(p.level))throw Error('level은 숫자입니다.');
+  if(p.type==='building'&&(!Number.isFinite(p.height)||p.height<0||p.height>200||!Number.isFinite(p.base_height)||p.base_height<0||p.base_height>p.height))throw Error('건물 height/base_height는 미터 단위 숫자이며 0≤base_height≤height≤200이어야 합니다.');
+  if(p.type==='path'&&(typeof p.walkable!=='boolean'||!Number.isFinite(p.width_m)||p.width_m<=0))throw Error('path에는 walkable(boolean), width_m(양수)가 필요합니다.');
+  const check=c=>{if(!Array.isArray(c)||c.length<2||!Number.isFinite(c[0])||!Number.isFinite(c[1])||Math.abs(c[0])>180||Math.abs(c[1])>85)throw Error('좌표는 [경도, 위도] 숫자 배열입니다.');if(++count>20000)throw Error('좌표 수가 20,000개를 초과했습니다.');};
+  if(g.type==='Point')check(g.coordinates);
+  else if(g.type==='LineString'){if(!Array.isArray(g.coordinates)||g.coordinates.length<2)throw Error('선은 좌표 2개 이상 필요합니다.');g.coordinates.forEach(check);pathSegments+=g.coordinates.length-1;if(pathSegments>1000)throw Error('첫 시제품은 보행 선분 1,000개 이하로 나누어 시험하세요.');}
+  else {if(!Array.isArray(g.coordinates)||!g.coordinates.length)throw Error('폴리곤 좌표가 없습니다.');for(const ring of g.coordinates){if(!Array.isArray(ring)||ring.length<4)throw Error('폴리곤 링은 좌표 4개 이상 필요합니다.');ring.forEach(check);if(dist(ring[0],ring.at(-1))>1e-10)throw Error('폴리곤의 처음과 마지막 좌표가 같아야 합니다.');}}
+ }
+ return fc;
+}
+function buildGraph(fc){
+ const nodes=new Map(),segments=[];
+ function node(c,level){const key=level+':'+c[0].toFixed(7)+','+c[1].toFixed(7);if(!nodes.has(key))nodes.set(key,{p:xy(c),edges:[]});return key;}
+ for(const f of fc.features.filter(f=>f.properties.type==='path'&&f.properties.walkable===true&&(f.properties.level??0)===0)){
+  const cs=f.geometry.coordinates;
+  for(let i=1;i<cs.length;i++){const a=node(cs[i-1],0),b=node(cs[i],0),pa=nodes.get(a).p,pb=nodes.get(b).p,len=dist(pa,pb);if(len<.01)continue;
+   const s={id:segments.length,a,b,pa,pb,len};segments.push(s);nodes.get(a).edges.push({to:b,len});nodes.get(b).edges.push({to:a,len});
+  }
+ }
+ return {nodes,segments};
+}
+function projection(p,s){const dx=s.pb[0]-s.pa[0],dy=s.pb[1]-s.pa[1];const t=Math.max(0,Math.min(1,((p[0]-s.pa[0])*dx+(p[1]-s.pa[1])*dy)/(s.len*s.len)));const q=mix(s.pa,s.pb,t);return {s,t,p:q,d:dist(p,q)};}
+function nearest(p,g){return g.segments.map(s=>projection(p,s)).sort((a,b)=>a.d-b.d);}
+// 복수 선분의 공통 꼭짓점만 연결. 다리/교차로는 제작 단계에서 topology를 확정해야 합니다.
+function route(a,b,g){
+ if(a.s.id===b.s.id)return [a.p,b.p];
+ const costs=new Map(),prev=new Map(),done=new Set();
+ for(const [id,cost] of [[a.s.a,a.t*a.s.len],[a.s.b,(1-a.t)*a.s.len]])costs.set(id,cost);
+ while(true){let u=null,best=Infinity;for(const [id,c] of costs)if(!done.has(id)&&c<best){u=id;best=c;}if(u===null)break;done.add(u);
+  for(const e of g.nodes.get(u).edges){const cost=best+e.len;if(cost<(costs.get(e.to)??Infinity)){costs.set(e.to,cost);prev.set(e.to,u);}}
+ }
+ const ends=[[b.s.a,b.t*b.s.len],[b.s.b,(1-b.t)*b.s.len]].sort((x,y)=>(costs.get(x[0])??Infinity)+x[1]-((costs.get(y[0])??Infinity)+y[1]));
+ let id=ends[0][0];if(!Number.isFinite(costs.get(id)))return null;const points=[g.nodes.get(id).p];while(prev.has(id)){id=prev.get(id);points.unshift(g.nodes.get(id).p);}return [a.p,...points,b.p];
+}
+const lengthOf=points=>points.slice(1).reduce((s,p,i)=>s+dist(points[i],p),0);
+function along(points,fraction){let remain=lengthOf(points)*fraction;for(let i=1;i<points.length;i++){const n=dist(points[i-1],points[i]);if(remain<=n&&n>0)return mix(points[i-1],points[i],remain/n);remain-=n;}return points.at(-1);}
+function inRing(point,ring){let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const a=ring[i],b=ring[j];if((a[1]>point[1])!==(b[1]>point[1])&&point[0]<(b[0]-a[0])*(point[1]-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;}
+function inPlaza(c,fc){return fc.features.some(f=>f.properties.type==='plaza'&&inRing(c,f.geometry.coordinates[0])&&!f.geometry.coordinates.slice(1).some(r=>inRing(c,r)));}
+function matchPosition(c,accuracy,prev,dt,g,fc){
+ const raw=xy(c);if(accuracy>25||inPlaza(c,fc))return {p:raw,snap:null,reason:'GPS 원위치 · 오차 큼 또는 광장'};
+ let candidates=nearest(raw,g).filter(a=>a.d<=Math.min(15,Math.max(5,accuracy))).slice(0,6);
+ candidates=candidates.map(a=>{const path=prev?.snap?route(prev.snap,a,g):null;const travel=path?lengthOf(path):0;return {...a,valid:!prev?.snap||!!path&&travel<=Math.max(12,dt*3+accuracy),score:a.d+(prev?.snap&&a.s.id!==prev.snap.s.id?2:0)};}).filter(a=>a.valid).sort((a,b)=>a.score-b.score);
+ const best=candidates[0];if(!best)return {p:raw,snap:null,reason:'GPS 원위치 · 보정 가능한 길 없음'};
+ if(candidates[1]&&candidates[1].score-best.score<2&&dist(best.p,candidates[1].p)>3)return {p:raw,snap:null,reason:'GPS 원위치 · 여러 길 중 판별 대기'};
+ return {p:best.p,snap:best,reason:'등록 보행로 보정 · 실험 기능'};
+}
+// ---- UI / Mapbox ----
+function status(text,error=false){$('status').textContent=text;$('status').dataset.error=error;}
+function style(){return {version:8,glyphs:'mapbox://fonts/mapbox/{fontstack}/{range}.pbf',sources:{streets:{type:'vector',url:'mapbox://mapbox.mapbox-streets-v8'}},layers:[
+ {id:'background',type:'background',paint:{'background-color':'#edf3e9'}},
+ {id:'parks',type:'fill',source:'streets','source-layer':'landuse',paint:{'fill-color':'#c9e2c3','fill-opacity':.65}},
+ {id:'water',type:'fill',source:'streets','source-layer':'water',paint:{'fill-color':'#99d7e6'}},
+ {id:'roads',type:'line',source:'streets','source-layer':'road',paint:{'line-color':'#fff7df','line-width':['interpolate',['linear'],['zoom'],13,1,18,9]}},
+ {id:'base-buildings',type:'fill-extrusion',source:'streets','source-layer':'building',minzoom:15,paint:{'fill-extrusion-color':'#c5dadc','fill-extrusion-height':['coalesce',['get','height'],6],'fill-extrusion-base':['coalesce',['get','min_height'],0],'fill-extrusion-opacity':.85}}
+ ]};}
+function addLayers(){
+ // 1. 디즈니 스타일의 따뜻한 3D 미니어처 조명 설정
+ map.setLight({
+   anchor: 'viewport',
+   color: '#fff3e0', // 따뜻한 웜톤 라이트
+   intensity: 0.45,
+   position: [1.5, 90, 40] // 블록 모형에 그림자가 지도록 위치 지정
+ });
+
+ // 2. 소스 데이터 등록
+ map.addSource('eco', { type: 'geojson', data });
+ map.addSource('accuracy', { type: 'geojson', data: EMPTY });
+
+ // 3. 광장 / 녹지 / 수변 영역 레이어
+ map.addLayer({
+   id: 'eco-areas',
+   type: 'fill',
+   source: 'eco',
+   filter: ['in', ['get', 'type'], ['literal', ['plaza', 'green', 'water']]],
+   paint: {
+     'fill-color': ['match', ['get', 'type'], 'water', '#86d3e5', 'green', '#a9d293', '#f8e6b9'],
+     'fill-opacity': 0.85
+   }
+ });
+
+ // 4. 보행로 레이어 (아기자기한 피치 오렌지 톤 둥근 라인)
+ map.addLayer({
+   id: 'eco-paths',
+   type: 'line',
+   source: 'eco',
+   filter: ['==', ['get', 'type'], 'path'],
+   layout: {
+     'line-cap': 'round',
+     'line-join': 'round'
+   },
+   paint: {
+     'line-color': '#FF9F43', // 따뜻한 피치 오렌지
+     'line-width': ['interpolate', ['linear'], ['zoom'], 14, 3, 19, 14],
+     'line-opacity': 0.85
+   }
+ });
+
+ // 5. 3D 건물 레이어 (입체감 및 부드러운 파스텔 블록)
+ map.addLayer({
+   id: 'eco-buildings',
+   type: 'fill-extrusion',
+   source: 'eco',
+   filter: ['==', ['get', 'type'], 'building'],
+   paint: {
+     'fill-extrusion-color': ['coalesce', ['get', 'color'], '#FF6B6B'],
+     'fill-extrusion-height': ['get', 'height'],
+     'fill-extrusion-base': ['get', 'base_height'],
+     'fill-extrusion-opacity': 0.92,
+     'fill-extrusion-vertical-gradient': true
+   }
+ });
+
+ // 6. 오차 범위 수신 레이어
+ map.addLayer({
+   id: 'accuracy-area',
+   type: 'fill',
+   source: 'accuracy',
+   paint: { 'fill-color': '#FF9F43', 'fill-opacity': 0.15 }
+ });
+
+ // 7. POI 아이콘 및 명칭 라벨 (기존 아이콘 연동)
+ const canvas = document.createElement('canvas');
+ canvas.width = canvas.height = 48;
+ const ctx = canvas.getContext('2d');
+ ctx.fillStyle = '#16786f';
+ ctx.beginPath();
+ ctx.arc(24, 24, 20, 0, Math.PI * 2);
+ ctx.fill();
+ ctx.fillStyle = '#fff';
+ ctx.font = 'bold 29px sans-serif';
+ ctx.textAlign = 'center';
+ ctx.fillText('i', 24, 34);
+ map.addImage('eco-info', ctx.getImageData(0, 0, 48, 48));
+
+ map.addLayer({
+   id: 'eco-poi',
+   type: 'symbol',
+   source: 'eco',
+   filter: ['==', ['get', 'type'], 'poi'],
+   layout: {
+     'icon-image': 'eco-info',
+     'icon-size': 0.65,
+     'text-field': ['get', 'name'],
+     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Regular'],
+     'text-size': 13,
+     'text-offset': [0, 1.3],
+     'text-anchor': 'top'
+   },
+   paint: {
+     'text-color': '#214b50',
+     'text-halo-color': '#ffffff',
+     'text-halo-width': 2
+   }
+ });
+
+ map.on('click', 'eco-poi', event => {
+   const f = event.features[0];
+   new mapboxgl.Popup().setLngLat(f.geometry.coordinates).setText(f.properties.name).addTo(map);
+ });
+
+ applyData();
+}
+function applyData(){graph=buildGraph(data);if(ready){map.getSource('eco').setData(data);map.setLayoutProperty('base-buildings','visibility',data.features.some(f=>f.properties.type==='building')?'none':'visible');}cancelAnimationFrame(raf);previous=null;displayed=null;if(dot){dot.remove();dot=null;}lastTimestamp=0;lastFix=0;
+ $('dataStatus').textContent=`등록 시설 ${data.features.length}개 · 보행 선분 ${graph.segments.length}개. 건물 등록 시 기본 건물은 중복 방지를 위해 숨깁니다.`;
+}
+$('token').value=MAPBOX_PUBLIC_TOKEN;
+$('connect').addEventListener('submit',event=>{event.preventDefault();if(map)return;const token=$('token').value.trim();if(!token.startsWith('pk.'))return status('pk.로 시작하는 Mapbox 공개 토큰을 입력하세요.',true);if(!window.mapboxgl)return status('Mapbox 라이브러리를 불러오지 못했습니다. 네트워크를 확인하세요.',true);if(!mapboxgl.supported())return status('이 브라우저에서는 WebGL 지도를 실행할 수 없습니다.',true);
+ try{mapboxgl.accessToken=token;$('empty').hidden=true;map=new mapboxgl.Map({container:'map',style:style(),center:HOME,zoom:16.7,pitch:55,bearing:-25,antialias:true});$('open').disabled=true;$('token').readOnly=true;map.addControl(new mapboxgl.NavigationControl());map.addControl(new mapboxgl.ScaleControl({unit:'metric'}));
+ map.on('error',()=>status('지도 리소스 오류: 토큰·허용 URL·네트워크를 확인하세요. 인증 오류는 수정 후 새로고침하세요.',true));
+ map.on('load',()=>{ready=true;addLayers();$('start').disabled=false;$('home').disabled=false;status('지도 준비 완료 · 위치 추적을 시작하세요.');});map.on('dragstart',()=>{$('follow').checked=false;});
+ }catch(e){status(e.message,true);}});
+$('file').addEventListener('change',async event=>{const f=event.target.files[0];if(!f)return;try{if(f.size>2*1024*1024)throw Error('2MB 이하 파일을 사용하세요.');const next=validate(JSON.parse(await f.text()));data=next;applyData();status('GeoJSON 적용 완료. 위치는 다음 GPS 수신 때 다시 표시됩니다.');}catch(e){status('파일 적용 실패: '+e.message,true);}event.target.value='';});
+function showPoint(p){displayed=p;if(!dot){const el=document.createElement('div');el.className='blue-dot';el.setAttribute('aria-label','추정 현재 위치');dot=new mapboxgl.Marker({element:el}).setLngLat(ll(p)).addTo(map);}else dot.setLngLat(ll(p));if($('follow').checked)map.jumpTo({center:ll(p)});}
+function animatePosition(result,dt){cancelAnimationFrame(raf);let points;
+ if(displayed&&result.snap){const start=nearest(displayed,graph)[0];if(start&&start.d<.5){points=route(start,result.snap,graph);if(points&&lengthOf(points)>Math.max(12,3*dt+15))points=null;}}
+ else if(displayed&&!previous?.snap&&!result.snap&&dist(displayed,result.p)<20)points=[displayed,result.p];
+ // 미연결 길 사이를 직선 애니메이션으로 가로지르지 않습니다.
+ if(!points){showPoint(result.p);return;}
+ const began=performance.now(),duration=matchMedia('(prefers-reduced-motion: reduce)').matches?0:Math.min(900,Math.max(200,dt*800));
+ function frame(now){const t=duration===0?1:Math.min(1,(now-began)/duration);showPoint(along(points,t));if(t<1)raf=requestAnimationFrame(frame);}raf=requestAnimationFrame(frame);
+}
+function accuracyRing(c,r){const center=xy(c),coordinates=[];for(let i=0;i<=48;i++){const a=i/48*Math.PI*2;coordinates.push(ll([center[0]+Math.cos(a)*r,center[1]+Math.sin(a)*r]));}coordinates[48]=coordinates[0];return {type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[coordinates]}};}
+function receive(position,token){if(token!==epoch||watchId===null)return;const c=position.coords,ts=position.timestamp;if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude)||Math.abs(c.latitude)>85||Math.abs(c.longitude)>180||!Number.isFinite(c.accuracy)||c.accuracy<0||!Number.isFinite(ts)||ts<=lastTimestamp||Date.now()-ts>15000||ts>Date.now()+1000)return;
+ const coords=[c.longitude,c.latitude],dt=lastTimestamp?(ts-lastTimestamp)/1000:1,raw=xy(coords);
+ if(previous&&dt<10&&dist(raw,previous.raw)>Math.max(35,dt*5+c.accuracy+previous.accuracy)){status('급격한 위치 변화 · 다음 측정값을 기다립니다.',true);return;}
+ if(dt>15){previous=null;displayed=null;}const result=matchPosition(coords,c.accuracy,previous,dt,graph,data);animatePosition(result,dt);
+ previous={...result,raw,accuracy:c.accuracy};lastTimestamp=ts;lastFix=Date.now();if(dot)dot.getElement().classList.remove('stale');
+ map.getSource('accuracy').setData({type:'FeatureCollection',features:[accuracyRing(coords,Math.min(c.accuracy,1000))]});
+ $('metrics').textContent=`${c.latitude.toFixed(6)}, ${c.longitude.toFixed(6)}\n기기 보고 정확도 ±${Math.round(c.accuracy)} m${c.accuracy>1000?' (원 표시는 1km로 제한)':''}\n${result.reason}\n${new Date(ts).toLocaleTimeString('ko-KR')}`;status('GPS 추적 중 · 파란 원은 원측정값의 오차 추정 범위입니다.');
+}
+function stop(message='추적 중지 · 마지막 위치 표시',error=false){epoch++;if(watchId!==null)navigator.geolocation.clearWatch(watchId);watchId=null;cancelAnimationFrame(raf);if(dot)dot.getElement().classList.add('stale');$('start').disabled=!ready;$('stop').disabled=true;status(message,error);}
+$('start').onclick=()=>{if(!ready||watchId!==null)return;if(!window.isSecureContext||!navigator.geolocation)return status('HTTPS/localhost와 위치 지원 브라우저가 필요합니다.',true);const token=++epoch;previous=null;displayed=null;lastTimestamp=0;lastFix=0;$('start').disabled=true;$('stop').disabled=false;status('위치 권한을 허용하세요. GPS 수신 대기 중…');try{watchId=navigator.geolocation.watchPosition(p=>receive(p,token),e=>{if(token!==epoch)return;if(e.code===1)stop('위치 권한이 차단되었습니다. 브라우저·OS 설정을 확인하세요.',true);else {if(dot)dot.getElement().classList.add('stale');status('위치 재수신 대기 · 표시된 점은 마지막 위치입니다.',true);}},{enableHighAccuracy:true,maximumAge:0,timeout:15000});}catch(e){stop(e.message,true);}};
+$('stop').onclick=()=>stop();$('home').onclick=()=>{$('follow').checked=false;map.easeTo({center:HOME,zoom:16.7,pitch:55,bearing: -25});};
+window.addEventListener('pagehide',()=>stop());setInterval(()=>{if(watchId!==null&&lastFix&&Date.now()-lastFix>15000){cancelAnimationFrame(raf);if(dot)dot.getElement().classList.add('stale');status('15초 이상 갱신 없음 · 마지막 위치 표시',true);}},3000);
+validate(data);graph=buildGraph(data);
+</script></body></html>
