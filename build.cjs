@@ -1,0 +1,47 @@
+const fs=require('fs'),crypto=require('crypto'),vm=require('vm');
+const read=p=>fs.readFileSync(__dirname+'/'+p,'utf8').replace(/^\uFEFF/,'');
+const input=JSON.parse(read('parsed-kml.json')),original=read('../ecoworld-visitor-v3/index.html');
+const old=JSON.parse(original.match(/const EMBEDDED_GEOJSON = (.*);/)[1]);
+const counts={},features=[];
+for(const item of input)for(const geom of item.geometries){
+ const name=item.name||'이름 없는 지점',seq=counts[name]=(counts[name]||0)+1;
+ const description=(item.description||'').replace(/<br\s*\/?\s*>/gi,' ').replace(/<[^>]*>/g,'').trim();
+ const raw=geom.coordinates.trim().split(/\s+/).map(p=>p.split(',').map(Number));
+ if(!raw.every(c=>c.length>=2&&c.every(Number.isFinite)&&Math.abs(c[0])<=180&&Math.abs(c[1])<=90))throw Error('Invalid coordinate');
+ if(!['Point','LineString'].includes(geom.type))throw Error('Unexpected geometry: '+geom.type);
+ const id='user-kml-'+crypto.createHash('sha256').update(name+'|'+seq).digest('hex').slice(0,12);
+ let kind=name==='수유실'?'nursing':name==='의무실'?'medical':name==='화장실'?'toilet':name.includes('주차장')?'parking':name.includes('카페')?'cafe':'info';
+ let category=kind==='medical'?'safety':kind!=='info'||/정문|매표소/.test(name)?'amenity':/박물관|세트장|갱도|사택촌/.test(name)?'exhibition':'experience';
+ if(name==='에코타운 정문')category='experience';
+ let display=name==='수유실'?name+' · '+(description.includes('석탄박물관')?'석탄박물관':'에코타운'):name;
+ if(name==='화장실'||name.includes('야외주차장')||name==='정문에서 2세트장까지 탐방로 경로')display+=' '+seq;
+ const line=geom.type==='LineString',mode=name==='모노레일 이동 경로'?'monorail':'pedestrian';
+ const p={id,name:display,source_name:name,type:line?'reference_path':'poi',category,icon_key:kind,description:description||'사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.',source:'ecoworld mapbox Project (1).kml',survey_verified:false,accuracy_m:null,source_altitudes:raw.map(c=>c[2]??null)};
+ if(line)Object.assign(p,{mode,walkable:mode==='monorail'?false:null,routing_enabled:false,level_transition:name.includes('2층'),review_required:true});
+ else p.location_role=/입구|정문/.test(name)?'entrance':kind==='nursing'?'indoor_facility':'facility_reference';
+ features.push({type:'Feature',id,properties:p,geometry:{type:geom.type,coordinates:line?raw.map(c=>c.slice(0,2)):raw[0].slice(0,2)}});
+}
+const fc={type:'FeatureCollection',features};
+fs.writeFileSync(__dirname+'/latest-kml.geojson',JSON.stringify(fc,null,2));
+const merged={...old,metadata:{...old.metadata,poi_source:'latest user KML',note:'최신 KML POI로 교체. 기존 OSM 도형 유지. 새 경로는 표시 전용이며 GPS 보정에 투입하지 않음.'},features:[...old.features.filter(f=>f.properties.type!=='poi'),...features]};
+fs.writeFileSync(__dirname+'/integrated.geojson',JSON.stringify(merged,null,2));
+let html=original.replace(/const EMBEDDED_GEOJSON = .*;/,'const EMBEDDED_GEOJSON = '+JSON.stringify(merged)+';');
+html=html.replace("path:'LineString',poi:'Point'","path:'LineString',reference_path:'LineString',poi:'Point'");
+const icons={info:['i','#16786f','시설'],nursing:['수유','#885a9b','수유실'],medical:['의무','#aa572a','의무실'],toilet:['WC','#266c9b','화장실'],parking:['P','#586773','주차장'],cafe:['카페','#876044','카페']};
+const iconCode=`const ICON_REGISTRY=${JSON.stringify(icons)};
+ for(const [key,[label,color]] of Object.entries(ICON_REGISTRY)){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle=color;x.beginPath();x.arc(32,32,29,0,Math.PI*2);x.fill();x.fillStyle='#fff';x.font='bold '+(label.length>1?21:34)+'px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(label,32,32);map.addImage('eco-'+key,x.getImageData(0,0,64,64));}
+ map.addLayer({id:'kml-routes',type:'line',source:'eco',filter:['==',['get','type'],'reference_path'],paint:{'line-color':['match',['get','mode'],'monorail','#78559c','#258078'],'line-width':4,'line-dasharray':[2,2]}});
+`;
+const a=html.indexOf(' const canvas=document.createElement'),b=html.indexOf(" map.addLayer({id:'eco-poi'",a);html=html.slice(0,a)+iconCode+html.slice(b);
+html=html.replace("'icon-image':'eco-info'","'icon-image':['concat','eco-',['coalesce',['get','icon_key'],'info']]");
+html=html.replace("POI_INFO[f.properties.id]?.[1]||'이 시설의 자세한 안내는 현장에서 확인해 주세요.'","f.properties.description||POI_INFO[f.properties.id]?.[1]||'이 시설의 자세한 안내는 현장에서 확인해 주세요.'");
+html=html.replace('방문객 지도 v3 · 시설 위치 14개','방문객 지도 v4 · 위치 28개 · 경로 17개').replace('좌표 업데이트 v2 · 시설 위치 14개 반영.','좌표 업데이트 v2 · 최신 KML 위치 28개 반영.');
+html=html.replace('안전·의무실 위치는 아직 등록되지 않았습니다.','편의시설은 최신 KML 기준입니다. 새 점선 경로는 현장 검증 전 참고 동선이며 GPS 보정에는 사용하지 않습니다.');
+const legend=Object.entries(icons).map(([k,[label,color,title]])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:4px 9px 4px 0"><b style="background:${color};color:white;padding:3px 6px;border-radius:8px">${label}</b>${title}</span>`).join('');
+html=html.replace('<details><summary>시설 목록</summary>','<details><summary>아이콘·경로 범례</summary>'+legend+'<p>청록 점선: KML 참고 보행 동선<br>보라 점선: 모노레일 이동선<br>황토 실선: 기존 공개 보행로</p><p>실내 편의시설의 점은 시설 위치이며 실내 GPS 추적을 의미하지 않습니다. 화장실 번호는 파일 순서로 부여한 구분용 번호입니다.</p></details><details><summary>시설 목록</summary>');
+new vm.Script(html.match(/<script>\s*([\s\S]*?)<\/script>/)[1]);
+fs.writeFileSync(__dirname+'/index.html',html);
+const point=features.filter(f=>f.geometry.type==='Point'),lines=features.filter(f=>f.geometry.type==='LineString');
+const report=`# KML 업데이트 결과\n\nPoint ${point.length}개, LineString ${lines.length}개, Polygon 0개입니다. 원본의 ${features.length}개 객체를 변환했습니다.\n\n## 위치점\n\n|ID|이름|경도|위도|설명|\n|---|---|---:|---:|---|\n${point.map(f=>`|${f.id}|${f.properties.name}|${f.geometry.coordinates[0]}|${f.geometry.coordinates[1]}|${f.properties.description}|`).join('\n')}\n\n## 경로\n\n|이름|좌표 수|구분|\n|---|---:|---|\n${lines.map(f=>`|${f.properties.name}|${f.geometry.coordinates.length}|${f.properties.mode}|`).join('\n')}\n\n## 적용 및 주의 사항\n\n- index.html은 최신 데이터가 내장된 별도 v4 배포본입니다. 기존 v3는 보존했습니다. GitHub Pages의 index.html을 교체하면 됩니다.\n- 최신 KML 28개 Point를 현재 시설 레이어로 사용합니다. 에코타운 대표점과 정문은 별도 지점입니다. 이전 점을 무조건 더해 중복 표시하지 않습니다.\n- 수유실 2곳은 원문 설명으로 박물관/에코타운을 구분했습니다. 화장실 5곳, 주차장 2곳은 구역 이름 정보가 없어 파일 순서 번호를 부여했습니다. 임의의 구역명을 붙이지 않았습니다.\n- 이름이 같은 2세트장 탐방로 2개는 별도 객체로 보존했습니다. 실제 목적지와 경로 의도는 현장 확인이 필요합니다.\n- 모노레일은 walkable:false, 모든 신규 경로는 routing_enabled:false입니다. 박물관 2층 후문 경로는 level_transition:true로 표시했습니다. 높이·계단·장애인 접근성·접속점은 검증하지 않았습니다.\n- 기존 GPS 보정은 기존 공개 보행 네트워크에만 작동합니다. 새 경로를 길찾기/보정에 넣으려면 교차점 분할, 종점 접속, 층별 연결 확인이 선행되어야 합니다.\n- 출입구와 시설 대표점, 실내 시설 위치를 구분합니다. 좌표 소수점 자릿수는 측량 정확도를 보장하지 않습니다.\n\n## 데이터 구조와 렌더링\n\nlatest-kml.geojson은 KML만, integrated.geojson은 기존 공개 도형과 합친 데이터입니다. 좌표는 [경도,위도]이며 고도는 원본 속성으로 보관합니다. build.cjs는 파싱 결과를 변환하는 코드입니다.\n\nPoint 속성: id, name, source_name, type:poi, category, icon_key, description, location_role, survey_verified, accuracy_m. LineString 속성: type:reference_path, mode, walkable, routing_enabled, level_transition.\n\nMapbox는 하나의 GeoJSON source를 공유하고 symbol 레이어는 poi, line 레이어는 reference_path로 필터링합니다. 아이콘은 Canvas로 생성해 addImage에 등록하고 icon_key로 선택합니다. 동일한 아이콘 정의에서 설정 범례를 생성합니다. 색상 외에 글자와 명칭을 함께 표시합니다. 공식 참고: https://docs.mapbox.com/mapbox-gl-js/example/add-image-generated/\n\nLeaflet에서는 L.geoJSON(data,{filter,pointToLayer,onEachFeature})로 같은 속성을 사용할 수 있습니다. 모노레일과 보행 동선은 mode로 분리하고 설명은 textContent로 표시하세요. 이 결과물은 기존 Mapbox 앱을 유지합니다.\n`;
+fs.writeFileSync(__dirname+'/업데이트보고서.md',report);
+console.log(JSON.stringify({points:point.length,lines:lines.length,amenities:point.filter(f=>['nursing','medical','toilet'].includes(f.properties.icon_key)).map(f=>f.properties.name),syntax:'pass'}));

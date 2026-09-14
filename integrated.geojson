@@ -1,0 +1,3437 @@
+{
+  "type": "FeatureCollection",
+  "name": "에코월드 사용자 확인 POI + 기존 공개 도형",
+  "attribution": "© OpenStreetMap contributors",
+  "license": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "metadata": {
+    "completeness": "partial_public_map_not_surveyed",
+    "missing": [
+      "최신 건물/구역 외곽",
+      "전체 실제 연결 보행 네트워크"
+    ],
+    "note": "최신 KML POI로 교체. 기존 OSM 도형 유지. 새 경로는 표시 전용이며 GPS 보정에 투입하지 않음.",
+    "poi_source": "latest user KML"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140229-building",
+        "type": "building",
+        "name": "탄광촌전시관",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140229",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0612892,
+              36.6543622
+            ],
+            [
+              128.0610974,
+              36.654033
+            ],
+            [
+              128.0613731,
+              36.6539296
+            ],
+            [
+              128.0615649,
+              36.6542588
+            ],
+            [
+              128.0612892,
+              36.6543622
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140230-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140230",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0612794,
+              36.6542927
+            ],
+            [
+              128.0612087,
+              36.6541808
+            ],
+            [
+              128.0613003,
+              36.6541436
+            ],
+            [
+              128.061371,
+              36.6542555
+            ],
+            [
+              128.0612794,
+              36.6542927
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140231-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140231",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.061192,
+              36.6541447
+            ],
+            [
+              128.0611299,
+              36.6540411
+            ],
+            [
+              128.0612026,
+              36.6540131
+            ],
+            [
+              128.0612647,
+              36.6541166
+            ],
+            [
+              128.061192,
+              36.6541447
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140232-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140232",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0614166,
+              36.6542269
+            ],
+            [
+              128.0613814,
+              36.6541669
+            ],
+            [
+              128.0614638,
+              36.6541358
+            ],
+            [
+              128.061499,
+              36.6541958
+            ],
+            [
+              128.0614166,
+              36.6542269
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140233-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140233",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0613647,
+              36.6541294
+            ],
+            [
+              128.0612846,
+              36.6539959
+            ],
+            [
+              128.0613678,
+              36.6539638
+            ],
+            [
+              128.0614479,
+              36.6540973
+            ],
+            [
+              128.0613647,
+              36.6541294
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140235-building",
+        "type": "building",
+        "name": "문경석탄박물관 매표소",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140235",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0613823,
+              36.6530342
+            ],
+            [
+              128.0613696,
+              36.6529861
+            ],
+            [
+              128.0614663,
+              36.6529698
+            ],
+            [
+              128.0614946,
+              36.6530153
+            ],
+            [
+              128.0613823,
+              36.6530342
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140238-building",
+        "type": "building",
+        "name": "문경석탄박물관",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140238",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 12,
+        "base_height": 0,
+        "color": "#E8B5A4",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0621433,
+              36.6540683
+            ],
+            [
+              128.0620728,
+              36.6540466
+            ],
+            [
+              128.0620151,
+              36.6540075
+            ],
+            [
+              128.0619768,
+              36.6539552
+            ],
+            [
+              128.0619623,
+              36.6538957
+            ],
+            [
+              128.0619731,
+              36.6538358
+            ],
+            [
+              128.062008,
+              36.653782
+            ],
+            [
+              128.0620632,
+              36.6537406
+            ],
+            [
+              128.0621323,
+              36.6537161
+            ],
+            [
+              128.0622076,
+              36.6537114
+            ],
+            [
+              128.0622806,
+              36.6537269
+            ],
+            [
+              128.0623409,
+              36.6537593
+            ],
+            [
+              128.0623852,
+              36.6538052
+            ],
+            [
+              128.062409,
+              36.6538602
+            ],
+            [
+              128.0624098,
+              36.6539183
+            ],
+            [
+              128.0623875,
+              36.6539736
+            ],
+            [
+              128.0623445,
+              36.6540204
+            ],
+            [
+              128.0622852,
+              36.6540538
+            ],
+            [
+              128.0622157,
+              36.6540703
+            ],
+            [
+              128.0621433,
+              36.6540683
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140239-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140239",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.062204,
+              36.6541668
+            ],
+            [
+              128.0624528,
+              36.6540799
+            ],
+            [
+              128.0624169,
+              36.6540137
+            ],
+            [
+              128.062168,
+              36.6541006
+            ],
+            [
+              128.062204,
+              36.6541668
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140241-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140241",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0649545,
+              36.6533593
+            ],
+            [
+              128.0650168,
+              36.6533069
+            ],
+            [
+              128.0651198,
+              36.6533859
+            ],
+            [
+              128.0650575,
+              36.6534382
+            ],
+            [
+              128.0649545,
+              36.6533593
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140244-building",
+        "type": "building",
+        "name": "화장실 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140244",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0615065,
+              36.6523793
+            ],
+            [
+              128.0614587,
+              36.6523048
+            ],
+            [
+              128.0615411,
+              36.6522708
+            ],
+            [
+              128.0615889,
+              36.6523453
+            ],
+            [
+              128.0615065,
+              36.6523793
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140245-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140245",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0620746,
+            36.6537262
+          ],
+          [
+            128.0618733,
+            36.6533688
+          ],
+          [
+            128.0618491,
+            36.6533258
+          ],
+          [
+            128.0616677,
+            36.6530285
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140246-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140246",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0618733,
+            36.6533688
+          ],
+          [
+            128.0615656,
+            36.654187
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140247-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140247",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0618491,
+            36.6533258
+          ],
+          [
+            128.0625276,
+            36.6537936
+          ],
+          [
+            128.0625837,
+            36.6539023
+          ],
+          [
+            128.0625463,
+            36.6539885
+          ],
+          [
+            128.0624436,
+            36.6540409
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140250-plaza",
+        "type": "plaza",
+        "name": "주차장 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140250",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "subtype": "parking"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.061412,
+              36.6528722
+            ],
+            [
+              128.061536,
+              36.6528184
+            ],
+            [
+              128.0612457,
+              36.6523872
+            ],
+            [
+              128.0611216,
+              36.6524409
+            ],
+            [
+              128.061412,
+              36.6528722
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140251-plaza",
+        "type": "plaza",
+        "name": "주차장 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140251",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "subtype": "parking"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0611636,
+              36.6527397
+            ],
+            [
+              128.061245,
+              36.6527681
+            ],
+            [
+              128.0610964,
+              36.6524841
+            ],
+            [
+              128.0611212,
+              36.6523791
+            ],
+            [
+              128.060923,
+              36.6525665
+            ],
+            [
+              128.0611636,
+              36.6527397
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140252-plaza",
+        "type": "plaza",
+        "name": "주차장 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140252",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "subtype": "parking"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0615801,
+              36.6527639
+            ],
+            [
+              128.0616846,
+              36.6527171
+            ],
+            [
+              128.0613981,
+              36.6523057
+            ],
+            [
+              128.0612936,
+              36.6523525
+            ],
+            [
+              128.0615801,
+              36.6527639
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140253-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140253",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0623033,
+              36.6544199
+            ],
+            [
+              128.0622784,
+              36.6542934
+            ],
+            [
+              128.0619923,
+              36.6543297
+            ],
+            [
+              128.0618218,
+              36.654423
+            ],
+            [
+              128.0619079,
+              36.6545243
+            ],
+            [
+              128.062037,
+              36.6544537
+            ],
+            [
+              128.0623033,
+              36.6544199
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140254-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140254",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.062037,
+              36.6546722
+            ],
+            [
+              128.0620086,
+              36.6546298
+            ],
+            [
+              128.0623135,
+              36.6544896
+            ],
+            [
+              128.0625208,
+              36.6544961
+            ],
+            [
+              128.0630412,
+              36.65432
+            ],
+            [
+              128.06309,
+              36.6544341
+            ],
+            [
+              128.0623541,
+              36.6546918
+            ],
+            [
+              128.062037,
+              36.6546722
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140258-building",
+        "type": "building",
+        "name": "요동성 세트장",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140258",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0636806,
+              36.6549984
+            ],
+            [
+              128.0640728,
+              36.6549984
+            ],
+            [
+              128.0643811,
+              36.6549835
+            ],
+            [
+              128.0654271,
+              36.6553806
+            ],
+            [
+              128.065754,
+              36.6556204
+            ],
+            [
+              128.0659408,
+              36.6556653
+            ],
+            [
+              128.0661276,
+              36.6556428
+            ],
+            [
+              128.0664078,
+              36.6558152
+            ],
+            [
+              128.0667161,
+              36.6562048
+            ],
+            [
+              128.0668562,
+              36.6558526
+            ],
+            [
+              128.0667908,
+              36.6555379
+            ],
+            [
+              128.0666227,
+              36.655418
+            ],
+            [
+              128.0662677,
+              36.6553206
+            ],
+            [
+              128.0659502,
+              36.6552307
+            ],
+            [
+              128.0650255,
+              36.6549535
+            ],
+            [
+              128.064241,
+              36.6547212
+            ],
+            [
+              128.0637366,
+              36.6548336
+            ],
+            [
+              128.0636806,
+              36.6549984
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140262-plaza",
+        "type": "plaza",
+        "name": "주차장 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140262",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "subtype": "parking"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059365,
+              36.6521576
+            ],
+            [
+              128.059751,
+              36.6522749
+            ],
+            [
+              128.0599236,
+              36.6521009
+            ],
+            [
+              128.0601288,
+              36.6516866
+            ],
+            [
+              128.0603555,
+              36.6512961
+            ],
+            [
+              128.0603809,
+              36.6512703
+            ],
+            [
+              128.0604748,
+              36.6512918
+            ],
+            [
+              128.0605111,
+              36.6512229
+            ],
+            [
+              128.0605902,
+              36.6511002
+            ],
+            [
+              128.0606773,
+              36.6510637
+            ],
+            [
+              128.0608128,
+              36.6510443
+            ],
+            [
+              128.0610166,
+              36.6510852
+            ],
+            [
+              128.0613787,
+              36.6505956
+            ],
+            [
+              128.0603139,
+              36.6502535
+            ],
+            [
+              128.059365,
+              36.6521576
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140268-building",
+        "type": "building",
+        "name": "화장실 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140268",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.06028,
+              36.6519189
+            ],
+            [
+              128.0601837,
+              36.6518863
+            ],
+            [
+              128.0602318,
+              36.6517945
+            ],
+            [
+              128.0602318,
+              36.6517618
+            ],
+            [
+              128.0601471,
+              36.6516892
+            ],
+            [
+              128.0602194,
+              36.6516349
+            ],
+            [
+              128.0602495,
+              36.6516576
+            ],
+            [
+              128.0602684,
+              36.651677
+            ],
+            [
+              128.0603132,
+              36.6517488
+            ],
+            [
+              128.0603213,
+              36.6518401
+            ],
+            [
+              128.06028,
+              36.6519189
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140271-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140271",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 1,
+        "bridge": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0612261,
+            36.6519492
+          ],
+          [
+            128.0607902,
+            36.6515684
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140273-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140273",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0612261,
+            36.6519492
+          ],
+          [
+            128.0613259,
+            36.6520429
+          ],
+          [
+            128.061169,
+            36.652172
+          ],
+          [
+            128.0607426,
+            36.6525077
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140275-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140275",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.060477,
+            36.6512445
+          ],
+          [
+            128.0606393,
+            36.6514092
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w561140276-path",
+        "type": "path",
+        "name": "보행로 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/561140276",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "walkable": true,
+        "width_m": 2.5,
+        "width_source": "estimated_visual_only",
+        "level": 0,
+        "bridge": false
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0606393,
+            36.6514092
+          ],
+          [
+            128.0607289,
+            36.6515084
+          ],
+          [
+            128.0607902,
+            36.6515684
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943901-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/1545943901",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0597091,
+              36.6544765
+            ],
+            [
+              128.0600618,
+              36.6541774
+            ],
+            [
+              128.0598392,
+              36.6539396
+            ],
+            [
+              128.0594985,
+              36.6543323
+            ],
+            [
+              128.0597091,
+              36.6544765
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/1545943902",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0589688,
+              36.6547799
+            ],
+            [
+              128.0593698,
+              36.6546841
+            ],
+            [
+              128.0593054,
+              36.6545174
+            ],
+            [
+              128.0589969,
+              36.6545723
+            ],
+            [
+              128.0589688,
+              36.6547799
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/1545943903",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0600524,
+              36.6547928
+            ],
+            [
+              128.060165,
+              36.6547691
+            ],
+            [
+              128.0608061,
+              36.6545712
+            ],
+            [
+              128.0606425,
+              36.6544033
+            ],
+            [
+              128.0599692,
+              36.6546486
+            ],
+            [
+              128.0600524,
+              36.6547928
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building",
+        "type": "building",
+        "name": "미명명 건물 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/1545943904",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "height": 6,
+        "base_height": 0,
+        "color": "#C6DCCB",
+        "height_source": "estimated_visual_only"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0592987,
+              36.655249
+            ],
+            [
+              128.0597573,
+              36.6550446
+            ],
+            [
+              128.0595991,
+              36.6547842
+            ],
+            [
+              128.0591994,
+              36.6549391
+            ],
+            [
+              128.0592987,
+              36.655249
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943905-plaza",
+        "type": "plaza",
+        "name": "주차장 (OSM)",
+        "source": "OpenStreetMap contributors",
+        "source_url": "https://www.openstreetmap.org/way/1545943905",
+        "license": "ODbL-1.0",
+        "retrieved_at": "2026-09-13",
+        "survey_verified": false,
+        "subtype": "parking"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0591565,
+              36.6540375
+            ],
+            [
+              128.0590546,
+              36.6539719
+            ],
+            [
+              128.0592035,
+              36.6537062
+            ],
+            [
+              128.0593751,
+              36.6535179
+            ],
+            [
+              128.0600055,
+              36.6529487
+            ],
+            [
+              128.0601114,
+              36.652868
+            ],
+            [
+              128.0601798,
+              36.6528476
+            ],
+            [
+              128.060334,
+              36.6529627
+            ],
+            [
+              128.0596554,
+              36.6535469
+            ],
+            [
+              128.059524,
+              36.6536577
+            ],
+            [
+              128.0591981,
+              36.6540278
+            ],
+            [
+              128.0591565,
+              36.6540375
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-36151912a2e8",
+      "properties": {
+        "id": "user-kml-36151912a2e8",
+        "name": "자이언트포레스트",
+        "source_name": "자이언트포레스트",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          151.0736867564646
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0606584926447,
+          36.65332241176445
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-540fcca76639",
+      "properties": {
+        "id": "user-kml-540fcca76639",
+        "name": "에코타운",
+        "source_name": "에코타운",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          153.2292420531653
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0597112322403,
+          36.65461218337404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-ada57d5b3aa8",
+      "properties": {
+        "id": "user-kml-ada57d5b3aa8",
+        "name": "물놀이장",
+        "source_name": "물놀이장",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          147.6720676503072
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0601861074064,
+          36.65373219526333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-798122eac9b9",
+      "properties": {
+        "id": "user-kml-798122eac9b9",
+        "name": "1세트장",
+        "source_name": "1세트장",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          225.5154922119921
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0651058036894,
+          36.65332977540214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-dec151519e6e",
+      "properties": {
+        "id": "user-kml-dec151519e6e",
+        "name": "꼬마열차",
+        "source_name": "꼬마열차",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          153.7514981095395
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0614409418579,
+          36.65371839861816
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-d523453e98d2",
+      "properties": {
+        "id": "user-kml-d523453e98d2",
+        "name": "매표소",
+        "source_name": "매표소",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          151.8638514233867
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0614026272404,
+          36.65264118443131
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-403a895ea92f",
+      "properties": {
+        "id": "user-kml-403a895ea92f",
+        "name": "가은모노레일",
+        "source_name": "가은모노레일",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          158.1407446498889
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0617512555226,
+          36.65257312774869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-d0fe5b8e8a77",
+      "properties": {
+        "id": "user-kml-d0fe5b8e8a77",
+        "name": "3세트장",
+        "source_name": "3세트장",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          199.5968364383177
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0663896754587,
+          36.65550200289552
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-9cad01521fb8",
+      "properties": {
+        "id": "user-kml-9cad01521fb8",
+        "name": "2세트장",
+        "source_name": "2세트장",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          198.9439403326205
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0675809920718,
+          36.65611779266166
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-5d9f5429a19b",
+      "properties": {
+        "id": "user-kml-5d9f5429a19b",
+        "name": "거미열차",
+        "source_name": "거미열차",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          167.4521351527553
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0623648338047,
+          36.65439432141314
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-51f5c900e686",
+      "properties": {
+        "id": "user-kml-51f5c900e686",
+        "name": "은성갱도 입구",
+        "source_name": "은성갱도 입구",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          172.4662348218398
+        ],
+        "location_role": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0620041880394,
+          36.65465561334202
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-595aa6c82685",
+      "properties": {
+        "id": "user-kml-595aa6c82685",
+        "name": "문경석탄박물관",
+        "source_name": "문경석탄박물관",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          158.7529158518337
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0621942375294,
+          36.65389074455849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-fa6b8b565472",
+      "properties": {
+        "id": "user-kml-fa6b8b565472",
+        "name": "에코타운 정문",
+        "source_name": "에코타운 정문",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          151.7920735613233
+        ],
+        "location_role": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0599848864423,
+          36.6544278797995
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-178f7c986a33",
+      "properties": {
+        "id": "user-kml-178f7c986a33",
+        "name": "에코카페 입구",
+        "source_name": "에코카페 입구",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "cafe",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          155.5079922744258
+        ],
+        "location_role": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0595224104233,
+          36.65479706843798
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-c5a48638017d",
+      "properties": {
+        "id": "user-kml-c5a48638017d",
+        "name": "정문에서 석탄박물관까지 경로",
+        "source_name": "정문에서 석탄박물관까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613069975602,
+            36.65271200054841
+          ],
+          [
+            128.0617437349931,
+            36.65315838166777
+          ],
+          [
+            128.0620939540503,
+            36.65371644553639
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-ad5d99c331d6",
+      "properties": {
+        "id": "user-kml-ad5d99c331d6",
+        "name": "정문에서 자이언트포레스트까지 경로",
+        "source_name": "정문에서 자이언트포레스트까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613097045317,
+            36.65271631770625
+          ],
+          [
+            128.0615036390608,
+            36.65305321983555
+          ],
+          [
+            128.0613903260595,
+            36.65322408383953
+          ],
+          [
+            128.0610555820342,
+            36.6534946486095
+          ],
+          [
+            128.0607880049759,
+            36.65340530041028
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-cd5e12f02b27",
+      "properties": {
+        "id": "user-kml-cd5e12f02b27",
+        "name": "정문에서 가은모노레일까지 경로",
+        "source_name": "정문에서 가은모노레일까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613053650932,
+            36.65271290566636
+          ],
+          [
+            128.0613391418609,
+            36.65274838307553
+          ],
+          [
+            128.0617004328103,
+            36.65260515086588
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-8fec4d8aad57",
+      "properties": {
+        "id": "user-kml-8fec4d8aad57",
+        "name": "정문에서 물놀이장까지 경로",
+        "source_name": "정문에서 물놀이장까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613053356307,
+            36.65271343067711
+          ],
+          [
+            128.0615064796385,
+            36.6530533280139
+          ],
+          [
+            128.0613928253266,
+            36.65322289202869
+          ],
+          [
+            128.0607196931964,
+            36.65376389110645
+          ],
+          [
+            128.0603619060369,
+            36.65363405457296
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-480041a48fda",
+      "properties": {
+        "id": "user-kml-480041a48fda",
+        "name": "정문에서부터 꼬마열차까지 경로",
+        "source_name": "정문에서부터 꼬마열차까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613061373457,
+            36.65271561860902
+          ],
+          [
+            128.0617417392131,
+            36.65315833968197
+          ],
+          [
+            128.0618825175052,
+            36.65338159029326
+          ],
+          [
+            128.0618335700105,
+            36.65343251984909
+          ],
+          [
+            128.0617014679784,
+            36.6538680362846
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-e88fcdbdeea8",
+      "properties": {
+        "id": "user-kml-e88fcdbdeea8",
+        "name": "정문에서 에코타운 정문까지 경로",
+        "source_name": "정문에서 에코타운 정문까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613075572736,
+            36.65271501035764
+          ],
+          [
+            128.0614983940029,
+            36.65304848706475
+          ],
+          [
+            128.0613940040614,
+            36.6532166732535
+          ],
+          [
+            128.0607309599272,
+            36.65375281083887
+          ],
+          [
+            128.0600041051205,
+            36.65441895158046
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-78b229d54c04",
+      "properties": {
+        "id": "user-kml-78b229d54c04",
+        "name": "정문에서 탄광사택촌까지 경로",
+        "source_name": "정문에서 탄광사택촌까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613073036247,
+            36.65271601255684
+          ],
+          [
+            128.0615024237725,
+            36.6530559953496
+          ],
+          [
+            128.0613933526841,
+            36.65321929552861
+          ],
+          [
+            128.0608918742452,
+            36.65362566822176
+          ],
+          [
+            128.0611104335096,
+            36.65400339529846
+          ],
+          [
+            128.0612723313493,
+            36.6539584608669
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-f3c2e03675ac",
+      "properties": {
+        "id": "user-kml-f3c2e03675ac",
+        "name": "정문에서 은성갱도까지 경로",
+        "source_name": "정문에서 은성갱도까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613063940121,
+            36.65271401804888
+          ],
+          [
+            128.0617375087997,
+            36.65315658690736
+          ],
+          [
+            128.0618838680246,
+            36.65338107401141
+          ],
+          [
+            128.0618331638012,
+            36.65343553965133
+          ],
+          [
+            128.0615821418209,
+            36.65422440080437
+          ],
+          [
+            128.0618587503187,
+            36.65453977185391
+          ],
+          [
+            128.0619998467537,
+            36.65458903961572
+          ],
+          [
+            128.0620039414326,
+            36.65466022335332
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-2e848bb595be",
+      "properties": {
+        "id": "user-kml-2e848bb595be",
+        "name": "석탄박물관 2층 후문에서 거미열차까지 경로",
+        "source_name": "석탄박물관 2층 후문에서 거미열차까지 경로",
+        "type": "reference_path",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": true,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0623434142403,
+            36.65411725829457
+          ],
+          [
+            128.0624130572717,
+            36.6542265438515
+          ],
+          [
+            128.0624739901415,
+            36.6542460800266
+          ],
+          [
+            128.0625468073159,
+            36.6542322374115
+          ],
+          [
+            128.0626718200835,
+            36.65415935649668
+          ],
+          [
+            128.0627246053059,
+            36.65414874013646
+          ],
+          [
+            128.0627540167492,
+            36.65416463521242
+          ],
+          [
+            128.0628123144837,
+            36.65428073969261
+          ],
+          [
+            128.0628043092576,
+            36.65433024199809
+          ],
+          [
+            128.0627759110113,
+            36.65435857646412
+          ],
+          [
+            128.0626476421615,
+            36.65440334589657
+          ],
+          [
+            128.0625696451309,
+            36.65441795509413
+          ],
+          [
+            128.0624936422155,
+            36.65441886483607
+          ],
+          [
+            128.0623658561906,
+            36.65439902010837
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-0342967e47b4",
+      "properties": {
+        "id": "user-kml-0342967e47b4",
+        "name": "거미열차에서 은성갱도까지 경로",
+        "source_name": "거미열차에서 은성갱도까지 경로",
+        "type": "reference_path",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0623370967459,
+            36.65441832886382
+          ],
+          [
+            128.0622568756618,
+            36.65444094274741
+          ],
+          [
+            128.0621660208894,
+            36.65452582580897
+          ],
+          [
+            128.0620622639964,
+            36.65457924787651
+          ],
+          [
+            128.0621076608141,
+            36.65463256458022
+          ],
+          [
+            128.062398469627,
+            36.65463788633738
+          ],
+          [
+            128.062401529399,
+            36.6546602320247
+          ],
+          [
+            128.0620104013695,
+            36.65465700292918
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-25b262944a34",
+      "properties": {
+        "id": "user-kml-25b262944a34",
+        "name": "정문에서 서바이벌체험장까지 경로",
+        "source_name": "정문에서 서바이벌체험장까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613059421975,
+            36.65271382908406
+          ],
+          [
+            128.0615022899995,
+            36.65305573123813
+          ],
+          [
+            128.0613937386835,
+            36.65321514109914
+          ],
+          [
+            128.0607165568087,
+            36.65376526532217
+          ],
+          [
+            128.0603366347188,
+            36.65410567455422
+          ],
+          [
+            128.0602010620984,
+            36.65400575141843
+          ],
+          [
+            128.0596916452103,
+            36.65446926946388
+          ],
+          [
+            128.0599178378423,
+            36.65462898762055
+          ],
+          [
+            128.0600478494415,
+            36.65461036887372
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-098e71f832dd",
+      "properties": {
+        "id": "user-kml-098e71f832dd",
+        "name": "서바이벌체험장 입구",
+        "source_name": "서바이벌체험장 입구",
+        "type": "poi",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          155.0324480694375
+        ],
+        "location_role": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0600450425438,
+          36.65460585294915
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-295d9bc8671e",
+      "properties": {
+        "id": "user-kml-295d9bc8671e",
+        "name": "정문에서 에코카페 입구까지 경로",
+        "source_name": "정문에서 에코카페 입구까지 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "cafe",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613081566132,
+            36.65271435388266
+          ],
+          [
+            128.061507529879,
+            36.65305389545892
+          ],
+          [
+            128.0613967970921,
+            36.65322267063234
+          ],
+          [
+            128.0607189144313,
+            36.65376289765712
+          ],
+          [
+            128.0603393586052,
+            36.65410687693671
+          ],
+          [
+            128.0602042371331,
+            36.65400751943232
+          ],
+          [
+            128.0596942443318,
+            36.65446621269537
+          ],
+          [
+            128.0596431582336,
+            36.65444173933095
+          ],
+          [
+            128.0594063824311,
+            36.65462690109451
+          ],
+          [
+            128.0594363971674,
+            36.65468937865485
+          ],
+          [
+            128.0594176605438,
+            36.65470228190476
+          ],
+          [
+            128.0594747168214,
+            36.65479636687067
+          ],
+          [
+            128.0595266882995,
+            36.65479827001971
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-1b5c60f82717",
+      "properties": {
+        "id": "user-kml-1b5c60f82717",
+        "name": "탄광사택촌",
+        "source_name": "탄광사택촌",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          157.7799279292272
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0613470629999,
+          36.6540842541685
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-6e6cb1fed873",
+      "properties": {
+        "id": "user-kml-6e6cb1fed873",
+        "name": "수유실 · 석탄박물관",
+        "source_name": "수유실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "nursing",
+        "description": "석탄박물관 로비 좌측에 위치하였습니다.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          157.3468053813293
+        ],
+        "location_role": "indoor_facility"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0620749788497,
+          36.6538624109573
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-0989fe6eb3f5",
+      "properties": {
+        "id": "user-kml-0989fe6eb3f5",
+        "name": "수유실 · 에코타운",
+        "source_name": "수유실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "nursing",
+        "description": "에코타운 로비에서 우측에 위치하고 있습니다.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          156.1203529190109
+        ],
+        "location_role": "indoor_facility"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0598245331995,
+          36.65472424871171
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-30dffae8c90d",
+      "properties": {
+        "id": "user-kml-30dffae8c90d",
+        "name": "의무실",
+        "source_name": "의무실",
+        "type": "poi",
+        "category": "safety",
+        "icon_key": "medical",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          146.4744895651318
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0598863180421,
+          36.65354083751411
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-df9c8de9a37a",
+      "properties": {
+        "id": "user-kml-df9c8de9a37a",
+        "name": "화장실 1",
+        "source_name": "화장실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "toilet",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          147.1132801267695
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0600715415836,
+          36.65339124358076
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-55391809416e",
+      "properties": {
+        "id": "user-kml-55391809416e",
+        "name": "화장실 2",
+        "source_name": "화장실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "toilet",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          153.2583379868819
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0615306031679,
+          36.65228335482698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-c1bcd1d4e831",
+      "properties": {
+        "id": "user-kml-c1bcd1d4e831",
+        "name": "화장실 3",
+        "source_name": "화장실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "toilet",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          200.330832978634
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.067162203233,
+          36.65533446479465
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-8033748900e3",
+      "properties": {
+        "id": "user-kml-8033748900e3",
+        "name": "화장실 4",
+        "source_name": "화장실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "toilet",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          226.5960700910659
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0642364376776,
+          36.65208208800899
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-4de8e1f19a1d",
+      "properties": {
+        "id": "user-kml-4de8e1f19a1d",
+        "name": "화장실 5",
+        "source_name": "화장실",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "toilet",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          247.505383403583
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0664117465305,
+          36.65311640905166
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-41c17b9f1336",
+      "properties": {
+        "id": "user-kml-41c17b9f1336",
+        "name": "정문에서 1세트장까지 탐방로 경로",
+        "source_name": "정문에서 1세트장까지 탐방로 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613103855893,
+            36.65271699668666
+          ],
+          [
+            128.0613434825179,
+            36.65274892680675
+          ],
+          [
+            128.0616862590642,
+            36.6526148008864
+          ],
+          [
+            128.0619596571384,
+            36.65302265129809
+          ],
+          [
+            128.0626187010125,
+            36.65358405265223
+          ],
+          [
+            128.0647041702292,
+            36.65459929271925
+          ],
+          [
+            128.0667246026764,
+            36.65530802233236
+          ],
+          [
+            128.0670462023716,
+            36.65538501615524
+          ],
+          [
+            128.0677281296096,
+            36.65558060855586
+          ],
+          [
+            128.0684080105227,
+            36.65581880883393
+          ],
+          [
+            128.0686962374131,
+            36.65585442886015
+          ],
+          [
+            128.068717467127,
+            36.65516506296649
+          ],
+          [
+            128.0686718802485,
+            36.65500752647627
+          ],
+          [
+            128.0686218976618,
+            36.65491196222984
+          ],
+          [
+            128.0681246401977,
+            36.65464616765659
+          ],
+          [
+            128.0680321475877,
+            36.65428908942335
+          ],
+          [
+            128.067999303052,
+            36.65405477104764
+          ],
+          [
+            128.0678932795151,
+            36.65398665576718
+          ],
+          [
+            128.0675941128939,
+            36.65389472265549
+          ],
+          [
+            128.0671113999795,
+            36.65384067667507
+          ],
+          [
+            128.0667145204622,
+            36.65369596354896
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-dc2b8a2de74a",
+      "properties": {
+        "id": "user-kml-dc2b8a2de74a",
+        "name": "은성갱도 출구",
+        "source_name": "은성갱도 출구",
+        "type": "poi",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          171.6747688608808
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0612702355016,
+          36.65476628157572
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-8f86f5cf34bf",
+      "properties": {
+        "id": "user-kml-8f86f5cf34bf",
+        "name": "은성갱도 출구에서 탄광사택촌까지 경로",
+        "source_name": "은성갱도 출구에서 탄광사택촌까지 경로",
+        "type": "reference_path",
+        "category": "exhibition",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0612702354487,
+            36.65476628153346
+          ],
+          [
+            128.0614755230096,
+            36.65464034211439
+          ],
+          [
+            128.0618613119356,
+            36.65453823664198
+          ],
+          [
+            128.0615851553476,
+            36.65422602460255
+          ],
+          [
+            128.0614232236401,
+            36.65422577681056
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-39921fe027dc",
+      "properties": {
+        "id": "user-kml-39921fe027dc",
+        "name": "정문에서 2세트장까지 탐방로 경로 1",
+        "source_name": "정문에서 2세트장까지 탐방로 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613104377374,
+            36.65271556860841
+          ],
+          [
+            128.0613435430332,
+            36.65275068742272
+          ],
+          [
+            128.0616834638147,
+            36.65261013506046
+          ],
+          [
+            128.0619580451399,
+            36.65302584592438
+          ],
+          [
+            128.0626180743933,
+            36.65358302575628
+          ],
+          [
+            128.064105244776,
+            36.65430973158382
+          ],
+          [
+            128.0641600718295,
+            36.65447441825026
+          ],
+          [
+            128.0643790629862,
+            36.65462112872602
+          ],
+          [
+            128.0646189963719,
+            36.65473172998109
+          ],
+          [
+            128.0649516792932,
+            36.6549314563897
+          ],
+          [
+            128.0650752704407,
+            36.65503898181483
+          ],
+          [
+            128.0657562266237,
+            36.65533607761377
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-b26c559392bf",
+      "properties": {
+        "id": "user-kml-b26c559392bf",
+        "name": "모노레일 이동 경로",
+        "source_name": "모노레일 이동 경로",
+        "type": "reference_path",
+        "category": "experience",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "monorail",
+        "walkable": false,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0618747475498,
+            36.65273470913657
+          ],
+          [
+            128.0620367604397,
+            36.65291713027229
+          ],
+          [
+            128.0622769556406,
+            36.65307115159318
+          ],
+          [
+            128.0624417542049,
+            36.65311620082189
+          ],
+          [
+            128.0628685102921,
+            36.65314451818524
+          ],
+          [
+            128.0637085496602,
+            36.65316000248519
+          ],
+          [
+            128.0640874826149,
+            36.65318510513076
+          ],
+          [
+            128.0644377725749,
+            36.65318979097109
+          ],
+          [
+            128.0647156625482,
+            36.65319934496467
+          ],
+          [
+            128.0648642088659,
+            36.65323078653236
+          ],
+          [
+            128.0650627504354,
+            36.65334603444486
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-e3396fc0361e",
+      "properties": {
+        "id": "user-kml-e3396fc0361e",
+        "name": "정문에서 2세트장까지 탐방로 경로 2",
+        "source_name": "정문에서 2세트장까지 탐방로 경로",
+        "type": "reference_path",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "mode": "pedestrian",
+        "walkable": null,
+        "routing_enabled": false,
+        "level_transition": false,
+        "review_required": true
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.0613111700707,
+            36.65271746404822
+          ],
+          [
+            128.0613411804829,
+            36.65275127063325
+          ],
+          [
+            128.0616760554289,
+            36.65261159774525
+          ],
+          [
+            128.0619604400347,
+            36.6530190138426
+          ],
+          [
+            128.0626203528451,
+            36.65358709075828
+          ],
+          [
+            128.0647044357791,
+            36.65459914655245
+          ],
+          [
+            128.0667230565386,
+            36.65530853676359
+          ],
+          [
+            128.0671286255956,
+            36.6554071870307
+          ],
+          [
+            128.0672299946414,
+            36.65584479707672
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-e455d21352f8",
+      "properties": {
+        "id": "user-kml-e455d21352f8",
+        "name": "에코월드 야외주차장 1",
+        "source_name": "에코월드 야외주차장",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "parking",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          147.6307743012182
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0601764217287,
+          36.6512397530704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-8312a3471dd2",
+      "properties": {
+        "id": "user-kml-8312a3471dd2",
+        "name": "에코월드 야외주차장 2",
+        "source_name": "에코월드 야외주차장",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "parking",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          145.5565131030878
+        ],
+        "location_role": "facility_reference"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.0595613047621,
+          36.65343680014664
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "user-kml-7e3590486010",
+      "properties": {
+        "id": "user-kml-7e3590486010",
+        "name": "정문",
+        "source_name": "정문",
+        "type": "poi",
+        "category": "amenity",
+        "icon_key": "info",
+        "description": "사용자가 제공한 최신 KML 위치입니다. 이용 안내는 현장에서 확인해 주세요.",
+        "source": "ecoworld mapbox Project (1).kml",
+        "survey_verified": false,
+        "accuracy_m": null,
+        "source_altitudes": [
+          151.3774045090452
+        ],
+        "location_role": "entrance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.061304516154,
+          36.65271266091241
+        ]
+      }
+    }
+  ]
+}
