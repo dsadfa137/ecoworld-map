@@ -1,0 +1,26 @@
+{
+  "units": "meters",
+  "datum": "local visual ground, not sea-level elevation",
+  "floor_height_m": 4,
+  "roof_rim_m": 0.35,
+  "roof_finish_m": 0.18,
+  "panel_support_m": 0.06,
+  "panel_thickness_m": 0.12,
+  "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+  "buildings": [
+    {"id":"osm-w1545943901-building","label":"녹색 지붕 전면동","floors":2,"base_m":0,"roof":"green"},
+    {"id":"osm-w1545943902-building","label":"녹색 지붕 서측동","floors":2,"base_m":0.6,"roof":"green"},
+    {"id":"osm-w1545943903-building","label":"녹색 지붕 동측동","floors":2,"base_m":0.6,"roof":"green"},
+    {"id":"osm-w1545943904-building","label":"태양광 메인동 · 에코카페 측","floors":3,"base_m":1.2,"roof":"solar"}
+  ],
+  "terrace": {
+    "start": [128.0599848864423,36.6544278797995],
+    "end": [128.05954,36.654775],
+    "width_m": 5,
+    "entry_m": 0.15,
+    "garden_m": 0.75,
+    "upper_m": 1.2,
+    "lower_steps": 6,
+    "upper_steps": 5
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "checks": [
+    "JavaScript syntax",
+    "unchanged token, GeoJSON, photos and GPS functions",
+    "unchanged museum and main gate",
+    "valid 60 visual solids and unique IDs",
+    "3-story / 2-story wall heights",
+    "roof and panel elevation continuity",
+    "monotonic terrace heights",
+    "terrace vertices outside building interiors"
+  ],
+  "renderer": "not tested in browser: local file URL blocked by browser policy"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "osm-w1545943901-building",
+    "label": "녹색 지붕 전면동",
+    "floors": 2,
+    "base_m": 0,
+    "roof": "green",
+    "wall_top_m": 8,
+    "rim_top_m": 8.35,
+    "roof_top_m": 8.53,
+    "maximum_top_m": 8.53
+  },
+  {
+    "id": "osm-w1545943902-building",
+    "label": "녹색 지붕 서측동",
+    "floors": 2,
+    "base_m": 0.6,
+    "roof": "green",
+    "wall_top_m": 8.6,
+    "rim_top_m": 8.95,
+    "roof_top_m": 9.13,
+    "maximum_top_m": 9.13
+  },
+  {
+    "id": "osm-w1545943903-building",
+    "label": "녹색 지붕 동측동",
+    "floors": 2,
+    "base_m": 0.6,
+    "roof": "green",
+    "wall_top_m": 8.6,
+    "rim_top_m": 8.95,
+    "roof_top_m": 9.13,
+    "maximum_top_m": 9.13
+  },
+  {
+    "id": "osm-w1545943904-building",
+    "label": "태양광 메인동 · 에코카페 측",
+    "floors": 3,
+    "base_m": 1.2,
+    "roof": "solar",
+    "wall_top_m": 13.2,
+    "rim_top_m": 13.55,
+    "roof_top_m": 13.73,
+    "maximum_top_m": 13.91
+  }
+]

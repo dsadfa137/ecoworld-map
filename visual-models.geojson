@@ -1,5 +1,62 @@
 {
   "type": "FeatureCollection",
+  "metadata": {
+    "units": "meters",
+    "datum": "local visual ground, not sea-level elevation",
+    "floor_height_m": 4,
+    "roof_rim_m": 0.35,
+    "roof_finish_m": 0.18,
+    "panel_support_m": 0.06,
+    "panel_thickness_m": 0.12,
+    "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+    "buildings": [
+      {
+        "id": "osm-w1545943901-building",
+        "label": "녹색 지붕 전면동",
+        "floors": 2,
+        "base_m": 0,
+        "roof": "green"
+      },
+      {
+        "id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "base_m": 0.6,
+        "roof": "green"
+      },
+      {
+        "id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "base_m": 0.6,
+        "roof": "green"
+      },
+      {
+        "id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "base_m": 1.2,
+        "roof": "solar"
+      }
+    ],
+    "terrace": {
+      "start": [
+        128.0599848864423,
+        36.6544278797995
+      ],
+      "end": [
+        128.05954,
+        36.654775
+      ],
+      "width_m": 5,
+      "entry_m": 0.15,
+      "garden_m": 0.75,
+      "upper_m": 1.2,
+      "lower_steps": 6,
+      "upper_steps": 5
+    },
+    "note": "Visual models only; no GPS or routing changes"
+  },
   "features": [
     {
       "type": "Feature",
@@ -404,658 +461,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "art-5",
-        "base": 0,
-        "height": 8,
-        "color": "#d7dfce",
-        "part": "eco walls",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0597091,
-              36.6544765
-            ],
-            [
-              128.0600618,
-              36.6541774
-            ],
-            [
-              128.0598392,
-              36.6539396
-            ],
-            [
-              128.0594985,
-              36.6543323
-            ],
-            [
-              128.0597091,
-              36.6544765
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-6",
-        "base": 7.3,
-        "height": 8.2,
-        "color": "#f7f2de",
-        "part": "eco roof edge",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05970807925,
-              36.65448017575
-            ],
-            [
-              128.06006606975,
-              36.65417658925
-            ],
-            [
-              128.05984013075,
-              36.65393522225
-            ],
-            [
-              128.05949432025,
-              36.654333812750004
-            ],
-            [
-              128.05970807925,
-              36.65448017575
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-7",
-        "base": 8.2,
-        "height": 8.45,
-        "color": "#83a857",
-        "part": "eco roof",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05972339049998,
-              36.6544250395
-            ],
-            [
-              128.0600020235,
-              36.6541887505
-            ],
-            [
-              128.0598261695,
-              36.6540008885
-            ],
-            [
-              128.05955701649998,
-              36.6543111215
-            ],
-            [
-              128.05972339049998,
-              36.6544250395
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-8",
-        "base": 0,
-        "height": 8,
-        "color": "#d7dfce",
-        "part": "eco walls",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0589688,
-              36.6547799
-            ],
-            [
-              128.0593698,
-              36.6546841
-            ],
-            [
-              128.0593054,
-              36.6545174
-            ],
-            [
-              128.0589969,
-              36.6545723
-            ],
-            [
-              128.0589688,
-              36.6547799
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-9",
-        "base": 7.3,
-        "height": 8.2,
-        "color": "#f7f2de",
-        "part": "eco roof edge",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.058965928625,
-              36.654782022125
-            ],
-            [
-              128.05937294362502,
-              36.654684785125
-            ],
-            [
-              128.059307577625,
-              36.654515584625
-            ],
-            [
-              128.058994450125,
-              36.654571308125
-            ],
-            [
-              128.058965928625,
-              36.654782022125
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-10",
-        "base": 8.2,
-        "height": 8.45,
-        "color": "#83a857",
-        "part": "eco roof",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05900899925,
-              36.65475019025
-            ],
-            [
-              128.05932578925,
-              36.65467450825
-            ],
-            [
-              128.05927491325,
-              36.654542815250004
-            ],
-            [
-              128.05903119825,
-              36.65458618625
-            ],
-            [
-              128.05900899925,
-              36.65475019025
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-11",
-        "base": 0,
-        "height": 8,
-        "color": "#d7dfce",
-        "part": "eco walls",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0600524,
-              36.6547928
-            ],
-            [
-              128.060165,
-              36.6547691
-            ],
-            [
-              128.0608061,
-              36.6545712
-            ],
-            [
-              128.0606425,
-              36.6544033
-            ],
-            [
-              128.0599692,
-              36.6546486
-            ],
-            [
-              128.0600524,
-              36.6547928
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-12",
-        "base": 7.3,
-        "height": 8.2,
-        "color": "#f7f2de",
-        "part": "eco roof edge",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0600482804,
-              36.654795137
-            ],
-            [
-              128.0601625694,
-              36.6547710815
-            ],
-            [
-              128.0608132859,
-              36.654570213
-            ],
-            [
-              128.0606472319,
-              36.6543997945
-            ],
-            [
-              128.0599638324,
-              36.654648774
-            ],
-            [
-              128.0600482804,
-              36.654795137
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-13",
-        "base": 8.2,
-        "height": 8.45,
-        "color": "#83a857",
-        "part": "eco roof",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0601100744,
-              36.654760082
-            ],
-            [
-              128.0601990284,
-              36.654741359
-            ],
-            [
-              128.0607054974,
-              36.654585018
-            ],
-            [
-              128.0605762534,
-              36.654452377
-            ],
-            [
-              128.06004434640002,
-              36.654646164
-            ],
-            [
-              128.0601100744,
-              36.654760082
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-14",
-        "base": 0,
-        "height": 8,
-        "color": "#d7dfce",
-        "part": "eco walls",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0592987,
-              36.655249
-            ],
-            [
-              128.0597573,
-              36.6550446
-            ],
-            [
-              128.0595991,
-              36.6547842
-            ],
-            [
-              128.0591994,
-              36.6549391
-            ],
-            [
-              128.0592987,
-              36.655249
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-15",
-        "base": 7.3,
-        "height": 8.2,
-        "color": "#f7f2de",
-        "part": "eco roof edge",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05929622612499,
-              36.655252671625
-            ],
-            [
-              128.059761705125,
-              36.655045205624994
-            ],
-            [
-              128.059601132125,
-              36.654780899625
-            ],
-            [
-              128.059195436625,
-              36.654938123125
-            ],
-            [
-              128.05929622612499,
-              36.655252671625
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-16",
-        "base": 8.2,
-        "height": 8.45,
-        "color": "#788f97",
-        "part": "eco roof",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05933333425,
-              36.655197597249995
-            ],
-            [
-              128.05969562825,
-              36.65503612125
-            ],
-            [
-              128.05957065025,
-              36.65483040525
-            ],
-            [
-              128.05925488725,
-              36.65495277625
-            ],
-            [
-              128.05933333425,
-              36.655197597249995
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-17",
-        "base": 8.5,
-        "height": 8.65,
-        "color": "#486d82",
-        "part": "solar panels",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0593305153803,
-              36.65494576913418
-            ],
-            [
-              128.05937302097317,
-              36.65494576913418
-            ],
-            [
-              128.05937302097317,
-              36.65506268086582
-            ],
-            [
-              128.0593305153803,
-              36.65506268086582
-            ],
-            [
-              128.0593305153803,
-              36.65494576913418
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-18",
-        "base": 8.5,
-        "height": 8.65,
-        "color": "#486d82",
-        "part": "solar panels",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0593976294743,
-              36.65494576913418
-            ],
-            [
-              128.05944013506712,
-              36.65494576913418
-            ],
-            [
-              128.05944013506712,
-              36.65506268086582
-            ],
-            [
-              128.0593976294743,
-              36.65506268086582
-            ],
-            [
-              128.0593976294743,
-              36.65494576913418
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-19",
-        "base": 8.5,
-        "height": 8.65,
-        "color": "#486d82",
-        "part": "solar panels",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.05946474356824,
-              36.65494576913418
-            ],
-            [
-              128.05950724916107,
-              36.65494576913418
-            ],
-            [
-              128.05950724916107,
-              36.65506268086582
-            ],
-            [
-              128.05946474356824,
-              36.65506268086582
-            ],
-            [
-              128.05946474356824,
-              36.65494576913418
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "art-20",
-        "base": 8.5,
-        "height": 8.65,
-        "color": "#486d82",
-        "part": "solar panels",
-        "source": "photo-inspired procedural illustration",
-        "survey_verified": false,
-        "usage": "visual_only"
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              128.0595318576622,
-              36.65494576913418
-            ],
-            [
-              128.05957436325505,
-              36.65494576913418
-            ],
-            [
-              128.05957436325505,
-              36.65506268086582
-            ],
-            [
-              128.0595318576622,
-              36.65506268086582
-            ],
-            [
-              128.0595318576622,
-              36.65494576913418
-            ]
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "art-21",
         "base": 0,
         "height": 3.4,
@@ -1448,6 +853,2042 @@
             [
               128.06152343260953,
               36.65262094970853
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943901-building-wall",
+        "base": 0,
+        "height": 8,
+        "color": "#cfd7c9",
+        "part": "eco walls",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943901-building",
+        "label": "녹색 지붕 전면동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0597091,
+              36.6544765
+            ],
+            [
+              128.0600618,
+              36.6541774
+            ],
+            [
+              128.0598392,
+              36.6539396
+            ],
+            [
+              128.0594985,
+              36.6543323
+            ],
+            [
+              128.0597091,
+              36.6544765
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943901-building-floor-1",
+        "base": 3.91,
+        "height": 4.09,
+        "color": "#aebbb4",
+        "part": "eco floor band",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943901-building",
+        "label": "녹색 지붕 전면동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059708964,
+              36.65447699
+            ],
+            [
+              128.060062369,
+              36.654177292
+            ],
+            [
+              128.059839324,
+              36.653939016
+            ],
+            [
+              128.059497943,
+              36.654332502
+            ],
+            [
+              128.059708964,
+              36.65447699
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943901-building-rim",
+        "base": 8,
+        "height": 8.35,
+        "color": "#f7f2de",
+        "part": "eco roof edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943901-building",
+        "label": "녹색 지붕 전면동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059708079,
+              36.654480176
+            ],
+            [
+              128.06006607,
+              36.654176589
+            ],
+            [
+              128.059840131,
+              36.653935222
+            ],
+            [
+              128.05949432,
+              36.654333813
+            ],
+            [
+              128.059708079,
+              36.654480176
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943901-building-roof",
+        "base": 8.35,
+        "height": 8.53,
+        "color": "#83a857",
+        "part": "eco roof",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943901-building",
+        "label": "녹색 지붕 전면동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.05972339,
+              36.65442504
+            ],
+            [
+              128.060002024,
+              36.654188751
+            ],
+            [
+              128.05982617,
+              36.654000889
+            ],
+            [
+              128.059557016,
+              36.654311122
+            ],
+            [
+              128.05972339,
+              36.65442504
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building-plinth",
+        "base": 0,
+        "height": 0.6,
+        "color": "#b9b5a2",
+        "part": "eco plinth",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0589688,
+              36.6547799
+            ],
+            [
+              128.0593698,
+              36.6546841
+            ],
+            [
+              128.0593054,
+              36.6545174
+            ],
+            [
+              128.0589969,
+              36.6545723
+            ],
+            [
+              128.0589688,
+              36.6547799
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building-wall",
+        "base": 0.6,
+        "height": 8.6,
+        "color": "#cfd7c9",
+        "part": "eco walls",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0589688,
+              36.6547799
+            ],
+            [
+              128.0593698,
+              36.6546841
+            ],
+            [
+              128.0593054,
+              36.6545174
+            ],
+            [
+              128.0589969,
+              36.6545723
+            ],
+            [
+              128.0589688,
+              36.6547799
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building-floor-1",
+        "base": 4.51,
+        "height": 4.69,
+        "color": "#aebbb4",
+        "part": "eco floor band",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.058968417,
+              36.654780183
+            ],
+            [
+              128.059370219,
+              36.654684191
+            ],
+            [
+              128.05930569,
+              36.654517158
+            ],
+            [
+              128.058996573,
+              36.654572168
+            ],
+            [
+              128.058968417,
+              36.654780183
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building-rim",
+        "base": 8.6,
+        "height": 8.95,
+        "color": "#f7f2de",
+        "part": "eco roof edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.058965929,
+              36.654782022
+            ],
+            [
+              128.059372944,
+              36.654684785
+            ],
+            [
+              128.059307578,
+              36.654515585
+            ],
+            [
+              128.05899445,
+              36.654571308
+            ],
+            [
+              128.058965929,
+              36.654782022
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943902-building-roof",
+        "base": 8.95,
+        "height": 9.13,
+        "color": "#83a857",
+        "part": "eco roof",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943902-building",
+        "label": "녹색 지붕 서측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059008999,
+              36.65475019
+            ],
+            [
+              128.059325789,
+              36.654674508
+            ],
+            [
+              128.059274913,
+              36.654542815
+            ],
+            [
+              128.059031198,
+              36.654586186
+            ],
+            [
+              128.059008999,
+              36.65475019
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building-plinth",
+        "base": 0,
+        "height": 0.6,
+        "color": "#b9b5a2",
+        "part": "eco plinth",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0600524,
+              36.6547928
+            ],
+            [
+              128.060165,
+              36.6547691
+            ],
+            [
+              128.0608061,
+              36.6545712
+            ],
+            [
+              128.0606425,
+              36.6544033
+            ],
+            [
+              128.0599692,
+              36.6546486
+            ],
+            [
+              128.0600524,
+              36.6547928
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building-wall",
+        "base": 0.6,
+        "height": 8.6,
+        "color": "#cfd7c9",
+        "part": "eco walls",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0600524,
+              36.6547928
+            ],
+            [
+              128.060165,
+              36.6547691
+            ],
+            [
+              128.0608061,
+              36.6545712
+            ],
+            [
+              128.0606425,
+              36.6544033
+            ],
+            [
+              128.0599692,
+              36.6546486
+            ],
+            [
+              128.0600524,
+              36.6547928
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building-floor-1",
+        "base": 4.51,
+        "height": 4.69,
+        "color": "#aebbb4",
+        "part": "eco floor band",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.060051851,
+              36.654793112
+            ],
+            [
+              128.060164676,
+              36.654769364
+            ],
+            [
+              128.060807058,
+              36.654571068
+            ],
+            [
+              128.060643131,
+              36.654402833
+            ],
+            [
+              128.059968484,
+              36.654648623
+            ],
+            [
+              128.060051851,
+              36.654793112
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building-rim",
+        "base": 8.6,
+        "height": 8.95,
+        "color": "#f7f2de",
+        "part": "eco roof edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.06004828,
+              36.654795137
+            ],
+            [
+              128.060162569,
+              36.654771082
+            ],
+            [
+              128.060813286,
+              36.654570213
+            ],
+            [
+              128.060647232,
+              36.654399795
+            ],
+            [
+              128.059963832,
+              36.654648774
+            ],
+            [
+              128.06004828,
+              36.654795137
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943903-building-roof",
+        "base": 8.95,
+        "height": 9.13,
+        "color": "#83a857",
+        "part": "eco roof",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943903-building",
+        "label": "녹색 지붕 동측동",
+        "floors": 2,
+        "floor_height_m": 4,
+        "ground_base_m": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.060110074,
+              36.654760082
+            ],
+            [
+              128.060199028,
+              36.654741359
+            ],
+            [
+              128.060705497,
+              36.654585018
+            ],
+            [
+              128.060576253,
+              36.654452377
+            ],
+            [
+              128.060044346,
+              36.654646164
+            ],
+            [
+              128.060110074,
+              36.654760082
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-plinth",
+        "base": 0,
+        "height": 1.2,
+        "color": "#b9b5a2",
+        "part": "eco plinth",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0592987,
+              36.655249
+            ],
+            [
+              128.0597573,
+              36.6550446
+            ],
+            [
+              128.0595991,
+              36.6547842
+            ],
+            [
+              128.0591994,
+              36.6549391
+            ],
+            [
+              128.0592987,
+              36.655249
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-wall",
+        "base": 1.2,
+        "height": 13.2,
+        "color": "#cfd7c9",
+        "part": "eco walls",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.0592987,
+              36.655249
+            ],
+            [
+              128.0597573,
+              36.6550446
+            ],
+            [
+              128.0595991,
+              36.6547842
+            ],
+            [
+              128.0591994,
+              36.6549391
+            ],
+            [
+              128.0592987,
+              36.655249
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-floor-1",
+        "base": 5.11,
+        "height": 5.29,
+        "color": "#aebbb4",
+        "part": "eco floor band",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.05929837,
+              36.65524949
+            ],
+            [
+              128.059757887,
+              36.655044681
+            ],
+            [
+              128.059599371,
+              36.65478376
+            ],
+            [
+              128.059198872,
+              36.65493897
+            ],
+            [
+              128.05929837,
+              36.65524949
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-floor-2",
+        "base": 9.11,
+        "height": 9.29,
+        "color": "#aebbb4",
+        "part": "eco floor band",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.05929837,
+              36.65524949
+            ],
+            [
+              128.059757887,
+              36.655044681
+            ],
+            [
+              128.059599371,
+              36.65478376
+            ],
+            [
+              128.059198872,
+              36.65493897
+            ],
+            [
+              128.05929837,
+              36.65524949
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-rim",
+        "base": 13.2,
+        "height": 13.55,
+        "color": "#f7f2de",
+        "part": "eco roof edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059296226,
+              36.655252672
+            ],
+            [
+              128.059761705,
+              36.655045206
+            ],
+            [
+              128.059601132,
+              36.6547809
+            ],
+            [
+              128.059195437,
+              36.654938123
+            ],
+            [
+              128.059296226,
+              36.655252672
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-roof",
+        "base": 13.55,
+        "height": 13.73,
+        "color": "#788f97",
+        "part": "eco roof",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059333334,
+              36.655197597
+            ],
+            [
+              128.059695628,
+              36.655036121
+            ],
+            [
+              128.05957065,
+              36.654830405
+            ],
+            [
+              128.059254887,
+              36.654952776
+            ],
+            [
+              128.059333334,
+              36.655197597
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-support-0",
+        "base": 13.73,
+        "height": 13.79,
+        "color": "#52646b",
+        "part": "solar support",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059330225,
+              36.654945769
+            ],
+            [
+              128.059372824,
+              36.654945769
+            ],
+            [
+              128.059372824,
+              36.655062681
+            ],
+            [
+              128.059330225,
+              36.655062681
+            ],
+            [
+              128.059330225,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-0",
+        "base": 13.79,
+        "height": 13.91,
+        "color": "#486d82",
+        "part": "solar panels",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059330225,
+              36.654945769
+            ],
+            [
+              128.059372824,
+              36.654945769
+            ],
+            [
+              128.059372824,
+              36.655062681
+            ],
+            [
+              128.059330225,
+              36.655062681
+            ],
+            [
+              128.059330225,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-support-1",
+        "base": 13.73,
+        "height": 13.79,
+        "color": "#52646b",
+        "part": "solar support",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059397486,
+              36.654945769
+            ],
+            [
+              128.059440084,
+              36.654945769
+            ],
+            [
+              128.059440084,
+              36.655062681
+            ],
+            [
+              128.059397486,
+              36.655062681
+            ],
+            [
+              128.059397486,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-1",
+        "base": 13.79,
+        "height": 13.91,
+        "color": "#486d82",
+        "part": "solar panels",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059397486,
+              36.654945769
+            ],
+            [
+              128.059440084,
+              36.654945769
+            ],
+            [
+              128.059440084,
+              36.655062681
+            ],
+            [
+              128.059397486,
+              36.655062681
+            ],
+            [
+              128.059397486,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-support-2",
+        "base": 13.73,
+        "height": 13.79,
+        "color": "#52646b",
+        "part": "solar support",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059464746,
+              36.654945769
+            ],
+            [
+              128.059507344,
+              36.654945769
+            ],
+            [
+              128.059507344,
+              36.655062681
+            ],
+            [
+              128.059464746,
+              36.655062681
+            ],
+            [
+              128.059464746,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-2",
+        "base": 13.79,
+        "height": 13.91,
+        "color": "#486d82",
+        "part": "solar panels",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059464746,
+              36.654945769
+            ],
+            [
+              128.059507344,
+              36.654945769
+            ],
+            [
+              128.059507344,
+              36.655062681
+            ],
+            [
+              128.059464746,
+              36.655062681
+            ],
+            [
+              128.059464746,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-support-3",
+        "base": 13.73,
+        "height": 13.79,
+        "color": "#52646b",
+        "part": "solar support",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059532006,
+              36.654945769
+            ],
+            [
+              128.059574605,
+              36.654945769
+            ],
+            [
+              128.059574605,
+              36.655062681
+            ],
+            [
+              128.059532006,
+              36.655062681
+            ],
+            [
+              128.059532006,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "osm-w1545943904-building-panel-3",
+        "base": 13.79,
+        "height": 13.91,
+        "color": "#486d82",
+        "part": "solar panels",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "building_id": "osm-w1545943904-building",
+        "label": "태양광 메인동 · 에코카페 측",
+        "floors": 3,
+        "floor_height_m": 4,
+        "ground_base_m": 1.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059532006,
+              36.654945769
+            ],
+            [
+              128.059574605,
+              36.654945769
+            ],
+            [
+              128.059574605,
+              36.655062681
+            ],
+            [
+              128.059532006,
+              36.655062681
+            ],
+            [
+              128.059532006,
+              36.654945769
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-entry",
+        "base": 0,
+        "height": 0.15,
+        "color": "#e2d7b9",
+        "part": "eco entry landing",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.060004426,
+              36.654443997
+            ],
+            [
+              128.059948173,
+              36.654487888
+            ],
+            [
+              128.059909095,
+              36.654455653
+            ],
+            [
+              128.059965347,
+              36.654411762
+            ],
+            [
+              128.060004426,
+              36.654443997
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-0",
+        "base": 0,
+        "height": 0.25,
+        "color": "#eee4cc",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059948173,
+              36.654487888
+            ],
+            [
+              128.059943351,
+              36.65449165
+            ],
+            [
+              128.059904273,
+              36.654459415
+            ],
+            [
+              128.059909095,
+              36.654455653
+            ],
+            [
+              128.059948173,
+              36.654487888
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-1",
+        "base": 0,
+        "height": 0.35,
+        "color": "#dbd1b4",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059943351,
+              36.65449165
+            ],
+            [
+              128.05993853,
+              36.654495412
+            ],
+            [
+              128.059899451,
+              36.654463177
+            ],
+            [
+              128.059904273,
+              36.654459415
+            ],
+            [
+              128.059943351,
+              36.65449165
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-2",
+        "base": 0,
+        "height": 0.45,
+        "color": "#eee4cc",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.05993853,
+              36.654495412
+            ],
+            [
+              128.059933708,
+              36.654499174
+            ],
+            [
+              128.05989463,
+              36.654466939
+            ],
+            [
+              128.059899451,
+              36.654463177
+            ],
+            [
+              128.05993853,
+              36.654495412
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-3",
+        "base": 0,
+        "height": 0.55,
+        "color": "#dbd1b4",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059933708,
+              36.654499174
+            ],
+            [
+              128.059928886,
+              36.654502936
+            ],
+            [
+              128.059889808,
+              36.654470702
+            ],
+            [
+              128.05989463,
+              36.654466939
+            ],
+            [
+              128.059933708,
+              36.654499174
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-4",
+        "base": 0,
+        "height": 0.65,
+        "color": "#eee4cc",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059928886,
+              36.654502936
+            ],
+            [
+              128.059924065,
+              36.654506698
+            ],
+            [
+              128.059884986,
+              36.654474464
+            ],
+            [
+              128.059889808,
+              36.654470702
+            ],
+            [
+              128.059928886,
+              36.654502936
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-lower-5",
+        "base": 0,
+        "height": 0.75,
+        "color": "#dbd1b4",
+        "part": "eco lower step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059924065,
+              36.654506698
+            ],
+            [
+              128.059919243,
+              36.654510461
+            ],
+            [
+              128.059880165,
+              36.654478226
+            ],
+            [
+              128.059884986,
+              36.654474464
+            ],
+            [
+              128.059924065,
+              36.654506698
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-garden",
+        "base": 0,
+        "height": 0.75,
+        "color": "#e8dec4",
+        "part": "eco garden walk",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059919243,
+              36.654510461
+            ],
+            [
+              128.059779415,
+              36.654619561
+            ],
+            [
+              128.059740336,
+              36.654587326
+            ],
+            [
+              128.059880165,
+              36.654478226
+            ],
+            [
+              128.059919243,
+              36.654510461
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-0",
+        "base": 0,
+        "height": 0.84,
+        "color": "#eee4cc",
+        "part": "eco upper step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059779415,
+              36.654619561
+            ],
+            [
+              128.059774593,
+              36.654623323
+            ],
+            [
+              128.059735515,
+              36.654591088
+            ],
+            [
+              128.059740336,
+              36.654587326
+            ],
+            [
+              128.059779415,
+              36.654619561
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-1",
+        "base": 0,
+        "height": 0.93,
+        "color": "#dbd1b4",
+        "part": "eco upper step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059774593,
+              36.654623323
+            ],
+            [
+              128.059769771,
+              36.654627085
+            ],
+            [
+              128.059730693,
+              36.65459485
+            ],
+            [
+              128.059735515,
+              36.654591088
+            ],
+            [
+              128.059774593,
+              36.654623323
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-2",
+        "base": 0,
+        "height": 1.02,
+        "color": "#eee4cc",
+        "part": "eco upper step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059769771,
+              36.654627085
+            ],
+            [
+              128.05976495,
+              36.654630847
+            ],
+            [
+              128.059725871,
+              36.654598612
+            ],
+            [
+              128.059730693,
+              36.65459485
+            ],
+            [
+              128.059769771,
+              36.654627085
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-3",
+        "base": 0,
+        "height": 1.11,
+        "color": "#dbd1b4",
+        "part": "eco upper step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.05976495,
+              36.654630847
+            ],
+            [
+              128.059760128,
+              36.654634609
+            ],
+            [
+              128.05972105,
+              36.654602374
+            ],
+            [
+              128.059725871,
+              36.654598612
+            ],
+            [
+              128.05976495,
+              36.654630847
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-4",
+        "base": 0,
+        "height": 1.2,
+        "color": "#eee4cc",
+        "part": "eco upper step",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059760128,
+              36.654634609
+            ],
+            [
+              128.059755307,
+              36.654638371
+            ],
+            [
+              128.059716228,
+              36.654606136
+            ],
+            [
+              128.05972105,
+              36.654602374
+            ],
+            [
+              128.059760128,
+              36.654634609
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-upper-landing",
+        "base": 0,
+        "height": 1.2,
+        "color": "#e2d7b9",
+        "part": "eco upper landing",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059755307,
+              36.654638371
+            ],
+            [
+              128.059559539,
+              36.654791117
+            ],
+            [
+              128.059520461,
+              36.654758883
+            ],
+            [
+              128.059716228,
+              36.654606136
+            ],
+            [
+              128.059755307,
+              36.654638371
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-bed-base--4",
+        "base": 0,
+        "height": 1,
+        "color": "#c7c0a7",
+        "part": "eco planter edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059903423,
+              36.654554166
+            ],
+            [
+              128.059839134,
+              36.654604327
+            ],
+            [
+              128.059823503,
+              36.654591434
+            ],
+            [
+              128.059887792,
+              36.654541273
+            ],
+            [
+              128.059903423,
+              36.654554166
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-bed-green--4",
+        "base": 0,
+        "height": 1.05,
+        "color": "#87a960",
+        "part": "eco raised garden",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059900644,
+              36.654554453
+            ],
+            [
+              128.059839569,
+              36.654602106
+            ],
+            [
+              128.059826283,
+              36.654591147
+            ],
+            [
+              128.059887357,
+              36.654543494
+            ],
+            [
+              128.059900644,
+              36.654554453
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-bed-base-4",
+        "base": 0,
+        "height": 1,
+        "color": "#c7c0a7",
+        "part": "eco planter edge",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059840898,
+              36.654502591
+            ],
+            [
+              128.059776609,
+              36.654552752
+            ],
+            [
+              128.059760978,
+              36.654539858
+            ],
+            [
+              128.059825267,
+              36.654489697
+            ],
+            [
+              128.059840898,
+              36.654502591
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terrace-bed-green-4",
+        "base": 0,
+        "height": 1.05,
+        "color": "#87a960",
+        "part": "eco raised garden",
+        "usage": "visual_only",
+        "survey_verified": false,
+        "source": "floor counts supplied by user; dimensions and ground levels are visual estimates",
+        "height_source": "visual estimate",
+        "routing_enabled": false
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              128.059838118,
+              36.654502878
+            ],
+            [
+              128.059777044,
+              36.654550531
+            ],
+            [
+              128.059763757,
+              36.654539571
+            ],
+            [
+              128.059824832,
+              36.654491918
+            ],
+            [
+              128.059838118,
+              36.654502878
             ]
           ]
         ]
