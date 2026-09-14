@@ -1,0 +1,4 @@
+export function addEcotownLayers(map, VISUAL_MODELS, ECOTOWN_WALKWAYS){map.addSource('visual-models',{type:'geojson',data:VISUAL_MODELS});
+  map.addLayer({id:'landmark-models',type:'fill-extrusion',source:'visual-models',paint:{'fill-extrusion-color':['get','color'],'fill-extrusion-base':['get','base'],'fill-extrusion-height':['get','height'],'fill-extrusion-opacity':1}});
+  map.addSource('ecotown-walkways',{type:'geojson',data:ECOTOWN_WALKWAYS});
+  map.addLayer({id:'ecotown-blue-walkways',type:'line',source:'ecotown-walkways',layout:{'line-elevation-reference':'ground','line-z-offset':['get','render_z_m'],'line-cap':'round','line-join':'round'},paint:{'line-color':'#355ed0','line-width':3,'line-opacity':.9}});}

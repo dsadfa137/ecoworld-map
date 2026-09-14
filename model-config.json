@@ -1,0 +1,13 @@
+{
+  "datum": {"ground_relative_m":0,"basement_relative_m":-4,"render_offset_m":4,"floor_height_m":4},
+  "origin": [128.05965,36.6546],
+  "survey_verified": false,
+  "photo_alignment": "Existing OSM building outlines; annotated photo interpreted for relative layout only. Not a georeferenced orthophoto.",
+  "buildings": [
+    {"id":"osm-w1545943901-building","label":"하단동","above_ground_floors":2,"courtyard_edge":0,"exposed_basement":true,"roof":"green"},
+    {"id":"osm-w1545943902-building","label":"좌측동","above_ground_floors":2,"courtyard_edge":1,"exposed_basement":false,"roof":"green"},
+    {"id":"osm-w1545943903-building","label":"우측동","above_ground_floors":2,"courtyard_edge":3,"exposed_basement":true,"roof":"green"},
+    {"id":"osm-w1545943904-building","label":"메인 온실동","above_ground_floors":3,"courtyard_edge":2,"exposed_basement":true,"roof":"solar","solar_racks":3}
+  ],
+  "notes": ["층수와 색상 의미는 사용자 제공", "지하 깊이·층고·선큰 경계·보행선은 시각적 추정", "신규 선은 표시·검토용이며 GPS 보정 및 길찾기에서 제외"]
+}

@@ -1,0 +1,1400 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "entry-b1",
+      "properties": {
+        "id": "entry-b1",
+        "type": "walk_node",
+        "level": "B1",
+        "relative_height_m": -4,
+        "render_height_m": 0,
+        "role": "existing KML entrance anchor",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059984886,
+          36.65442788
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "lower-court",
+      "properties": {
+        "id": "lower-court",
+        "type": "walk_node",
+        "level": "B1",
+        "relative_height_m": -4,
+        "render_height_m": 0,
+        "role": "lower courtyard junction",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.06013203,
+          36.654357183
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "front-door-b1",
+      "properties": {
+        "id": "front-door-b1",
+        "type": "walk_node",
+        "level": "B1",
+        "relative_height_m": -4,
+        "render_height_m": 0,
+        "role": "inferred basement door",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059898479,
+          36.654336839
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-door-b1",
+      "properties": {
+        "id": "east-door-b1",
+        "type": "walk_node",
+        "level": "B1",
+        "relative_height_m": -4,
+        "render_height_m": 0,
+        "role": "inferred basement door",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.060298434,
+          36.654512849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "upper-junction",
+      "properties": {
+        "id": "upper-junction",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "upper walkway junction",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.05965,
+          36.654492081
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-junction",
+      "properties": {
+        "id": "west-junction",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "walkway bend",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.05940338,
+          36.654671946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-door",
+      "properties": {
+        "id": "west-door",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "inferred ground floor door",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059354732,
+          36.65459649
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "main-door",
+      "properties": {
+        "id": "main-door",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "inferred ground floor door",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059391448,
+          36.654848693
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-junction",
+      "properties": {
+        "id": "east-junction",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "upper walkway junction",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.05989662,
+          36.654608993
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-door-g1",
+      "properties": {
+        "id": "east-door-g1",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "inferred ground floor door",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059994523,
+          36.654726744
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "rear-path",
+      "properties": {
+        "id": "rear-path",
+        "type": "walk_node",
+        "level": "G1",
+        "relative_height_m": 0,
+        "render_height_m": 4,
+        "role": "rear path connection unverified",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.05993025,
+          36.654896776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-1",
+      "properties": {
+        "id": "transition-1",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -3.75,
+        "render_height_m": 0.25,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059963956,
+          36.654431892
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-2",
+      "properties": {
+        "id": "transition-2",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -3.5,
+        "render_height_m": 0.5,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059943026,
+          36.654435905
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-3",
+      "properties": {
+        "id": "transition-3",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -3.25,
+        "render_height_m": 0.75,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059922095,
+          36.654439918
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-4",
+      "properties": {
+        "id": "transition-4",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -3,
+        "render_height_m": 1,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059901165,
+          36.65444393
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-5",
+      "properties": {
+        "id": "transition-5",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -2.75,
+        "render_height_m": 1.25,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059880234,
+          36.654447943
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-6",
+      "properties": {
+        "id": "transition-6",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -2.5,
+        "render_height_m": 1.5,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059859304,
+          36.654451955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-7",
+      "properties": {
+        "id": "transition-7",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -2.25,
+        "render_height_m": 1.75,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059838374,
+          36.654455968
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-8",
+      "properties": {
+        "id": "transition-8",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -2,
+        "render_height_m": 2,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059817443,
+          36.654459981
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-9",
+      "properties": {
+        "id": "transition-9",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -1.75,
+        "render_height_m": 2.25,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059796513,
+          36.654463993
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-10",
+      "properties": {
+        "id": "transition-10",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -1.5,
+        "render_height_m": 2.5,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059775582,
+          36.654468006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-11",
+      "properties": {
+        "id": "transition-11",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -1.25,
+        "render_height_m": 2.75,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059754652,
+          36.654472018
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-12",
+      "properties": {
+        "id": "transition-12",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -1,
+        "render_height_m": 3,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059733722,
+          36.654476031
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-13",
+      "properties": {
+        "id": "transition-13",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -0.75,
+        "render_height_m": 3.25,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059712791,
+          36.654480044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-14",
+      "properties": {
+        "id": "transition-14",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -0.5,
+        "render_height_m": 3.5,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.059691861,
+          36.654484056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-15",
+      "properties": {
+        "id": "transition-15",
+        "type": "walk_node",
+        "level": "transition",
+        "relative_height_m": -0.25,
+        "render_height_m": 3.75,
+        "role": "inferred stepped connection",
+        "survey_verified": false
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          128.05967093,
+          36.654488069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "entry-lower",
+      "properties": {
+        "id": "entry-lower",
+        "type": "review_walkway",
+        "from_node": "entry-b1",
+        "to_node": "lower-court",
+        "from_level": "B1",
+        "to_level": "B1",
+        "relative_start_m": -4,
+        "relative_end_m": -4,
+        "render_z_m": 0.15,
+        "length_m": 15.3,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059984886,
+            36.65442788
+          ],
+          [
+            128.06013203,
+            36.654357183
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "lower-front",
+      "properties": {
+        "id": "lower-front",
+        "type": "review_walkway",
+        "from_node": "lower-court",
+        "to_node": "front-door-b1",
+        "from_level": "B1",
+        "to_level": "B1",
+        "relative_start_m": -4,
+        "relative_end_m": -4,
+        "render_z_m": 0.15,
+        "length_m": 20.96,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.06013203,
+            36.654357183
+          ],
+          [
+            128.059898479,
+            36.654336839
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "lower-east",
+      "properties": {
+        "id": "lower-east",
+        "type": "review_walkway",
+        "from_node": "lower-court",
+        "to_node": "east-door-b1",
+        "from_level": "B1",
+        "to_level": "B1",
+        "relative_start_m": -4,
+        "relative_end_m": -4,
+        "render_z_m": 0.15,
+        "length_m": 22.8,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.06013203,
+            36.654357183
+          ],
+          [
+            128.060298434,
+            36.654512849
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "g1-west",
+      "properties": {
+        "id": "g1-west",
+        "type": "review_walkway",
+        "from_node": "upper-junction",
+        "to_node": "west-junction",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 29.73,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05965,
+            36.654492081
+          ],
+          [
+            128.05940338,
+            36.654671946
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-entrance-link",
+      "properties": {
+        "id": "west-entrance-link",
+        "type": "review_walkway",
+        "from_node": "west-junction",
+        "to_node": "west-door",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 9.45,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05940338,
+            36.654671946
+          ],
+          [
+            128.059354732,
+            36.65459649
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-main",
+      "properties": {
+        "id": "west-main",
+        "type": "review_walkway",
+        "from_node": "west-junction",
+        "to_node": "main-door",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 19.68,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05940338,
+            36.654671946
+          ],
+          [
+            128.059391448,
+            36.654848693
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "g1-east",
+      "properties": {
+        "id": "g1-east",
+        "type": "review_walkway",
+        "from_node": "upper-junction",
+        "to_node": "east-junction",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 25.55,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05965,
+            36.654492081
+          ],
+          [
+            128.05989662,
+            36.654608993
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-door",
+      "properties": {
+        "id": "east-door",
+        "type": "review_walkway",
+        "from_node": "east-junction",
+        "to_node": "east-door-g1",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 15.74,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05989662,
+            36.654608993
+          ],
+          [
+            128.059994523,
+            36.654726744
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-rear",
+      "properties": {
+        "id": "east-rear",
+        "type": "review_walkway",
+        "from_node": "east-junction",
+        "to_node": "rear-path",
+        "from_level": "G1",
+        "to_level": "G1",
+        "relative_start_m": 0,
+        "relative_end_m": 0,
+        "render_z_m": 4.15,
+        "length_m": 32.14,
+        "vertical_transition": false,
+        "access": "unknown",
+        "role": "pedestrian_reference",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05989662,
+            36.654608993
+          ],
+          [
+            128.05993025,
+            36.654896776
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-1",
+      "properties": {
+        "id": "transition-link-1",
+        "type": "review_walkway",
+        "from_node": "entry-b1",
+        "to_node": "transition-1",
+        "from_level": "B1",
+        "to_level": "transition",
+        "relative_start_m": -4,
+        "relative_end_m": -3.75,
+        "render_z_m": 0.275,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059984886,
+            36.65442788
+          ],
+          [
+            128.059963956,
+            36.654431892
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-2",
+      "properties": {
+        "id": "transition-link-2",
+        "type": "review_walkway",
+        "from_node": "transition-1",
+        "to_node": "transition-2",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -3.75,
+        "relative_end_m": -3.5,
+        "render_z_m": 0.525,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059963956,
+            36.654431892
+          ],
+          [
+            128.059943026,
+            36.654435905
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-3",
+      "properties": {
+        "id": "transition-link-3",
+        "type": "review_walkway",
+        "from_node": "transition-2",
+        "to_node": "transition-3",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -3.5,
+        "relative_end_m": -3.25,
+        "render_z_m": 0.775,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059943026,
+            36.654435905
+          ],
+          [
+            128.059922095,
+            36.654439918
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-4",
+      "properties": {
+        "id": "transition-link-4",
+        "type": "review_walkway",
+        "from_node": "transition-3",
+        "to_node": "transition-4",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -3.25,
+        "relative_end_m": -3,
+        "render_z_m": 1.025,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059922095,
+            36.654439918
+          ],
+          [
+            128.059901165,
+            36.65444393
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-5",
+      "properties": {
+        "id": "transition-link-5",
+        "type": "review_walkway",
+        "from_node": "transition-4",
+        "to_node": "transition-5",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -3,
+        "relative_end_m": -2.75,
+        "render_z_m": 1.275,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059901165,
+            36.65444393
+          ],
+          [
+            128.059880234,
+            36.654447943
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-6",
+      "properties": {
+        "id": "transition-link-6",
+        "type": "review_walkway",
+        "from_node": "transition-5",
+        "to_node": "transition-6",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -2.75,
+        "relative_end_m": -2.5,
+        "render_z_m": 1.525,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059880234,
+            36.654447943
+          ],
+          [
+            128.059859304,
+            36.654451955
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-7",
+      "properties": {
+        "id": "transition-link-7",
+        "type": "review_walkway",
+        "from_node": "transition-6",
+        "to_node": "transition-7",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -2.5,
+        "relative_end_m": -2.25,
+        "render_z_m": 1.775,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059859304,
+            36.654451955
+          ],
+          [
+            128.059838374,
+            36.654455968
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-8",
+      "properties": {
+        "id": "transition-link-8",
+        "type": "review_walkway",
+        "from_node": "transition-7",
+        "to_node": "transition-8",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -2.25,
+        "relative_end_m": -2,
+        "render_z_m": 2.025,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059838374,
+            36.654455968
+          ],
+          [
+            128.059817443,
+            36.654459981
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-9",
+      "properties": {
+        "id": "transition-link-9",
+        "type": "review_walkway",
+        "from_node": "transition-8",
+        "to_node": "transition-9",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -2,
+        "relative_end_m": -1.75,
+        "render_z_m": 2.275,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059817443,
+            36.654459981
+          ],
+          [
+            128.059796513,
+            36.654463993
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-10",
+      "properties": {
+        "id": "transition-link-10",
+        "type": "review_walkway",
+        "from_node": "transition-9",
+        "to_node": "transition-10",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -1.75,
+        "relative_end_m": -1.5,
+        "render_z_m": 2.525,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059796513,
+            36.654463993
+          ],
+          [
+            128.059775582,
+            36.654468006
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-11",
+      "properties": {
+        "id": "transition-link-11",
+        "type": "review_walkway",
+        "from_node": "transition-10",
+        "to_node": "transition-11",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -1.5,
+        "relative_end_m": -1.25,
+        "render_z_m": 2.775,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059775582,
+            36.654468006
+          ],
+          [
+            128.059754652,
+            36.654472018
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-12",
+      "properties": {
+        "id": "transition-link-12",
+        "type": "review_walkway",
+        "from_node": "transition-11",
+        "to_node": "transition-12",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -1.25,
+        "relative_end_m": -1,
+        "render_z_m": 3.025,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059754652,
+            36.654472018
+          ],
+          [
+            128.059733722,
+            36.654476031
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-13",
+      "properties": {
+        "id": "transition-link-13",
+        "type": "review_walkway",
+        "from_node": "transition-12",
+        "to_node": "transition-13",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -1,
+        "relative_end_m": -0.75,
+        "render_z_m": 3.275,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059733722,
+            36.654476031
+          ],
+          [
+            128.059712791,
+            36.654480044
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-14",
+      "properties": {
+        "id": "transition-link-14",
+        "type": "review_walkway",
+        "from_node": "transition-13",
+        "to_node": "transition-14",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -0.75,
+        "relative_end_m": -0.5,
+        "render_z_m": 3.525,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059712791,
+            36.654480044
+          ],
+          [
+            128.059691861,
+            36.654484056
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-15",
+      "properties": {
+        "id": "transition-link-15",
+        "type": "review_walkway",
+        "from_node": "transition-14",
+        "to_node": "transition-15",
+        "from_level": "transition",
+        "to_level": "transition",
+        "relative_start_m": -0.5,
+        "relative_end_m": -0.25,
+        "render_z_m": 3.775,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.059691861,
+            36.654484056
+          ],
+          [
+            128.05967093,
+            36.654488069
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "transition-link-16",
+      "properties": {
+        "id": "transition-link-16",
+        "type": "review_walkway",
+        "from_node": "transition-15",
+        "to_node": "upper-junction",
+        "from_level": "transition",
+        "to_level": "G1",
+        "relative_start_m": -0.25,
+        "relative_end_m": 0,
+        "render_z_m": 4.025,
+        "length_m": 1.92,
+        "vertical_transition": true,
+        "access": "unknown",
+        "role": "stairs_assumed_for_visual_review",
+        "routing_enabled": false,
+        "survey_verified": false,
+        "source": "annotated aerial photo interpretation; not surveyed"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            128.05967093,
+            36.654488069
+          ],
+          [
+            128.05965,
+            36.654492081
+          ]
+        ]
+      }
+    }
+  ]
+}

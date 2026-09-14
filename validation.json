@@ -1,14 +1,21 @@
 {
-  "status": "passed",
+  "passed": true,
+  "structural_features": 89,
+  "nodes": 26,
+  "links": 25,
+  "connected_components": 1,
   "checks": [
-    "JavaScript syntax",
-    "unchanged token, GeoJSON, photos and GPS functions",
-    "unchanged museum and main gate",
-    "valid 60 visual solids and unique IDs",
-    "3-story / 2-story wall heights",
-    "roof and panel elevation continuity",
-    "monotonic terrace heights",
-    "terrace vertices outside building interiors"
+    "original token, data, photos and GPS preserved",
+    "nonnegative renderer elevations and signed relative datum",
+    "G1 and upper floor separation",
+    "closed rings, no self intersections and sunken hole containment",
+    "shared link endpoints and explicit vertical transitions",
+    "reference lines do not cross original building interiors",
+    "lower courtyard does not cross building interiors"
   ],
-  "renderer": "not tested in browser: local file URL blocked by browser policy"
+  "not_verified": [
+    "real-world horizontal/vertical accuracy",
+    "actual stairs and accessibility",
+    "Mapbox runtime and on-site appearance"
+  ]
 }
