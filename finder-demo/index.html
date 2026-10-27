@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#12675e">
+<title>에코월드 시설 지도</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.15.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="app">
+  <div id="map" aria-label="에코월드 시설 지도"></div>
+
+  <!-- 상단: 검색 + 카테고리 칩 + 필터 -->
+  <header class="topbar">
+    <div class="search">
+      <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 4a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13Zm0 2a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm5.6 9.2 4.2 4.2-1.4 1.4-4.2-4.2 1.4-1.4Z"/></svg>
+      <input id="searchInput" type="search" placeholder="시설 이름 검색" autocomplete="off" aria-label="시설 이름 검색">
+      <button id="searchClear" class="search-clear" type="button" aria-label="검색어 지우기" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 5.6 5 5 5-5L18.4 7l-5 5 5 5-1.4 1.4-5-5-5 5L5.6 17l5-5-5-5L7 5.6Z"/></svg>
+      </button>
+    </div>
+    <div class="chip-row">
+      <div id="categoryChips" class="chips" role="tablist" aria-label="시설 종류"></div>
+      <button id="filterButton" class="filter-button" type="button" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4V6Zm3 5h10v2H7v-2Zm3 5h4v2h-4v-2Z"/></svg>
+        <span>필터</span><b id="filterCount" hidden>0</b>
+      </button>
+    </div>
+  </header>
+
+  <!-- 오른쪽 지도 버튼 -->
+  <div class="map-controls" role="group" aria-label="지도 조작">
+    <div class="zoom-group">
+      <button id="zoomIn" type="button" aria-label="확대"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg></button>
+      <button id="zoomOut" type="button" aria-label="축소"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v2H5v-2Z"/></svg></button>
+    </div>
+    <button id="locateButton" type="button" aria-label="내 위치 보기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2h2v2.1A8 8 0 0 1 19.9 11H22v2h-2.1A8 8 0 0 1 13 19.9V22h-2v-2.1A8 8 0 0 1 4.1 13H2v-2h2.1A8 8 0 0 1 11 4.1V2Zm1 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/></svg></button>
+    <button id="resetView" type="button" aria-label="전체 보기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z"/></svg></button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- 바텀시트: 목록 보기 / 시설 상세 -->
+  <section id="sheet" class="sheet" data-state="collapsed" aria-label="시설 목록">
+    <div id="sheetGrip" class="sheet-grip" role="button" tabindex="0" aria-label="목록 펼치기·접기">
+      <span class="grip-bar" aria-hidden="true"></span>
+    </div>
+
+    <div id="listView" class="sheet-view">
+      <div class="list-head">
+        <h2 id="listTitle">시설 <span id="resultCount">0</span>곳</h2>
+        <label class="sort">
+          <span class="sr-only">정렬</span>
+          <select id="sortSelect">
+            <option value="name">이름순</option>
+            <option value="distance">가까운 순</option>
+            <option value="wait">대기 짧은 순</option>
+          </select>
+        </label>
+      </div>
+      <ul id="resultList" class="result-list" aria-labelledby="listTitle"></ul>
+      <div id="emptyState" class="empty" hidden>
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="21" cy="21" r="13" fill="none" stroke="currentColor" stroke-width="3"/><path d="m31 31 9 9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M15 21h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        <strong>조건에 맞는 시설이 없어요</strong>
+        <p>검색어나 필터를 바꿔 보세요.</p>
+        <button id="emptyReset" type="button" class="primary">조건 모두 지우기</button>
+      </div>
+    </div>
+
+    <article id="detailView" class="sheet-view detail" hidden aria-labelledby="detailName">
+      <div class="detail-top">
+        <button id="detailBack" type="button" class="icon-text" aria-label="목록으로 돌아가기">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.6 5 1.4 1.4L10.4 12l5.6 5.6-1.4 1.4-7-7 7-7Z"/></svg><span>목록</span>
+        </button>
+        <button id="detailClose" type="button" class="icon-only" aria-label="시설 정보 닫기">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 5.6 5 5 5-5L18.4 7l-5 5 5 5-1.4 1.4-5-5-5 5L5.6 17l5-5-5-5L7 5.6Z"/></svg>
+        </button>
+      </div>
+      <div class="detail-card">
+        <div id="detailThumb" class="detail-thumb" aria-hidden="true"></div>
+        <div class="detail-title">
+          <p id="detailCategory" class="detail-category"></p>
+          <h2 id="detailName"></h2>
+          <p id="detailMeta" class="detail-meta"></p>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button id="actionCenter" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 1 7 7c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 7-7Zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg><span>지도에서 보기</span></button>
+        <button id="actionShare" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 3a3 3 0 1 1-2.8 4.1L9 10.4a3 3 0 0 1 0 3.2l6.2 3.3A3 3 0 1 1 14.4 19L8 15.6a3 3 0 1 1 0-7.2L14.4 5A3 3 0 0 1 18 3Z"/></svg><span>공유</span></button>
+      </div>
+      <img id="detailPhoto" class="detail-photo" alt="" hidden>
+      <dl class="detail-info">
+        <div><dt>운영</dt><dd id="detailStatus"></dd></div>
+        <div><dt>대기시간</dt><dd id="detailWait"></dd></div>
+        <div><dt>거리</dt><dd id="detailDistance"></dd></div>
+      </dl>
+      <p id="detailDescription" class="detail-description"></p>
+      <p class="detail-note">운영 정보는 현장 안내가 우선입니다. 위치는 지도 표시용이며 현장 확인이 필요합니다.</p>
+    </article>
+  </section>
+
+  <!-- 필터 시트 -->
+  <dialog id="filterDialog" class="filter-dialog" aria-labelledby="filterTitle">
+    <form method="dialog" class="filter-form">
+      <div class="filter-head">
+        <h2 id="filterTitle">필터</h2>
+        <button value="cancel" type="submit" class="icon-only" aria-label="필터 닫기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 5.6 5 5 5-5L18.4 7l-5 5 5 5-1.4 1.4-5-5-5 5L5.6 17l5-5-5-5L7 5.6Z"/></svg></button>
+      </div>
+      <fieldset>
+        <legend>편의시설</legend>
+        <div id="tagOptions" class="option-grid"></div>
+      </fieldset>
+      <fieldset>
+        <legend>운영 정보</legend>
+        <label class="switch"><input id="optOpen" type="checkbox"><span>지금 운영 중인 곳만</span></label>
+        <label class="switch"><input id="optWait" type="checkbox"><span>대기시간 정보가 있는 곳만</span></label>
+      </fieldset>
+      <div class="filter-foot">
+        <button id="filterClear" type="button" class="ghost">초기화</button>
+        <button id="filterApply" value="apply" type="submit" class="primary">적용</button>
+      </div>
+    </form>
+  </dialog>
+</div>
+
+<script src="data/facilities.js"></script>
+<script src="data/park.js"></script>
+<script src="data/basemap.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
