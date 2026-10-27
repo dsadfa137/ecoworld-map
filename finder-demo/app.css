@@ -34,6 +34,8 @@ svg{width:22px;height:22px;fill:currentColor;flex:none}
 .chip-row{display:flex;gap:8px;align-items:center;margin-top:10px}
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;flex:1;padding:2px 2px 4px;scroll-snap-type:x proximity}
 .chips::-webkit-scrollbar{display:none}
+/* 칩이 오른쪽으로 더 있다는 것을 끝을 흐리게 해서 알린다 */
+.chips{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
 .chip{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--line);
   background:#fff;font-size:14px;font-weight:600;white-space:nowrap;box-shadow:var(--shadow-sm);scroll-snap-align:start;transition:background .18s,color .18s,border-color .18s}
 .chip .dot{width:10px;height:10px;border-radius:50%;background:var(--chip-c,var(--teal))}
@@ -165,7 +167,7 @@ legend{font-weight:700;font-size:14px;color:var(--ink-2);padding:8px 0}
   background:rgba(25,59,64,.94);color:#fff;padding:10px 16px;border-radius:14px;font-size:14px;box-shadow:var(--shadow-sm);text-align:center}
 
 .maplibregl-ctrl-attrib{font-size:10px}
-.maplibregl-ctrl-bottom-right{bottom:calc(var(--sheet-visible,var(--sheet-peek)) - 2px)}
+.maplibregl-ctrl-bottom-left{bottom:calc(var(--sheet-visible,var(--sheet-peek)) - 2px)}
 
 /* ---------- 데스크톱: 시트를 왼쪽 패널로 ---------- */
 @media (min-width:900px){
@@ -175,7 +177,7 @@ legend{font-weight:700;font-size:14px;color:var(--ink-2);padding:8px 0}
   .list-head{padding-top:14px}
   .detail{padding-top:12px}
   .map-controls{bottom:28px!important}
-  .maplibregl-ctrl-bottom-right{bottom:0!important}
+  .maplibregl-ctrl-bottom-left{bottom:0!important;left:400px}
   .filter-dialog{margin:auto;max-width:420px;border-radius:var(--radius)}
   .toast{left:calc(50% + 200px)}
 }

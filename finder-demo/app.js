@@ -5,7 +5,7 @@ import * as maplibregl from 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.15.0/dis
 const CONFIG = {
   labelMinZoom: 17,      // 이 줌 이상에서만 시설 이름 표시 (minzoom)
   clusterBelowZoom: 16,  // 이 줌 미만에서는 가까운 핀을 묶는다
-  clusterRadiusPx: 46,
+  clusterRadiusPx: 64,   // 묶음 원(48px+테두리)끼리 겹치지 않는 간격
   selectZoom: 17.3,      // 핀을 고르면 최소 이 줌까지 확대
   minZoom: 13.5, maxZoom: 19.5,
   walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
@@ -262,8 +262,9 @@ function createPin(f) {
 }
 function updateLabels() {
   // minzoom: 기준 줌 근처의 깜빡임을 막기 위해 0.05 히스테리시스를 둔다.
+  // 애니메이션이 16.999…에서 멈춰도 이름이 나오도록 0.01 여유를 준다.
   const z = map.getZoom(), c = map.getContainer(), on = c.classList.contains('show-labels');
-  if (!on && z >= CONFIG.labelMinZoom) c.classList.add('show-labels');
+  if (!on && z >= CONFIG.labelMinZoom - 0.01) c.classList.add('show-labels');
   else if (on && z < CONFIG.labelMinZoom - 0.05) c.classList.remove('show-labels');
 }
 // 이름표끼리 겹치면 우선순위가 낮은 쪽을 숨긴다. 선택 시설 > 체험·전시 > 그 밖의 시설.
@@ -489,7 +490,7 @@ function locate() {
     else userMarker.setLngLat(state.user);
     const far = distanceM(state.user, state.center);
     if (far > CONFIG.farFromParkM) toast(`공원에서 약 ${formatDistance(far)} 떨어져 있어요. 거리는 직선 기준이에요.`);
-    else { focusOn(state.user, Math.max(map.getZoom(), 17), 600); if (pos.coords.accuracy > 50) toast(`위치 정확도가 낮아요(약 ${Math.round(pos.coords.accuracy)}m).`); }
+    else { focusOn(state.user, Math.max(map.getZoom(), CONFIG.selectZoom), 600); if (pos.coords.accuracy > 50) toast(`위치 정확도가 낮아요(약 ${Math.round(pos.coords.accuracy)}m).`); }
     if (state.sort === 'name') { state.sort = 'distance'; $('sortSelect').value = 'distance'; }
     renderList(); if (state.selected) renderDetail(byId(state.selected));
   }, err => {
@@ -507,11 +508,12 @@ async function main() {
   const pad = 0.012;
   map = new maplibregl.Map({
     container: 'map', style: buildStyle(), center: state.center, zoom: 16.2,
-    minZoom: CONFIG.minZoom, maxZoom: CONFIG.maxZoom, attributionControl: { compact: true },
+    minZoom: CONFIG.minZoom, maxZoom: CONFIG.maxZoom, attributionControl: false,
     maxBounds: [[b.getWest() - pad, b.getSouth() - pad], [b.getEast() + pad, b.getNorth() + pad]],
     pitchWithRotate: false, dragRotate: false, touchPitch: false
   });
   map.touchZoomRotate.disableRotation();
+  map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left'); // 오른쪽 지도 버튼과 겹치지 않게 왼쪽 아래
   window.ecoMap = map; // 디버그·검사용
   for (const f of state.facilities) createPin(f);
   map.on('zoom', updateLabels);
