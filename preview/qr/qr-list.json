@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "baseUrl": "https://dsadfa137.github.io/ecoworld-map/",
+  "entries": [
+    {
+      "src": "gate",
+      "name": "정문",
+      "poiId": "user-kml-7e3590486010",
+      "url": "https://dsadfa137.github.io/ecoworld-map/?src=gate",
+      "file": "ecoworld-gate.png",
+      "width": 1800,
+      "height": 1800,
+      "errorCorrection": "Q",
+      "quietZoneModules": 4,
+      "decodeVerified": true
+    },
+    {
+      "src": "parking",
+      "name": "에코월드 야외주차장 1",
+      "poiId": "user-kml-e455d21352f8",
+      "url": "https://dsadfa137.github.io/ecoworld-map/?src=parking",
+      "file": "ecoworld-parking.png",
+      "width": 1800,
+      "height": 1800,
+      "errorCorrection": "Q",
+      "quietZoneModules": 4,
+      "decodeVerified": true
+    },
+    {
+      "src": "museum",
+      "name": "문경석탄박물관",
+      "poiId": "user-kml-595aa6c82685",
+      "url": "https://dsadfa137.github.io/ecoworld-map/?src=museum",
+      "file": "ecoworld-museum.png",
+      "width": 1800,
+      "height": 1800,
+      "errorCorrection": "Q",
+      "quietZoneModules": 4,
+      "decodeVerified": true
+    },
+    {
+      "src": "set1",
+      "name": "1세트장",
+      "poiId": "user-kml-798122eac9b9",
+      "url": "https://dsadfa137.github.io/ecoworld-map/?src=set1",
+      "file": "ecoworld-set1.png",
+      "width": 1800,
+      "height": 1800,
+      "errorCorrection": "Q",
+      "quietZoneModules": 4,
+      "decodeVerified": true
+    },
+    {
+      "src": "village",
+      "name": "탄광사택촌",
+      "poiId": "user-kml-1b5c60f82717",
+      "url": "https://dsadfa137.github.io/ecoworld-map/?src=village",
+      "file": "ecoworld-village.png",
+      "width": 1800,
+      "height": 1800,
+      "errorCorrection": "Q",
+      "quietZoneModules": 4,
+      "decodeVerified": true
+    }
+  ]
+}

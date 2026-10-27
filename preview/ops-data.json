@@ -1,0 +1,233 @@
+{
+  "schemaVersion": 2,
+  "waitMaxAgeMinutes": 30,
+  "updatedAt": null,
+  "facilities": {
+    "user-kml-36151912a2e8": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-540fcca76639": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-ada57d5b3aa8": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-798122eac9b9": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-dec151519e6e": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-d523453e98d2": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-403a895ea92f": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-d0fe5b8e8a77": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-9cad01521fb8": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-5d9f5429a19b": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-51f5c900e686": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-595aa6c82685": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-fa6b8b565472": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-178f7c986a33": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-098e71f832dd": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-1b5c60f82717": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-6e6cb1fed873": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-0989fe6eb3f5": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-30dffae8c90d": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-df9c8de9a37a": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-55391809416e": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-c1bcd1d4e831": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-8033748900e3": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-4de8e1f19a1d": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-dc2b8a2de74a": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-e455d21352f8": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-8312a3471dd2": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    },
+    "user-kml-7e3590486010": {
+      "status": "unknown",
+      "hours": "",
+      "note": "",
+      "checkedAt": null,
+      "validUntil": null,
+      "waitMinutes": null
+    }
+  },
+  "schedule": [],
+  "notices": []
+}
