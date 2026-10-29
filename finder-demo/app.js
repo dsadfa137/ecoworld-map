@@ -10,6 +10,7 @@ const CONFIG = {
   minZoom: 13.5, maxZoom: 19.5,
   walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
   farFromParkM: 2000,
+  pitch3d: 50,           // 입체 보기 기울기
   desktopMin: 900
 };
 
@@ -135,7 +136,12 @@ function applySheet(y, animate = true) {
   s.classList.toggle('dragging', !animate);
   s.style.setProperty('--sheet-y', `${y}px`);
   const visible = isDesktop() ? 0 : Math.max(0, pos.height - y);
-  $('app').style.setProperty('--sheet-visible', `${Math.min(visible, innerHeight * 0.55)}px`);
+  const shown = Math.min(visible, innerHeight * 0.55);
+  $('app').style.setProperty('--sheet-visible', `${shown}px`);
+  // 시트가 올라와 지도 버튼이 상단 검색·카테고리 줄에 닿으면 버튼을 잠시 숨긴다.
+  const top = $('app').querySelector('.topbar').getBoundingClientRect().bottom;
+  const controlsH = $('app').querySelector('.map-controls').offsetHeight;
+  $('app').classList.toggle('app-hide-controls', !isDesktop() && innerHeight - shown - 14 - controlsH < top + 6);
 }
 function setSheet(name, animate = true) {
   state.sheet = name;
@@ -216,21 +222,92 @@ function cameraPadding() {
   if (isDesktop()) return { top: 40, bottom: 40, left: 432, right: 80 };
   return { top, bottom: sheetVisibleHeight() + 28, left: 32, right: 72 };
 }
+// 일러스트풍 배경: 브이월드 타일을 파스텔로 누르고, 공원 도형과 3D 건물을 같은 좌표 위에 올린다.
 function buildStyle() {
   const sources = { park: { type: 'geojson', data: window.ECO_PARK || { type: 'FeatureCollection', features: [] } } };
-  const layers = [{ id: 'bg', type: 'background', paint: { 'background-color': '#e8efdf' } }];
+  const layers = [{ id: 'bg', type: 'background', paint: { 'background-color': '#e3e8de' } }];
   const base = window.ECO_BASEMAP;
   if (base?.tiles?.length) {
     sources.base = { type: 'raster', tiles: base.tiles, tileSize: 256, bounds: base.bounds, minzoom: base.minzoom || 6, maxzoom: base.maxzoom || 19, attribution: base.attribution || '' };
-    layers.push({ id: 'base', type: 'raster', source: 'base', paint: { 'raster-fade-duration': 0, 'raster-opacity': 0.9 } });
+    layers.push({ id: 'base', type: 'raster', source: 'base', paint: {
+      'raster-fade-duration': 0, 'raster-opacity': 0.85,
+      'raster-saturation': -0.35, 'raster-contrast': -0.15, 'raster-brightness-min': 0.12, 'raster-hue-rotate': 8
+    } });
   }
+  const kind = k => ['==', ['get', 'kind'], k];
+  const isModel = ['==', ['get', 'model'], true];
   layers.push(
-    { id: 'plaza', type: 'fill', source: 'park', filter: ['==', ['get', 'kind'], 'plaza'], paint: { 'fill-color': '#f3e7c9', 'fill-opacity': 0.75 } },
-    { id: 'building', type: 'fill', source: 'park', filter: ['==', ['get', 'kind'], 'building'], paint: { 'fill-color': '#c9d6c4', 'fill-outline-color': '#97a993', 'fill-opacity': 0.9 } },
-    { id: 'path-casing', type: 'line', source: 'park', filter: ['==', ['get', 'kind'], 'path'], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffffff', 'line-width': ['interpolate', ['linear'], ['zoom'], 15, 4, 19, 14] } },
-    { id: 'path', type: 'line', source: 'park', filter: ['==', ['get', 'kind'], 'path'], layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#e9c46a', 'line-width': ['interpolate', ['linear'], ['zoom'], 15, 2, 19, 9] } }
+    { id: 'plaza', type: 'fill', source: 'park', filter: kind('plaza'), paint: { 'fill-color': '#f6ead0', 'fill-outline-color': '#e2cfa4', 'fill-opacity': 0.9 } },
+    // 3D 모델이 놓이는 자리는 밝은 바닥만 깔아 둔다.
+    { id: 'model-pad', type: 'fill', source: 'park', filter: ['all', kind('building'), isModel], paint: { 'fill-color': '#f4efe2', 'fill-opacity': 0.8 } },
+    { id: 'path-casing', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#fffaf0', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 3, 17, 10, 19.5, 30] } },
+    { id: 'path', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#efcf86', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 1.5, 17, 6, 19.5, 20] } },
+    { id: 'path-dash', type: 'line', source: 'park', filter: kind('path'), minzoom: 16.5, layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ffffff', 'line-opacity': 0.7, 'line-width': ['interpolate', ['linear'], ['zoom'], 16.5, 0.8, 19.5, 2.5], 'line-dasharray': [2, 3] } },
+    // 모델이 없는 건물은 파스텔 블록으로 세운다(높이는 표시용 가정값).
+    { id: 'building-3d', type: 'fill-extrusion', source: 'park', filter: ['all', kind('building'), ['!', isModel]], paint: {
+      'fill-extrusion-color': '#e7d9c3', 'fill-extrusion-height': ['coalesce', ['get', 'height'], 7], 'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.92, 'fill-extrusion-vertical-gradient': true
+    } }
   );
-  return { version: 8, sources, layers };
+  return {
+    version: 8, sources, layers,
+    sky: { 'sky-color': '#9fd0ea', 'horizon-color': '#f4f7ef', 'fog-color': '#e3e8de', 'sky-horizon-blend': 0.7, 'horizon-fog-blend': 0.8, 'fog-ground-blend': 0.9 },
+    light: { anchor: 'map', position: [1.4, 210, 35], intensity: 0.35, color: '#fff6e0' }
+  };
+}
+
+// ---------------------------------------------------------------- 3D 랜드마크 (v7.3 GLB 6개, 같은 좌표계)
+const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js';
+function landmarkLayer() {
+  const models = window.ECO_LANDMARKS || [];
+  return {
+    id: 'landmarks', type: 'custom', renderingMode: '3d',
+    onAdd(m, gl) {
+      this.items = [];
+      Promise.all([import(THREE_URL), import('three/addons/loaders/GLTFLoader.js')]).then(([THREE, { GLTFLoader }]) => {
+        this.THREE = THREE;
+        this.camera = new THREE.Camera();
+        this.renderer = new THREE.WebGLRenderer({ canvas: m.getCanvas(), context: gl, antialias: true });
+        this.renderer.autoClear = false; this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        const loader = new GLTFLoader();
+        // GLB 축: X 동, Y 위, Z 남 → 메르카토르 축: X 동, Y 남, Z 위
+        const basis = new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+        for (const cfg of models) {
+          const o = maplibregl.MercatorCoordinate.fromLngLat(cfg.origin, 0), u = o.meterInMercatorCoordinateUnits();
+          const r = cfg.orientation.map(v => v * Math.PI / 180);
+          const matrix = new THREE.Matrix4().makeTranslation(o.x, o.y, o.z).scale(new THREE.Vector3(u, u, u))
+            .multiply(new THREE.Matrix4().makeRotationZ(r[2])).multiply(new THREE.Matrix4().makeRotationX(r[0]))
+            .multiply(new THREE.Matrix4().makeRotationY(r[1])).scale(new THREE.Vector3(...cfg.scale)).multiply(basis);
+          const scene = new THREE.Scene();
+          scene.add(new THREE.AmbientLight('#ffffff', 1.9));
+          const sun = new THREE.DirectionalLight('#fff3d6', 1.7), az = (210 - r[2] * 180 / Math.PI) * Math.PI / 180, po = 35 * Math.PI / 180;
+          sun.position.set(Math.sin(az) * Math.sin(po), Math.cos(po), -Math.cos(az) * Math.sin(po)); scene.add(sun);
+          loader.load(cfg.url, g => { scene.add(g.scene); this.items.push({ scene, matrix }); m.triggerRepaint(); },
+            undefined, () => console.warn(`3D 모델을 불러오지 못했어요: ${cfg.name}`));
+        }
+      }).catch(() => console.warn('3D 렌더러를 준비하지 못해 평면 지도로 표시합니다.'));
+    },
+    render(gl, args) {
+      if (!this.renderer || !this.items.length) return;
+      const main = new this.THREE.Matrix4().fromArray(args?.defaultProjectionData?.mainMatrix || args);
+      this.renderer.resetState();
+      for (const it of this.items) {
+        this.camera.projectionMatrix = main.clone().multiply(it.matrix);
+        this.renderer.render(it.scene, this.camera);
+      }
+    }
+  };
+}
+
+// 3D 기울기 보기 ↔ 위에서 보기
+function viewIs3d() { return map.getPitch() > 5; }
+function set3d(on, animate = true) {
+  map.easeTo({ pitch: on ? CONFIG.pitch3d : 0, duration: animate ? 600 : 0 });
+  const b = $('viewToggle');
+  b.textContent = on ? '2D' : '3D';
+  b.setAttribute('aria-label', on ? '위에서 보기(2D)로 바꾸기' : '입체 보기(3D)로 바꾸기');
+  b.setAttribute('aria-pressed', String(on));
+  try { localStorage.setItem('eco-view', on ? '3d' : '2d'); } catch { /* 저장 불가 환경 */ }
 }
 // 지점을 '가려지지 않은 지도 영역'의 가운데로 옮긴다. 지도에 padding을 남기지 않도록 offset을 쓴다.
 function focusOn(lngLat, zoom, duration = 500) {
@@ -245,7 +322,33 @@ function boundsOf(list) {
 function fitAll(animate = true) {
   const list = state.facilities.filter(matches);
   if (!list.length) return;
-  map.fitBounds(boundsOf(list), { padding: cameraPadding(), maxZoom: 17, duration: animate ? 600 : 0 });
+  const pad = cameraPadding(), pitch = map.getPitch(), bearing = map.getBearing();
+  const cam = map.cameraForBounds(boundsOf(list), { padding: pad, maxZoom: 17, bearing, pitch: 0 });
+  if (!cam) return;
+  let center = cam.center, zoom = cam.zoom;
+  if (pitch > 5) {
+    // 기울이면 가까운 쪽은 커지고 먼 쪽은 작아진다. 실제로 투영해 보며 모든 시설이
+    // 가려지지 않는 영역(상단 바와 시트 사이)에 들어오는 가장 큰 줌과 가운데를 찾는다.
+    const saved = { center: map.getCenter(), zoom: map.getZoom(), pitch, bearing };
+    const box = { l: pad.left, r: innerWidth - pad.right, t: pad.top, b: innerHeight - pad.bottom };
+    const extent = (c, z) => {
+      map.jumpTo({ center: c, zoom: z, pitch, bearing });
+      const ps = list.map(f => map.project([f.lng, f.lat]));
+      return { l: Math.min(...ps.map(p => p.x)), r: Math.max(...ps.map(p => p.x)), t: Math.min(...ps.map(p => p.y)) - 52, b: Math.max(...ps.map(p => p.y)) };
+    };
+    for (let pass = 0; pass < 2; pass++) {
+      for (zoom = Math.min(17, cam.zoom + 0.8); zoom > cam.zoom - 1.5; zoom -= 0.05) {
+        const e = extent(center, zoom);
+        if (e.l >= box.l && e.r <= box.r && e.t >= box.t && e.b <= box.b) break;
+      }
+      // 시설 묶음의 화면 가운데를 가려지지 않은 영역 가운데로 옮긴다.
+      const e = extent(center, zoom);
+      const dx = (e.l + e.r) / 2 - (box.l + box.r) / 2, dy = (e.t + e.b) / 2 - (box.t + box.b) / 2;
+      center = map.unproject([innerWidth / 2 + dx, innerHeight / 2 + dy]);
+    }
+    map.jumpTo(saved);
+  }
+  map.easeTo({ center, zoom, pitch, bearing, duration: animate ? 600 : 0 });
 }
 
 function createPin(f) {
@@ -318,7 +421,7 @@ function updatePins() {
     const center = [g.reduce((s, f) => s + f.lng, 0) / g.length, g.reduce((s, f) => s + f.lat, 0) / g.length];
     c.addEventListener('click', e => {
       e.stopPropagation();
-      map.fitBounds(boundsOf(g), { padding: cameraPadding(), maxZoom: Math.max(CONFIG.clusterBelowZoom + 0.3, map.getZoom() + 1.5), duration: 500 });
+      map.fitBounds(boundsOf(g), { padding: cameraPadding(), maxZoom: Math.max(CONFIG.clusterBelowZoom + 0.3, map.getZoom() + 1.5), pitch: map.getPitch(), bearing: map.getBearing(), duration: 500 });
     });
     clusterMarkers.push(new maplibregl.Marker({ element: c }).setLngLat(center).addTo(map));
   }
@@ -553,8 +656,14 @@ async function main() {
   let resizeTimer = 0;
   addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => setSheet(state.sheet, false), 80); });
 
+  let saved3d = true;
+  try { saved3d = localStorage.getItem('eco-view') !== '2d'; } catch { /* 기본은 입체 */ }
+  $('viewToggle').addEventListener('click', () => set3d(!viewIs3d()));
+
   setSheet('collapsed', false);
   map.once('load', () => {
+    if (window.ECO_LANDMARKS?.length) map.addLayer(landmarkLayer());
+    set3d(saved3d, false);
     fitAll(false);
     updateLabels();
     readHash({ fly: true });

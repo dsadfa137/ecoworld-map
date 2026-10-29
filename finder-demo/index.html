@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#12675e">
 <title>에코월드 시설 지도</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@6.15.0/dist/maplibre-gl.css">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=20261029">
 </head>
 <body>
 <div id="app">
@@ -37,6 +37,7 @@
       <button id="zoomOut" type="button" aria-label="축소"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 11h14v2H5v-2Z"/></svg></button>
     </div>
     <button id="locateButton" type="button" aria-label="내 위치 보기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2h2v2.1A8 8 0 0 1 19.9 11H22v2h-2.1A8 8 0 0 1 13 19.9V22h-2v-2.1A8 8 0 0 1 4.1 13H2v-2h2.1A8 8 0 0 1 11 4.1V2Zm1 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12Zm0 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z"/></svg></button>
+    <button id="viewToggle" class="view-toggle" type="button" aria-pressed="false" aria-label="입체 보기(3D)로 바꾸기">3D</button>
     <button id="resetView" type="button" aria-label="전체 보기"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z"/></svg></button>
   </div>
 
@@ -125,9 +126,11 @@
   </dialog>
 </div>
 
-<script src="data/facilities.js"></script>
-<script src="data/park.js"></script>
-<script src="data/basemap.js"></script>
-<script type="module" src="app.js"></script>
+<script src="data/facilities.js?v=20261029"></script>
+<script src="data/park.js?v=20261029"></script>
+<script src="data/basemap.js?v=20261029"></script>
+<script src="data/landmarks.js?v=20261029"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}</script>
+<script type="module" src="app.js?v=20261029"></script>
 </body>
 </html>

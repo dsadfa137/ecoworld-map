@@ -50,12 +50,15 @@ svg{width:22px;height:22px;fill:currentColor;flex:none}
   bottom:calc(var(--sheet-visible,var(--sheet-peek)) + 14px);transition:bottom .32s var(--ease)}
 .map-controls button{width:46px;height:46px;border:0;border-radius:14px;background:#fff;box-shadow:var(--shadow-sm);display:grid;place-items:center;color:var(--ink)}
 .map-controls button:active{transform:scale(.94)}
+.map-controls .view-toggle{font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--teal)}
+.map-controls .view-toggle[aria-pressed="true"]{background:var(--teal);color:#fff}
 .zoom-group{display:flex;flex-direction:column;border-radius:14px;box-shadow:var(--shadow-sm);overflow:hidden}
 .zoom-group button{border-radius:0;box-shadow:none}
 .zoom-group button+button{border-top:1px solid var(--line)}
 #locateButton.on{color:#1a73e8}
 #locateButton.busy svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.map-controls{transition:bottom .32s var(--ease),opacity .2s}
 .app-hide-controls .map-controls{opacity:0;pointer-events:none}
 
 /* ---------- 지도 핀 ---------- */
