@@ -10,6 +10,7 @@ const CONFIG = {
   minZoom: 13.5, maxZoom: 19.5,
   walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
   farFromParkM: 2000,
+  coreRadiusM: 200,      // 처음 화면에 담을 공원 중심부 반경
   pitch3d: 50,           // 입체 보기 기울기
   desktopMin: 900
 };
@@ -138,10 +139,14 @@ function applySheet(y, animate = true) {
   const visible = isDesktop() ? 0 : Math.max(0, pos.height - y);
   const shown = Math.min(visible, innerHeight * 0.55);
   $('app').style.setProperty('--sheet-visible', `${shown}px`);
+  // 끄는 동안 버튼이 손가락보다 늦게 따라오지 않도록 위치 애니메이션을 끈다.
+  const app = $('app');
+  app.classList.toggle('sheet-dragging', !animate);
   // 시트가 올라와 지도 버튼이 상단 검색·카테고리 줄에 닿으면 버튼을 잠시 숨긴다.
-  const top = $('app').querySelector('.topbar').getBoundingClientRect().bottom;
-  const controlsH = $('app').querySelector('.map-controls').offsetHeight;
-  $('app').classList.toggle('app-hide-controls', !isDesktop() && innerHeight - shown - 14 - controlsH < top + 6);
+  // 경계에서 깜빡이지 않도록 다시 나타나는 기준은 조금 더 여유 있게 둔다.
+  const top = app.querySelector('.topbar').getBoundingClientRect().bottom;
+  const gap = innerHeight - shown - 14 - app.querySelector('.map-controls').offsetHeight - top;
+  app.classList.toggle('app-hide-controls', !isDesktop() && gap < (app.classList.contains('app-hide-controls') ? 18 : 6));
 }
 function setSheet(name, animate = true) {
   state.sheet = name;
@@ -319,8 +324,14 @@ function boundsOf(list) {
   for (const f of list) b.extend([f.lng, f.lat]);
   return b;
 }
-function fitAll(animate = true) {
-  const list = state.facilities.filter(matches);
+// 처음 화면: 시설 좌표의 중앙값에서 가까운, 시설이 모인 공원 중심부만 담는다.
+function coreFacilities() {
+  const median = a => a.slice().sort((x, y) => x - y)[a.length >> 1];
+  const c = [median(state.facilities.map(f => f.lng)), median(state.facilities.map(f => f.lat))];
+  const core = state.facilities.filter(f => distanceM(c, [f.lng, f.lat]) <= CONFIG.coreRadiusM);
+  return core.length >= 3 ? core : state.facilities;
+}
+function fitAll(animate = true, list = state.facilities.filter(matches)) {
   if (!list.length) return;
   const pad = cameraPadding(), pitch = map.getPitch(), bearing = map.getBearing();
   const cam = map.cameraForBounds(boundsOf(list), { padding: pad, maxZoom: 17, bearing, pitch: 0 });
@@ -664,9 +675,11 @@ async function main() {
   map.once('load', () => {
     if (window.ECO_LANDMARKS?.length) map.addLayer(landmarkLayer());
     set3d(saved3d, false);
-    fitAll(false);
+    fitAll(false, coreFacilities());
     updateLabels();
     readHash({ fly: true });
+    // 공유 링크에 필터가 있으면 중심부 대신 그 결과에 맞춘다.
+    if (!state.selected && (state.category !== 'all' || state.query || state.tags.size)) fitAll(false);
     document.documentElement.dataset.ready = 'true';
   });
 }
