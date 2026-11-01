@@ -11,8 +11,6 @@ const CONFIG = {
   walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
   farFromParkM: 2000,
   fitMaxZoom: 17, detailZoom: 17.6,
-  // 리플렛 그림지도 모드. 그림은 실제 축척이 아니어서 줌 기준을 따로 둔다.
-  illus: { scale: 1.49e-8, labelMinZoom: 15.6, clusterBelowZoom: 14.9, clusterRadiusPx: 44, selectZoom: 15.7, detailZoom: 16.2, fitMaxZoom: 15.6, maxZoom: 17.5, home: [1950, 1250] },
   coreRadiusM: 200,      // 처음 화면에 담을 공원 중심부 반경
   pitch3d: 50,           // 입체 보기 기울기
   desktopMin: 900
@@ -39,8 +37,7 @@ const norm = s => String(s || '').toLowerCase().replace(/\s+/g, '');
 const state = {
   facilities: [], categories: [], center: [128.0618, 36.6537],
   category: 'all', query: '', tags: new Set(), onlyOpen: false, onlyWait: false, sort: 'name',
-  selected: null, user: null, sheet: 'collapsed', view: 'list',
-  mode: window.ECO_ILLUS ? 'illus' : '3d'   // 'illus' 리플렛 그림지도, '3d' 실제 지도와 3D 건물
+  selected: null, user: null, sheet: 'collapsed', view: 'list'
 };
 let map, userMarker = null;
 const pins = new Map();           // facilMappCd → { marker, el }
@@ -71,7 +68,6 @@ async function loadData() {
   const list = Array.isArray(raw) ? raw : raw.facilities || raw.items || [];
   state.facilities = list.map(normalizeFacility).filter(Boolean);
   if (Array.isArray(raw.center)) state.center = raw.center;
-  if (window.ECO_ILLUS) for (const f of state.facilities) f.illusPos = illusLngLat(window.ECO_ILLUS.points[f.id] || realToIllus([f.lng, f.lat]));
   state.categories = (raw.categories || [
     { id: 'experience', label: '체험/탑승' }, { id: 'exhibition', label: '전시/박물관' },
     { id: 'amenity', label: '편의시설/식당' }, { id: 'safety', label: '안전/의무실' }
@@ -79,34 +75,6 @@ async function loadData() {
 }
 const byId = id => state.facilities.find(f => f.id === id) || null;
 const categoryLabel = id => state.categories.find(c => c.id === id)?.label || '시설';
-
-// ---------------------------------------------------------------- 리플렛 그림지도 좌표
-// 그림은 비스듬한 그림이라 실제 위경도와 맞지 않는다. 그림 픽셀을 공원 근처 가상의 평면에 깔고,
-// 시설은 그림 속 자리에 둔다. 거리 계산은 실제 좌표(f.lng, f.lat)를 그대로 쓴다.
-const cfg = () => state.mode === 'illus' ? CONFIG.illus : CONFIG;
-const pos = f => state.mode === 'illus' ? f.illusPos : [f.lng, f.lat];
-function illusLngLat([x, y]) {
-  const { width, height } = window.ECO_ILLUS, s = CONFIG.illus.scale;
-  const c = maplibregl.MercatorCoordinate.fromLngLat(state.center);
-  return new maplibregl.MercatorCoordinate(c.x + (x - width / 2) * s, c.y + (y - height / 2) * s).toLngLat().toArray();
-}
-// 실제 위경도 → 그림 픽셀: 아핀 변환에 가까운 시설의 오차를 거리 가중으로 더한다. 내 위치 점에 쓴다.
-function realToIllus(p) {
-  const { affine: a, points, width, height } = window.ECO_ILLUS;
-  const base = q => { const e = (q[0] - a.lng0) * 89500, n = (q[1] - a.lat0) * 111000; return [a.ax[0] * e + a.ax[1] * n + a.ax[2], a.ay[0] * e + a.ay[1] * n + a.ay[2]]; };
-  const out = base(p);
-  let w = 0, dx = 0, dy = 0;
-  for (const f of state.facilities) {
-    const pt = points[f.id]; if (!pt) continue;
-    const d = distanceM(p, [f.lng, f.lat]);
-    if (d < 1) return pt;
-    const b = base([f.lng, f.lat]), k = 1 / (d * d);
-    w += k; dx += k * (pt[0] - b[0]); dy += k * (pt[1] - b[1]);
-  }
-  if (w) { out[0] += dx / w; out[1] += dy / w; }
-  return [Math.min(width, Math.max(0, out[0])), Math.min(height, Math.max(0, out[1]))];
-}
-const userPos = () => state.mode === 'illus' ? illusLngLat(realToIllus(state.user)) : state.user;
 
 // ---------------------------------------------------------------- 아이콘
 function iconKey(f) {
@@ -261,14 +229,6 @@ function cameraPadding() {
   return { top, bottom: sheetVisibleHeight() + 28, left: 32, right: 72 };
 }
 // 일러스트풍 배경: 브이월드 타일을 파스텔로 누르고, 공원 도형과 3D 건물을 같은 좌표 위에 올린다.
-const REAL_LAYERS = ['base', 'tint', 'plaza', 'model-pad', 'path-casing', 'path', 'path-dash', 'building-3d'];
-function withIllustration(sources, layers) {
-  const il = window.ECO_ILLUS;
-  if (!il) return layers;
-  const { width: w, height: h } = il;
-  sources.illus = { type: 'image', url: new URL(il.image, location.href).href, coordinates: [[0, 0], [w, 0], [w, h], [0, h]].map(illusLngLat) };
-  return [...layers, { id: 'illus', type: 'raster', source: 'illus', paint: { 'raster-fade-duration': 0 } }];
-}
 function buildStyle() {
   const sources = { park: { type: 'geojson', data: window.ECO_PARK || { type: 'FeatureCollection', features: [] } } };
   const layers = [{ id: 'bg', type: 'background', paint: { 'background-color': '#e3e8de' } }];
@@ -282,23 +242,22 @@ function buildStyle() {
     // 회색기를 없애고 봄 풀빛으로 전체를 물들인다.
     layers.push({ id: 'tint', type: 'background', paint: { 'background-color': '#b9e08e', 'background-opacity': 0.26 } });
   }
+  const pastel = window.ECO_PASTEL;
+  if (pastel) {
+    sources.pastel = { type: 'image', url: new URL(pastel.image, location.href).href, coordinates: pastel.coordinates };
+    layers.push({ id: 'pastel', type: 'raster', source: 'pastel', paint: { 'raster-fade-duration': 0 } });
+  }
   const kind = k => ['==', ['get', 'kind'], k];
   const isModel = ['==', ['get', 'model'], true];
   layers.push(
-    { id: 'plaza', type: 'fill', source: 'park', filter: kind('plaza'), paint: { 'fill-color': '#ffe7b0', 'fill-outline-color': '#e0b768', 'fill-opacity': 1 } },
-    // 3D 모델이 놓이는 자리는 밝은 바닥만 깔아 둔다.
-    { id: 'model-pad', type: 'fill', source: 'park', filter: ['all', kind('building'), isModel], paint: { 'fill-color': '#f4efe2', 'fill-opacity': 0.8 } },
-    { id: 'path-casing', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#fffdf5', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 5, 17, 18, 19.5, 56] } },
-    { id: 'path', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffcf6e', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 3, 17, 12, 19.5, 40] } },
-    { id: 'path-dash', type: 'line', source: 'park', filter: kind('path'), minzoom: 16.5, layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ffffff', 'line-opacity': 0.7, 'line-width': ['interpolate', ['linear'], ['zoom'], 16.5, 0.8, 19.5, 2.5], 'line-dasharray': [2, 3] } },
     // 모델이 없는 건물은 파스텔 블록으로 세운다(높이는 표시용 가정값).
     { id: 'building-3d', type: 'fill-extrusion', source: 'park', filter: ['all', kind('building'), ['!', isModel]], paint: {
-      'fill-extrusion-color': '#f7b58a', 'fill-extrusion-height': ['coalesce', ['get', 'height'], 7], 'fill-extrusion-base': 0,
+      'fill-extrusion-color': '#f6dcc8', 'fill-extrusion-height': ['coalesce', ['get', 'height'], 7], 'fill-extrusion-base': 0,
       'fill-extrusion-opacity': 0.96, 'fill-extrusion-vertical-gradient': true
     } }
   );
   return {
-    version: 8, sources, layers: withIllustration(sources, layers),
+    version: 8, sources, layers,
     sky: { 'sky-color': '#9fd0ea', 'horizon-color': '#f4f7ef', 'fog-color': '#e3e8de', 'sky-horizon-blend': 0.7, 'horizon-fog-blend': 0.8, 'fog-ground-blend': 0.9 },
     light: { anchor: 'map', position: [1.4, 210, 35], intensity: 0.35, color: '#fff6e0' }
   };
@@ -347,48 +306,18 @@ function landmarkLayer() {
   };
 }
 
-// 그림지도 ↔ 3D 지도 전환. 두 화면은 좌표계가 달라 핀과 카메라를 함께 옮긴다.
-function modeBounds(mode) {
-  if (mode === 'illus') {
-    const { width: w, height: h } = window.ECO_ILLUS;
-    const nw = illusLngLat([0, -h]), se = illusLngLat([w, 2 * h]);
-    return [[nw[0], se[1]], [se[0], nw[1]]];
-  }
-  const lngs = state.facilities.map(f => f.lng), lats = state.facilities.map(f => f.lat), pad = 0.012;
-  return [[Math.min(...lngs) - pad, Math.min(...lats) - pad], [Math.max(...lngs) + pad, Math.max(...lats) + pad]];
-}
-const illusMinZoom = () => Math.log2($('map').clientWidth / (window.ECO_ILLUS.width * CONFIG.illus.scale * 512));
-// 처음 화면: 그림 높이를 상단 바와 시트 사이에 꽉 채우고, 좌우는 밀어서 본다.
-function illusHome() {
-  const p = cameraPadding(), h = $('map').clientHeight - p.top - p.bottom + 60;
-  focusOn(illusLngLat(CONFIG.illus.home), Math.max(illusMinZoom(), Math.log2(h / (window.ECO_ILLUS.height * CONFIG.illus.scale * 512))), 0);
-}
-function applyMode(mode) {
-  state.mode = mode;
-  const illus = mode === 'illus';
-  const show = (id, on) => { if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none'); };
-  for (const id of REAL_LAYERS) show(id, !illus);
-  show('illus', illus);
-  if (!illus && window.ECO_LANDMARKS?.length && !map.getLayer('landmarks')) map.addLayer(landmarkLayer());
-  show('landmarks', !illus);
-  map.setPaintProperty('bg', 'background-color', illus ? '#a9dc82' : '#e3e8de');
-  map.setMaxBounds(null);
-  map.setMinZoom(illus ? illusMinZoom() : CONFIG.minZoom);
-  map.setMaxZoom(illus ? CONFIG.illus.maxZoom : CONFIG.maxZoom);
-  map.jumpTo({ pitch: illus ? 0 : CONFIG.pitch3d, bearing: 0 });
-  for (const f of state.facilities) pins.get(f.id).marker.setLngLat(pos(f));
-  if (userMarker) userMarker.setLngLat(userPos());
+// 입체 보기 ↔ 위에서 보기
+const viewIs3d = () => map.getPitch() > 5;
+function set3d(on, animate = true) {
+  if (on && window.ECO_LANDMARKS?.length && !map.getLayer('landmarks')) map.addLayer(landmarkLayer());
+  // 위에서 볼 때는 그림의 파스텔 지붕이 보이도록 3D 모델과 입체 블록을 끈다.
+  for (const id of ['landmarks', 'building-3d']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  map.easeTo({ pitch: on ? CONFIG.pitch3d : 0, duration: animate ? 600 : 0 });
   const b = $('viewToggle');
-  b.textContent = illus ? '3D' : '그림';
-  b.setAttribute('aria-label', illus ? '3D 지도로 바꾸기' : '그림지도로 바꾸기');
-  b.setAttribute('aria-pressed', String(!illus));
-  try { localStorage.setItem('eco-view', mode); } catch { /* 저장 불가 환경 */ }
-  const sel = state.selected && byId(state.selected);
-  if (sel) focusOn(pos(sel), cfg().selectZoom, 0);
-  else if (illus) illusHome();
-  else fitAll(false, coreFacilities());
-  map.setMaxBounds(modeBounds(mode));
-  updateLabels(); updatePins();
+  b.textContent = on ? '2D' : '3D';
+  b.setAttribute('aria-label', on ? '위에서 보기(2D)로 바꾸기' : '입체 보기(3D)로 바꾸기');
+  b.setAttribute('aria-pressed', String(on));
+  try { localStorage.setItem('eco-view', on ? '3d' : '2d'); } catch { /* 저장 불가 환경 */ }
 }
 
 // 지점을 '가려지지 않은 지도 영역'의 가운데로 옮긴다. 지도에 padding을 남기지 않도록 offset을 쓴다.
@@ -398,7 +327,7 @@ function focusOn(lngLat, zoom, duration = 500) {
 }
 function boundsOf(list) {
   const b = new maplibregl.LngLatBounds();
-  for (const f of list) b.extend(pos(f));
+  for (const f of list) b.extend([f.lng, f.lat]);
   return b;
 }
 // 처음 화면: 시설 좌표의 중앙값에서 가까운, 시설이 모인 공원 중심부만 담는다.
@@ -411,7 +340,7 @@ function coreFacilities() {
 function fitAll(animate = true, list = state.facilities.filter(matches)) {
   if (!list.length) return;
   const pad = cameraPadding(), pitch = map.getPitch(), bearing = map.getBearing();
-  const cam = map.cameraForBounds(boundsOf(list), { padding: pad, maxZoom: cfg().fitMaxZoom, bearing, pitch: 0 });
+  const cam = map.cameraForBounds(boundsOf(list), { padding: pad, maxZoom: CONFIG.fitMaxZoom, bearing, pitch: 0 });
   if (!cam) return;
   let center = cam.center, zoom = cam.zoom;
   if (pitch > 5) {
@@ -421,11 +350,11 @@ function fitAll(animate = true, list = state.facilities.filter(matches)) {
     const box = { l: pad.left, r: innerWidth - pad.right, t: pad.top, b: innerHeight - pad.bottom };
     const extent = (c, z) => {
       map.jumpTo({ center: c, zoom: z, pitch, bearing });
-      const ps = list.map(f => map.project(pos(f)));
+      const ps = list.map(f => map.project([f.lng, f.lat]));
       return { l: Math.min(...ps.map(p => p.x)), r: Math.max(...ps.map(p => p.x)), t: Math.min(...ps.map(p => p.y)) - 52, b: Math.max(...ps.map(p => p.y)) };
     };
     for (let pass = 0; pass < 2; pass++) {
-      for (zoom = Math.min(cfg().fitMaxZoom, cam.zoom + 0.8); zoom > cam.zoom - 1.5; zoom -= 0.05) {
+      for (zoom = Math.min(CONFIG.fitMaxZoom, cam.zoom + 0.8); zoom > cam.zoom - 1.5; zoom -= 0.05) {
         const e = extent(center, zoom);
         if (e.l >= box.l && e.r <= box.r && e.t >= box.t && e.b <= box.b) break;
       }
@@ -448,15 +377,15 @@ function createPin(f) {
   b.append(head, el('span', 'pin-label', f.name));
   if (f.waitMinutes != null) b.append(el('span', 'pin-wait', `${f.waitMinutes}분`));
   b.addEventListener('click', e => { e.stopPropagation(); select(f.id); });
-  const marker = new maplibregl.Marker({ element: b, anchor: 'bottom' }).setLngLat(pos(f)).addTo(map);
+  const marker = new maplibregl.Marker({ element: b, anchor: 'bottom' }).setLngLat([f.lng, f.lat]).addTo(map);
   pins.set(f.id, { marker, el: b });
 }
 function updateLabels() {
   // minzoom: 기준 줌 근처의 깜빡임을 막기 위해 0.05 히스테리시스를 둔다.
   // 애니메이션이 16.999…에서 멈춰도 이름이 나오도록 0.01 여유를 준다.
   const z = map.getZoom(), c = map.getContainer(), on = c.classList.contains('show-labels');
-  if (!on && z >= cfg().labelMinZoom - 0.01) c.classList.add('show-labels');
-  else if (on && z < cfg().labelMinZoom - 0.05) c.classList.remove('show-labels');
+  if (!on && z >= CONFIG.labelMinZoom - 0.01) c.classList.add('show-labels');
+  else if (on && z < CONFIG.labelMinZoom - 0.05) c.classList.remove('show-labels');
 }
 // 이름표끼리 겹치면 우선순위가 낮은 쪽을 숨긴다. 선택 시설 > 체험·전시 > 그 밖의 시설.
 const LABEL_RANK = { experience: 1, exhibition: 1, safety: 2, amenity: 3 };
@@ -484,13 +413,13 @@ function updatePins() {
   const visible = state.facilities.filter(matches);
   const visibleIds = new Set(visible.map(f => f.id));
   const groups = [];
-  if (map.getZoom() < cfg().clusterBelowZoom) {
+  if (map.getZoom() < CONFIG.clusterBelowZoom) {
     // 화면 좌표 기준으로 가까운 핀을 묶는다. 선택한 시설은 묶지 않는다.
-    const pts = visible.filter(f => f.id !== state.selected).map(f => ({ f, p: map.project(pos(f)) }));
+    const pts = visible.filter(f => f.id !== state.selected).map(f => ({ f, p: map.project([f.lng, f.lat]) }));
     const used = new Set();
     for (const a of pts) {
       if (used.has(a.f.id)) continue;
-      const g = pts.filter(b => !used.has(b.f.id) && Math.hypot(a.p.x - b.p.x, a.p.y - b.p.y) <= cfg().clusterRadiusPx);
+      const g = pts.filter(b => !used.has(b.f.id) && Math.hypot(a.p.x - b.p.x, a.p.y - b.p.y) <= CONFIG.clusterRadiusPx);
       g.forEach(b => used.add(b.f.id));
       if (g.length > 1) groups.push(g.map(x => x.f));
     }
@@ -506,10 +435,10 @@ function updatePins() {
     const c = el('button', 'cluster', String(g.length));
     c.type = 'button';
     c.setAttribute('aria-label', `시설 ${g.length}곳 묶음, 눌러서 확대`);
-    const center = [g.reduce((s, f) => s + pos(f)[0], 0) / g.length, g.reduce((s, f) => s + pos(f)[1], 0) / g.length];
+    const center = [g.reduce((s, f) => s + f.lng, 0) / g.length, g.reduce((s, f) => s + f.lat, 0) / g.length];
     c.addEventListener('click', e => {
       e.stopPropagation();
-      map.fitBounds(boundsOf(g), { padding: cameraPadding(), maxZoom: Math.max(cfg().clusterBelowZoom + 0.3, map.getZoom() + 1.5), pitch: map.getPitch(), bearing: map.getBearing(), duration: 500 });
+      map.fitBounds(boundsOf(g), { padding: cameraPadding(), maxZoom: Math.max(CONFIG.clusterBelowZoom + 0.3, map.getZoom() + 1.5), pitch: map.getPitch(), bearing: map.getBearing(), duration: 500 });
     });
     clusterMarkers.push(new maplibregl.Marker({ element: c }).setLngLat(center).addTo(map));
   }
@@ -594,7 +523,7 @@ function select(id, { push = true, fly = true } = {}) {
   renderDetail(f); showView('detail');
   if (!isDesktop()) setSheet(reselect && state.sheet === 'expanded' ? 'expanded' : 'half');
   updatePins();
-  if (fly) focusOn(pos(f), Math.max(map.getZoom(), cfg().selectZoom), 550);
+  if (fly) focusOn([f.lng, f.lat], Math.max(map.getZoom(), CONFIG.selectZoom), 550);
   writeHash(push);
   $('detailName').tabIndex = -1;
   setTimeout(() => $('detailName').focus({ preventScroll: true }), 0);
@@ -677,12 +606,11 @@ function locate() {
   navigator.geolocation.getCurrentPosition(pos => {
     btn.classList.remove('busy'); btn.classList.add('on');
     state.user = [pos.coords.longitude, pos.coords.latitude];
-    if (!userMarker) { const d = el('div', 'user-dot'); d.setAttribute('aria-label', '내 위치'); userMarker = new maplibregl.Marker({ element: d }).setLngLat(userPos()).addTo(map); }
-    else userMarker.setLngLat(userPos());
+    if (!userMarker) { const d = el('div', 'user-dot'); d.setAttribute('aria-label', '내 위치'); userMarker = new maplibregl.Marker({ element: d }).setLngLat(state.user).addTo(map); }
+    else userMarker.setLngLat(state.user);
     const far = distanceM(state.user, state.center);
-    userMarker.getElement().hidden = state.mode === 'illus' && far > CONFIG.farFromParkM; // 그림 밖 위치는 찍지 않는다
     if (far > CONFIG.farFromParkM) toast(`공원에서 약 ${formatDistance(far)} 떨어져 있어요. 거리는 직선 기준이에요.`);
-    else { focusOn(userPos(), Math.max(map.getZoom(), cfg().selectZoom), 600); if (pos.coords.accuracy > 50) toast(`위치 정확도가 낮아요(약 ${Math.round(pos.coords.accuracy)}m).`); }
+    else { focusOn(state.user, Math.max(map.getZoom(), CONFIG.selectZoom), 600); if (pos.coords.accuracy > 50) toast(`위치 정확도가 낮아요(약 ${Math.round(pos.coords.accuracy)}m).`); }
     if (state.sort === 'name') { state.sort = 'distance'; $('sortSelect').value = 'distance'; }
     renderList(); if (state.selected) renderDetail(byId(state.selected));
   }, err => {
@@ -696,12 +624,14 @@ async function main() {
   await loadData();
   renderChips(); setupFilter(); setupSheetDrag();
 
+  const lngs = state.facilities.map(f => f.lng), lats = state.facilities.map(f => f.lat), pad = 0.008;
   map = new maplibregl.Map({
-    container: 'map', style: buildStyle(), center: state.center, zoom: 15, minZoom: 10,
+    container: 'map', style: buildStyle(), center: state.center, zoom: 16, minZoom: CONFIG.minZoom, maxZoom: CONFIG.maxZoom,
+    maxBounds: [[Math.min(...lngs) - pad, Math.min(...lats) - pad], [Math.max(...lngs) + pad, Math.max(...lats) + pad]],
     pitchWithRotate: false, dragRotate: false, touchPitch: false, attributionControl: false
   });
   map.touchZoomRotate.disableRotation();
-  map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left'); // 오른쪽 지도 버튼과 겹치지 않게 왼쪽 아래
+  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© OpenStreetMap' }), 'bottom-left'); // 오른쪽 지도 버튼과 겹치지 않게 왼쪽 아래
   window.ecoMap = map; // 디버그·검사용
   for (const f of state.facilities) createPin(f);
   // 기울기 50°에서는 지도 엔진의 수평선이 화면 밖이라, 화면 위쪽에 하늘 그라데이션을 직접 깐다.
@@ -719,7 +649,7 @@ async function main() {
   $('locateButton').addEventListener('click', locate);
   $('detailBack').addEventListener('click', () => { deselect(); setSheet('half'); });
   $('detailClose').addEventListener('click', () => deselect());
-  $('actionCenter').addEventListener('click', () => { const f = byId(state.selected); if (f) { setSheet('collapsed'); focusOn(pos(f), Math.max(map.getZoom(), cfg().detailZoom), 500); } });
+  $('actionCenter').addEventListener('click', () => { const f = byId(state.selected); if (f) { setSheet('collapsed'); focusOn([f.lng, f.lat], Math.max(map.getZoom(), CONFIG.detailZoom), 500); } });
   $('actionShare').addEventListener('click', async () => {
     const f = byId(state.selected); if (!f) return;
     const url = location.href;
@@ -745,14 +675,15 @@ async function main() {
   let resizeTimer = 0;
   addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => setSheet(state.sheet, false), 80); });
 
-  try { const v = localStorage.getItem('eco-view'); if (v === '3d' || (v === 'illus' && window.ECO_ILLUS)) state.mode = v; } catch { /* 기본 화면 */ }
-  $('viewToggle').hidden = !window.ECO_ILLUS;
-  $('viewToggle').addEventListener('click', () => applyMode(state.mode === 'illus' ? '3d' : 'illus'));
+  let saved3d = true;
+  try { saved3d = localStorage.getItem('eco-view') !== '2d'; } catch { /* 기본은 입체 */ }
+  $('viewToggle').addEventListener('click', () => set3d(!viewIs3d()));
 
   setSheet('collapsed', false);
   map.once('load', () => {
-    applyMode(state.mode);
+    set3d(saved3d, false);
     updateSky();
+    fitAll(false, coreFacilities());
     updateLabels();
     readHash({ fly: true });
     // 공유 링크에 필터가 있으면 중심부 대신 그 결과에 맞춘다.
