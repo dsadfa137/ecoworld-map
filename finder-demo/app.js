@@ -11,6 +11,7 @@ const CONFIG = {
   walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
   farFromParkM: 2000,
   fitMaxZoom: 17, detailZoom: 17.6,
+  coreMinZoom: 16.5,     // 이 줌 이상에서 고해상도 그림으로 바꾼다
   coreRadiusM: 200,      // 처음 화면에 담을 공원 중심부 반경
   pitch3d: 50,           // 입체 보기 기울기
   desktopMin: 900
@@ -246,6 +247,10 @@ function buildStyle() {
   if (pastel) {
     sources.pastel = { type: 'image', url: new URL(pastel.image, location.href).href, coordinates: pastel.coordinates };
     layers.push({ id: 'pastel', type: 'raster', source: 'pastel', paint: { 'raster-fade-duration': 0 } });
+    if (pastel.core) {  // 확대할 때 쓰는 공원 중심부 고해상도 그림
+      sources.pastelCore = { type: 'image', url: new URL(pastel.core.image, location.href).href, coordinates: pastel.core.coordinates };
+      layers.push({ id: 'pastel-core', type: 'raster', source: 'pastelCore', minzoom: CONFIG.coreMinZoom, paint: { 'raster-fade-duration': 0 } });
+    }
   }
   const kind = k => ['==', ['get', 'kind'], k];
   const isModel = ['==', ['get', 'model'], true];
@@ -289,7 +294,16 @@ function landmarkLayer() {
           scene.add(new THREE.AmbientLight('#ffffff', 1.9));
           const sun = new THREE.DirectionalLight('#fff3d6', 1.7), az = (210 - r[2] * 180 / Math.PI) * Math.PI / 180, po = 35 * Math.PI / 180;
           sun.position.set(Math.sin(az) * Math.sin(po), Math.cos(po), -Math.cos(az) * Math.sin(po)); scene.add(sun);
-          loader.load(cfg.url, g => { scene.add(g.scene); this.items.push({ scene, matrix }); m.triggerRepaint(); },
+          loader.load(cfg.url, g => {
+            // 모델의 회색을 지도와 같은 파스텔 톤으로 밝힌다.
+            const warm = new THREE.Color('#fff1e0'), seen = new Set();
+            g.scene.traverse(n => {
+              for (const mat of Array.isArray(n.material) ? n.material : n.material ? [n.material] : []) {
+                if (seen.has(mat) || !mat.color) continue;
+                seen.add(mat); mat.color.lerp(warm, 0.5); if ('roughness' in mat) mat.roughness = 1; if ('metalness' in mat) mat.metalness = 0;
+              }
+            });
+            scene.add(g.scene); this.items.push({ scene, matrix }); m.triggerRepaint(); },
             undefined, () => console.warn(`3D 모델을 불러오지 못했어요: ${cfg.name}`));
         }
       }).catch(() => console.warn('3D 렌더러를 준비하지 못해 평면 지도로 표시합니다.'));
