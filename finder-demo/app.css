@@ -45,6 +45,10 @@ svg{width:22px;height:22px;fill:currentColor;flex:none}
 .filter-button b{min-width:20px;height:20px;border-radius:10px;background:var(--teal);color:#fff;font-size:12px;display:grid;place-items:center;padding:0 5px}
 .filter-button.active{border-color:var(--teal);color:var(--teal)}
 
+/* 입체 보기의 하늘: 지도 위쪽을 하늘빛으로 물들인다. 조작은 지도로 그대로 통과한다. */
+.sky{position:absolute;left:0;right:0;top:0;height:34%;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,#7cc4ee 0%,#a9dcf3 42%,#e6f5ee 72%,rgba(230,245,238,0) 100%)}
+
 /* ---------- 지도 버튼 ---------- */
 .map-controls{position:absolute;right:12px;z-index:15;display:flex;flex-direction:column;gap:10px;
   bottom:calc(var(--sheet-visible,var(--sheet-peek)) + 14px);transition:bottom .32s var(--ease)}

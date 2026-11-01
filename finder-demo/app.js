@@ -235,23 +235,25 @@ function buildStyle() {
   if (base?.tiles?.length) {
     sources.base = { type: 'raster', tiles: base.tiles, tileSize: 256, bounds: base.bounds, minzoom: base.minzoom || 6, maxzoom: base.maxzoom || 19, attribution: base.attribution || '' };
     layers.push({ id: 'base', type: 'raster', source: 'base', paint: {
-      'raster-fade-duration': 0, 'raster-opacity': 0.85,
-      'raster-saturation': -0.35, 'raster-contrast': -0.15, 'raster-brightness-min': 0.12, 'raster-hue-rotate': 8
+      'raster-fade-duration': 0, 'raster-opacity': 1,
+      'raster-saturation': 0.45, 'raster-contrast': 0.1, 'raster-brightness-min': 0.08
     } });
+    // 회색기를 없애고 봄 풀빛으로 전체를 물들인다.
+    layers.push({ id: 'tint', type: 'background', paint: { 'background-color': '#b9e08e', 'background-opacity': 0.26 } });
   }
   const kind = k => ['==', ['get', 'kind'], k];
   const isModel = ['==', ['get', 'model'], true];
   layers.push(
-    { id: 'plaza', type: 'fill', source: 'park', filter: kind('plaza'), paint: { 'fill-color': '#f6ead0', 'fill-outline-color': '#e2cfa4', 'fill-opacity': 0.9 } },
+    { id: 'plaza', type: 'fill', source: 'park', filter: kind('plaza'), paint: { 'fill-color': '#ffe7b0', 'fill-outline-color': '#e0b768', 'fill-opacity': 1 } },
     // 3D 모델이 놓이는 자리는 밝은 바닥만 깔아 둔다.
     { id: 'model-pad', type: 'fill', source: 'park', filter: ['all', kind('building'), isModel], paint: { 'fill-color': '#f4efe2', 'fill-opacity': 0.8 } },
-    { id: 'path-casing', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#fffaf0', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 3, 17, 10, 19.5, 30] } },
-    { id: 'path', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#efcf86', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 1.5, 17, 6, 19.5, 20] } },
+    { id: 'path-casing', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#fffdf5', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 5, 17, 18, 19.5, 56] } },
+    { id: 'path', type: 'line', source: 'park', filter: kind('path'), layout: { 'line-cap': 'round', 'line-join': 'round' }, paint: { 'line-color': '#ffcf6e', 'line-width': ['interpolate', ['exponential', 1.6], ['zoom'], 14, 3, 17, 12, 19.5, 40] } },
     { id: 'path-dash', type: 'line', source: 'park', filter: kind('path'), minzoom: 16.5, layout: { 'line-cap': 'round' }, paint: { 'line-color': '#ffffff', 'line-opacity': 0.7, 'line-width': ['interpolate', ['linear'], ['zoom'], 16.5, 0.8, 19.5, 2.5], 'line-dasharray': [2, 3] } },
     // 모델이 없는 건물은 파스텔 블록으로 세운다(높이는 표시용 가정값).
     { id: 'building-3d', type: 'fill-extrusion', source: 'park', filter: ['all', kind('building'), ['!', isModel]], paint: {
-      'fill-extrusion-color': '#e7d9c3', 'fill-extrusion-height': ['coalesce', ['get', 'height'], 7], 'fill-extrusion-base': 0,
-      'fill-extrusion-opacity': 0.92, 'fill-extrusion-vertical-gradient': true
+      'fill-extrusion-color': '#f7b58a', 'fill-extrusion-height': ['coalesce', ['get', 'height'], 7], 'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.96, 'fill-extrusion-vertical-gradient': true
     } }
   );
   return {
@@ -630,6 +632,10 @@ async function main() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-left'); // 오른쪽 지도 버튼과 겹치지 않게 왼쪽 아래
   window.ecoMap = map; // 디버그·검사용
   for (const f of state.facilities) createPin(f);
+  // 기울기 50°에서는 지도 엔진의 수평선이 화면 밖이라, 화면 위쪽에 하늘 그라데이션을 직접 깐다.
+  map.getCanvas().after($('sky')); // 캔버스 바로 위, 핀 아래에 놓는다.
+  const updateSky = () => { $('sky').style.opacity = String(Math.min(1, map.getPitch() / CONFIG.pitch3d)); };
+  map.on('pitch', updateSky);
   map.on('zoom', updateLabels);
   map.on('moveend', () => { updatePins(); declutterLabels(); });
   map.on('click', () => { if (state.selected) deselect(); else if (state.sheet !== 'collapsed' && !isDesktop()) setSheet('collapsed'); });
@@ -675,6 +681,7 @@ async function main() {
   map.once('load', () => {
     if (window.ECO_LANDMARKS?.length) map.addLayer(landmarkLayer());
     set3d(saved3d, false);
+    updateSky();
     fitAll(false, coreFacilities());
     updateLabels();
     readHash({ fly: true });
