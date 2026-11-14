@@ -1,0 +1,975 @@
+// 에코월드 시설 지도 — 지도 핀 선택 → 바텀시트, 확대/축소, 카테고리 필터, 핀 묶음, 내 위치
+// 데이터: data/facilities.js(window.ECO_FACILITIES) 또는 ?data=<JSON 주소>. 외부 테마파크 서버는 쓰지 않는다.
+import * as maplibregl from 'https://cdn.jsdelivr.net/npm/maplibre-gl@6.15.0/dist/maplibre-gl.mjs';
+import { createWayfinding } from './wayfinding.js?v=20261113g';
+
+const CONFIG = {
+  labelMinZoom: 17,      // 이 줌 이상에서만 시설 이름 표시 (minzoom)
+  clusterBelowZoom: 16,  // 이 줌 미만에서는 가까운 핀을 묶는다
+  clusterRadiusPx: 64,   // 묶음 원(48px+테두리)끼리 겹치지 않는 간격
+  selectZoom: 17.3,      // 핀을 고르면 최소 이 줌까지 확대
+  minZoom: 13.5, maxZoom: 19.5,
+  walkMetersPerMin: 4000 / 60, straightFactor: 1.3,
+  farFromParkM: 2000,
+  fitMaxZoom: 17, detailZoom: 17.6,
+  coreMinZoom: 16.5,     // 이 줌 이상에서 고해상도 그림으로 바꾼다
+  coreRadiusM: 200,      // 처음 화면에 담을 공원 중심부 반경
+  pitch3d: 50,           // 입체 보기 기울기
+  desktopMin: 900
+};
+
+const CATEGORY_COLOR = { experience: 'var(--c-experience)', exhibition: 'var(--c-exhibition)', amenity: 'var(--c-amenity)', safety: 'var(--c-safety)' };
+const TAG_LABEL = { toilet: '화장실', nursing: '수유실', food: '식당·카페', parking: '주차장' };
+const STATUS_LABEL = { open: '운영 중', closed: '운영 종료', unknown: '정보 없음' };
+
+// 단색 아이콘(24×24 path). 글자 아이콘은 glyph로 그린다.
+const ICON_PATH = {
+  experience: 'M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z',
+  exhibition: 'M12 2 2 7v2h20V7L12 2Zm-7 9v7h2.5v-7H5Zm5.75 0v7h2.5v-7h-2.5ZM16.5 11v7H19v-7h-2.5ZM3 20v2h18v-2H3Z',
+  medical: 'M9.5 3h5v6.5H21v5h-6.5V21h-5v-6.5H3v-5h6.5z',
+  nursing: 'M10 2h4v2h1a2 2 0 0 1 2 2v1.5c0 .8-.5 1.5-1 2V20a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V9.5c-.5-.5-1-1.2-1-2V6a2 2 0 0 1 2-2h1V2Zm0 10v2h4v-2h-4Z',
+  food: 'M4 3h14v3h1.5A2.5 2.5 0 0 1 22 8.5v1A3.5 3.5 0 0 1 18.5 13H18a6 6 0 0 1-6 5H10a6 6 0 0 1-6-6V3Zm14 5v3h.5c.8 0 1.5-.7 1.5-1.5v-1c0-.3-.2-.5-.5-.5H18ZM3 20h17v2H3z'
+};
+const ICON_GLYPH = { toilet: 'WC', parking: 'P', info: 'i' };
+
+const $ = id => document.getElementById(id);
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+const norm = s => String(s || '').toLowerCase().replace(/\s+/g, '');
+
+const state = {
+  facilities: [], categories: [], center: [128.0618, 36.6537],
+  category: 'all', query: '', tags: new Set(), onlyOpen: false, onlyWait: false, sort: 'name',
+  selected: null, user: null, sheet: 'collapsed', view: 'list'
+};
+let map, userMarker = null, wf = null, userAccuracy = null;
+const pins = new Map();           // facilMappCd → { marker, el }
+let clusterMarkers = [];
+
+// ---------------------------------------------------------------- 2.5D 건물 (volumes.js)
+// 바닥 외곽 폴리곤 위에 세운 건물. 지도가 뜬 뒤에 따로 불러오므로 지도·핀·필터·길찾기는
+// 이 모듈을 기다리지 않는다. 불러오지 못해도 기존 그림(스프라이트·GLB)이 그대로 남는다.
+let volumes25 = null;
+const ready25 = new Set();            // GPU 준비까지 끝난 시설 id (volumes.js 의 facilityIds)
+const volumeTopM = new Map();         // 시설 id → 건물 꼭대기 높이(m). 핀을 그만큼 올린다.
+const suppressedLandmarks = new Set();// 2.5D 가 대신 그리는 GLB 랜드마크 이름
+window.ecoArt = { ready25, volumeTopM, suppressedLandmarks };   // 디버그·검사용 (ecoMap 과 같은 용도)
+
+// 이 시설을 지금 2.5D 가 그리고 있는가. 준비(ready25)만으로는 모자라고 레이어가 보이는 중이어야 한다.
+// setVisible(false) 는 준비 Set 을 그대로 두므로 isVisible() 을 함께 본다.
+const art25 = id => ready25.has(id) && !!volumes25?.isVisible();
+
+// ---------------------------------------------------------------- 데이터
+// 다른 형식의 시설 JSON(facilMappCd/facilNm/mapX/mapY 등)도 받아들인다.
+function normalizeFacility(r) {
+  const id = r.facilMappCd ?? r.id ?? r.facilId ?? r.code;
+  const name = r.name ?? r.facilNm ?? r.facilName ?? r.title;
+  const lat = Number(r.lat ?? r.latitude ?? r.mapY ?? r.y);
+  const lng = Number(r.lng ?? r.lon ?? r.longitude ?? r.mapX ?? r.x);
+  if (id == null || !name || !Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  const category = CATEGORY_COLOR[r.category] ? r.category : 'amenity';
+  const wait = r.waitMinutes ?? r.waitTime ?? null;
+  return {
+    id: String(id), name: String(name), category, lat, lng,
+    tags: Array.isArray(r.tags) ? r.tags : [], icon: r.icon || null,
+    description: r.description || r.desc || '', photo: r.photo || null,
+    status: ['open', 'closed'].includes(r.status) ? r.status : 'unknown',
+    hours: r.hours || '', waitMinutes: wait === null || wait === '' ? null : Number(wait), checkedAt: r.checkedAt || null
+  };
+}
+async function loadData() {
+  const url = new URLSearchParams(location.search).get('data');
+  let raw = window.ECO_FACILITIES;
+  if (url || !raw) raw = await (await fetch(url || 'data/facilities.json', { cache: 'no-cache' })).json();
+  const list = Array.isArray(raw) ? raw : raw.facilities || raw.items || [];
+  state.facilities = list.map(normalizeFacility).filter(Boolean);
+  if (Array.isArray(raw.center)) state.center = raw.center;
+  state.categories = (raw.categories || [
+    { id: 'experience', label: '체험/탑승' }, { id: 'exhibition', label: '전시/박물관' },
+    { id: 'amenity', label: '편의시설/식당' }, { id: 'safety', label: '안전/의무실' }
+  ]).filter(c => state.facilities.some(f => f.category === c.id));
+}
+const byId = id => state.facilities.find(f => f.id === id) || null;
+const categoryLabel = id => state.categories.find(c => c.id === id)?.label || '시설';
+
+// ---------------------------------------------------------------- 아이콘
+function iconKey(f) {
+  if (f.category === 'safety') return 'medical';
+  if (f.tags.includes('toilet')) return 'toilet';
+  if (f.tags.includes('parking')) return 'parking';
+  if (f.tags.includes('nursing')) return 'nursing';
+  if (f.tags.includes('food') || f.icon === 'cafe') return 'food';
+  if (f.category === 'experience' || f.category === 'exhibition') return f.category;
+  return 'info';
+}
+function iconNode(f) {
+  const key = iconKey(f);
+  if (ICON_PATH[key]) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', ICON_PATH[key]);
+    svg.append(p); return svg;
+  }
+  const g = el('span', 'glyph', ICON_GLYPH[key] || 'i'); g.setAttribute('aria-hidden', 'true'); return g;
+}
+
+// ---------------------------------------------------------------- 계산
+function distanceM(a, b) {
+  const R = 6371008.8, r = Math.PI / 180;
+  const dLat = (b[1] - a[1]) * r, dLng = (b[0] - a[0]) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a[1] * r) * Math.cos(b[1] * r) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+const userDistance = f => state.user ? distanceM(state.user, [f.lng, f.lat]) : null;
+const walkMinutes = m => Math.max(1, Math.ceil(m * CONFIG.straightFactor / CONFIG.walkMetersPerMin));
+const formatDistance = m => m < 1000 ? `${Math.round(m / 10) * 10}m` : `${(m / 1000).toFixed(1)}km`;
+
+function matches(f) {
+  if (state.category !== 'all' && f.category !== state.category) return false;
+  if (state.tags.size && !f.tags.some(t => state.tags.has(t))) return false;
+  if (state.onlyOpen && f.status !== 'open') return false;
+  if (state.onlyWait && f.waitMinutes == null) return false;
+  if (state.query && !norm(f.name).includes(norm(state.query))) return false;
+  return true;
+}
+function sorted(list) {
+  const out = list.slice();
+  const byName = (a, b) => a.name.localeCompare(b.name, 'ko');
+  if (state.sort === 'distance' && state.user) out.sort((a, b) => userDistance(a) - userDistance(b) || byName(a, b));
+  else if (state.sort === 'wait') out.sort((a, b) => (a.waitMinutes ?? Infinity) - (b.waitMinutes ?? Infinity) || byName(a, b));
+  else out.sort(byName);
+  return out;
+}
+
+// ---------------------------------------------------------------- 바텀시트
+const isDesktop = () => innerWidth >= CONFIG.desktopMin;
+const sheet = () => $('sheet');
+function sheetPositions() {
+  const h = sheet().getBoundingClientRect().height;
+  const peek = state.view === 'detail' ? 238 : 148;
+  return { collapsed: Math.max(0, h - peek), half: Math.max(0, h - Math.round(innerHeight * 0.5)), expanded: 0, height: h };
+}
+function applySheet(y, animate = true) {
+  const s = sheet(), pos = sheetPositions();
+  s.classList.toggle('dragging', !animate);
+  s.style.setProperty('--sheet-y', `${y}px`);
+  const visible = isDesktop() ? 0 : Math.max(0, pos.height - y);
+  const shown = Math.min(visible, innerHeight * 0.55);
+  $('app').style.setProperty('--sheet-visible', `${shown}px`);
+  // 끄는 동안 버튼이 손가락보다 늦게 따라오지 않도록 위치 애니메이션을 끈다.
+  const app = $('app');
+  app.classList.toggle('sheet-dragging', !animate);
+  // 시트가 올라와 지도 버튼이 상단 검색·카테고리 줄에 닿으면 버튼을 잠시 숨긴다.
+  // 경계에서 깜빡이지 않도록 다시 나타나는 기준은 조금 더 여유 있게 둔다.
+  const top = app.querySelector('.topbar').getBoundingClientRect().bottom;
+  const gap = innerHeight - shown - 14 - app.querySelector('.map-controls').offsetHeight - top;
+  app.classList.toggle('app-hide-controls', !isDesktop() && gap < (app.classList.contains('app-hide-controls') ? 18 : 6));
+}
+function setSheet(name, animate = true) {
+  state.sheet = name;
+  sheet().dataset.state = name;
+  applySheet(sheetPositions()[name], animate);
+  $('sheetGrip').setAttribute('aria-expanded', String(name !== 'collapsed'));
+}
+function sheetVisibleHeight() {
+  if (isDesktop()) return 0;
+  const pos = sheetPositions();
+  return Math.min(pos.height - pos[state.sheet], innerHeight * 0.55);
+}
+function setupSheetDrag() {
+  const s = sheet();
+  let start = null;
+  const scrollerOf = t => t.closest('.result-list,.detail');
+  const begin = (y, target) => {
+    if (isDesktop()) return;
+    const m = /translateY\(([-\d.]+)px\)/.exec(getComputedStyle(s).transform) || null;
+    const current = m ? Number(m[1]) : new DOMMatrixReadOnly(getComputedStyle(s).transform).m42;
+    start = { y, base: current, last: y, t: performance.now(), v: 0, decided: false, drag: false, target };
+  };
+  const move = (y, ev) => {
+    if (!start) return;
+    const dy = y - start.y;
+    if (!start.decided) {
+      if (Math.abs(dy) < 6) return;
+      start.decided = true;
+      const scroller = scrollerOf(start.target);
+      const expanded = state.sheet === 'expanded';
+      // 펼친 상태에서 목록을 스크롤 중이면 시트를 끌지 않는다.
+      start.drag = !(scroller && expanded && (scroller.scrollTop > 0 || dy < 0));
+    }
+    if (!start.drag) return;
+    ev?.preventDefault();
+    const now = performance.now();
+    start.v = (y - start.last) / Math.max(1, now - start.t); start.last = y; start.t = now;
+    const pos = sheetPositions();
+    const next = Math.min(pos.collapsed + 40, Math.max(-20, start.base + dy));
+    applySheet(next, false);
+  };
+  const end = () => {
+    if (!start) return;
+    const s0 = start; start = null;
+    if (!s0.drag) { sheet().classList.remove('dragging'); return; }
+    const pos = sheetPositions();
+    const y = s0.base + (s0.last - s0.y);
+    const order = ['expanded', 'half', 'collapsed'];
+    let target;
+    if (Math.abs(s0.v) > 0.45) {
+      const i = order.indexOf(state.sheet === 'expanded' && y > pos.half ? 'half' : nearest(y, pos));
+      target = order[Math.max(0, Math.min(2, i + (s0.v > 0 ? 1 : -1)))];
+    } else target = nearest(y, pos);
+    setSheet(target);
+  };
+  const nearest = (y, pos) => ['expanded', 'half', 'collapsed'].reduce((a, b) => Math.abs(pos[b] - y) < Math.abs(pos[a] - y) ? b : a);
+
+  s.addEventListener('touchstart', e => begin(e.touches[0].clientY, e.target), { passive: true });
+  s.addEventListener('touchmove', e => move(e.touches[0].clientY, e), { passive: false });
+  s.addEventListener('touchend', end); s.addEventListener('touchcancel', end);
+  s.addEventListener('pointerdown', e => { if (e.pointerType === 'mouse' && e.target.closest('.sheet-grip,.list-head,.detail-top,.detail-card')) { begin(e.clientY, e.target); s.setPointerCapture(e.pointerId); } });
+  s.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') move(e.clientY, e); });
+  s.addEventListener('pointerup', e => { if (e.pointerType === 'mouse') end(); });
+
+  const grip = $('sheetGrip');
+  const cycle = () => setSheet(state.sheet === 'collapsed' ? 'half' : state.sheet === 'half' ? 'expanded' : 'collapsed');
+  grip.addEventListener('click', cycle);
+  grip.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cycle(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); setSheet(state.sheet === 'collapsed' ? 'half' : 'expanded'); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setSheet(state.sheet === 'expanded' ? 'half' : 'collapsed'); }
+  });
+}
+
+// ---------------------------------------------------------------- 지도
+function cameraPadding() {
+  const top = $('app').querySelector('.topbar').getBoundingClientRect().bottom + 12;
+  if (isDesktop()) return { top: 40, bottom: 40, left: 432, right: 80 };
+  return { top, bottom: sheetVisibleHeight() + 28, left: 32, right: 72 };
+}
+// 입체 보기에서 상자로 세우는 건물 (3D 모델이 없는 건물).
+// 건물마다 벽과 지붕을 따로 쌓아 '작은 집'으로 읽히게 한다. 높이·색은 data/building-style.js 에서 온다.
+//  · source 가 recon 이면 드론 점군에서 읽은 값, assumed 면 단층으로 가정한 표시용 값이다(측량값 아님).
+//  · skip 으로 표시된 외곽은 그리지 않는다(그 자리에 세울 건물이 확인되지 않은 경우).
+function blockFeatures() {
+  const S = window.ECO_BUILDING_STYLE || { buildings: {}, extras: [], palette: {}, roofThicknessM: 0.7 };
+  const pal = S.palette || {}, t = S.roofThicknessM || 0.7, out = [];
+  const color = (k, fallback) => pal[k] || k || fallback;
+  for (const f of (window.ECO_PARK?.features || [])) {
+    const p = f.properties;
+    if (p.kind !== 'building' || p.model === true || f.geometry.type !== 'Polygon') continue;
+    const st = S.buildings?.[p.id] || {};
+    if (st.skip) continue;
+    const h = st.height ?? p.height ?? 4.5;
+    out.push({ type: 'Feature', properties: { id: p.id, part: 'wall', base: 0, height: Math.max(0.5, h - t), color: color(st.wall || 'wall', '#f7ead9') }, geometry: f.geometry });
+    out.push({ type: 'Feature', properties: { id: p.id, part: 'roof', base: Math.max(0.5, h - t), height: h, color: color(st.roof || 'roof', '#e9a98f') }, geometry: f.geometry });
+  }
+  for (const e of (S.extras || [])) out.push({ type: 'Feature', properties: { id: e.id, part: e.part, base: e.base, height: e.height, color: color(e.color, '#ffffff') }, geometry: { type: 'Polygon', coordinates: [e.ring] } });
+  return { type: 'FeatureCollection', features: out };
+}
+
+// 일러스트풍 배경: 브이월드 타일을 파스텔로 누르고, 공원 도형과 3D 건물을 같은 좌표 위에 올린다.
+function buildStyle() {
+  const sources = { park: { type: 'geojson', data: window.ECO_PARK || { type: 'FeatureCollection', features: [] } }, blocks: { type: 'geojson', data: blockFeatures() } };
+  const layers = [{ id: 'bg', type: 'background', paint: { 'background-color': '#e3e8de' } }];
+  const base = window.ECO_BASEMAP;
+  if (base?.tiles?.length) {
+    sources.base = { type: 'raster', tiles: base.tiles, tileSize: 256, bounds: base.bounds, minzoom: base.minzoom || 6, maxzoom: base.maxzoom || 19, attribution: base.attribution || '' };
+    layers.push({ id: 'base', type: 'raster', source: 'base', paint: {
+      'raster-fade-duration': 0, 'raster-opacity': 1,
+      'raster-saturation': 0.45, 'raster-contrast': 0.1, 'raster-brightness-min': 0.08
+    } });
+    // 회색기를 없애고 봄 풀빛으로 전체를 물들인다.
+    layers.push({ id: 'tint', type: 'background', paint: { 'background-color': '#b9e08e', 'background-opacity': 0.26 } });
+  }
+  const pastel = window.ECO_PASTEL;
+  if (pastel) {
+    sources.pastel = { type: 'image', url: new URL(pastel.image, location.href).href, coordinates: pastel.coordinates };
+    layers.push({ id: 'pastel', type: 'raster', source: 'pastel', paint: { 'raster-fade-duration': 0 } });
+    if (pastel.core) {  // 확대할 때 쓰는 공원 중심부 고해상도 그림
+      sources.pastelCore = { type: 'image', url: new URL(pastel.core.image, location.href).href, coordinates: pastel.core.coordinates };
+      layers.push({ id: 'pastel-core', type: 'raster', source: 'pastelCore', minzoom: CONFIG.coreMinZoom, paint: { 'raster-fade-duration': 0 } });
+    }
+  }
+  const kind = k => ['==', ['get', 'kind'], k];
+  const isModel = ['==', ['get', 'model'], true];
+  layers.push(
+    // 모델이 없는 건물은 벽+지붕 블록으로 세운다(blockFeatures). 정문 캐노피처럼 외곽 자료에 없던 부재도 여기에 들어간다.
+    { id: 'building-3d', type: 'fill-extrusion', source: 'blocks', paint: {
+      'fill-extrusion-color': ['get', 'color'], 'fill-extrusion-height': ['get', 'height'], 'fill-extrusion-base': ['get', 'base'],
+      'fill-extrusion-opacity': 0.97, 'fill-extrusion-vertical-gradient': true
+    } }
+  );
+  return {
+    version: 8, sources, layers,
+    sky: { 'sky-color': '#9fd0ea', 'horizon-color': '#f4f7ef', 'fog-color': '#e3e8de', 'sky-horizon-blend': 0.7, 'horizon-fog-blend': 0.8, 'fog-ground-blend': 0.9 },
+    light: { anchor: 'map', position: [1.4, 210, 35], intensity: 0.35, color: '#fff6e0' }
+  };
+}
+
+// ------------------------------------------------- 시설 건물 그림 (실제 외관을 보고 그린 일러스트)
+// 항공영상·시설 사진에서 본 지붕 모양과 색을 그대로 옮긴 그림을 실제 좌표에 세운다.
+// 폭이 미터 단위라 줌이 바뀌어도 땅 위의 실제 크기와 비율이 같다.
+const SPRITE_SCALE = 3;   // 그림을 3배로 올려 확대해도 또렷하게
+const Z_REF = 17;         // 아래 sz를 계산한 기준 줌
+// 관광 안내 지도의 관례대로 건물을 실제보다 조금 크게 그린다. 위치는 실제 좌표 그대로다.
+const SPRITE_EXAGGERATION = 1.5;
+const metersPerPixel = lat => 156543.03392 * Math.cos(lat * Math.PI / 180) / 2 ** Z_REF;
+
+async function loadBuildingSprites() {
+  const lib = window.ECO_BUILDINGS; if (!lib) return false;
+  const names = new Set();
+  for (const f of state.facilities) { const p = lib.pick(f); if (p) names.add(p.art); }
+  for (const name of names) {
+    if (map.hasImage(name)) continue;
+    const box = lib.box(name); if (!box) continue;
+    const img = new Image();
+    const ok = await new Promise(res => { img.onload = () => res(true); img.onerror = () => res(false); img.src = lib.dataUri(name); });
+    if (!ok) { console.warn(`건물 그림을 그리지 못했어요: ${name}`); continue; }
+    const c = document.createElement('canvas');
+    c.width = Math.round(box.w * SPRITE_SCALE); c.height = Math.round(box.h * SPRITE_SCALE);
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0, c.width, c.height);
+    map.addImage(name, g.getImageData(0, 0, c.width, c.height), { pixelRatio: SPRITE_SCALE });
+  }
+  return names.size > 0;
+}
+
+// 큰 건물 '안에' 있는 작은 시설(석탄박물관 안의 수유실, 정문 안의 매표소 등)은
+// 그림을 그리지 않는다. 겹쳐 그리면 가려서 안 보이고, 건물이 둘인 것처럼 오해를 준다.
+// 핀은 그대로 남으므로 찾고 고르는 데는 지장이 없다.
+//
+// 판정은 그림 전체가 아니라 '건물 바닥'으로 한다. 그림은 위로 높게 솟으므로 전체 넓이로 재면
+// 북쪽으로 수십 m 떨어진 별개 시설(거미열차 등)까지 삼켜 버린다.
+const FOOTPRINT_DEPTH = 0.4;      // 바닥 깊이 = 폭 × 이 값
+const suppressedSprites = new Set();
+
+function spriteBoxes() {
+  const lib = window.ECO_BUILDINGS, boxes = [];
+  const latToM = 111320, lngToM = 111320 * Math.cos(state.center[1] * Math.PI / 180);
+  for (const f of state.facilities) {
+    const p = lib?.pick(f); if (!p) continue;
+    const box = lib.box(p.art); if (!box) continue;
+    const w = p.widthM * SPRITE_EXAGGERATION, h = w * box.h / box.w;
+    const d = w * FOOTPRINT_DEPTH;                    // 바닥 깊이(남북)
+    const cx = f.lng * lngToM, cy = f.lat * latToM;   // 지상 미터 기준 (줌과 무관)
+    boxes.push({ f, p, box, w, h, cx, cy, l: cx - w / 2, r: cx + w / 2, s: cy - d / 2, n: cy + d / 2 });
+  }
+  return boxes;
+}
+
+function computeSuppressed(boxes) {
+  suppressedSprites.clear();
+  const big = [...boxes].sort((a, b) => b.w - a.w);
+  for (let i = 0; i < big.length; i++) {
+    for (let j = i + 1; j < big.length; j++) {
+      const a = big[i], b = big[j];
+      if (suppressedSprites.has(a.f.id) || suppressedSprites.has(b.f.id)) continue;
+      // 작은 시설의 자리가 큰 건물의 바닥 안에 들어오면 그 건물의 일부로 본다.
+      if (b.cx >= a.l && b.cx <= a.r && b.cy >= a.s && b.cy <= a.n) suppressedSprites.add(b.f.id);
+    }
+  }
+}
+
+function buildingFeatures() {
+  const boxes = spriteBoxes();
+  computeSuppressed(boxes);
+  const out = [];
+  spriteHeightM.clear();
+  for (const { f, p, box, w, h } of boxes) {
+    if (suppressedSprites.has(f.id)) continue;
+    // 2.5D 로 선 건물은 그림을 그리지 않는다. 같은 건물이 두 번 서는 것을 막는다.
+    if (art25(f.id)) continue;
+    // 기준 줌에서 그림 폭이 실제 폭(m)이 되도록 맞춘 배율
+    spriteHeightM.set(f.id, h);
+    out.push({
+      type: 'Feature',
+      properties: { id: f.id, art: p.art, sz: (w / metersPerPixel(f.lat)) / box.w },
+      geometry: { type: 'Point', coordinates: [f.lng, f.lat] }
+    });
+  }
+  // 앞뒤 순서: 북쪽(먼 쪽) 건물을 먼저 깔고 남쪽(가까운 쪽)을 그 위에 올린다.
+  out.sort((a, b) => b.geometry.coordinates[1] - a.geometry.coordinates[1]);
+  return { type: 'FeatureCollection', features: out };
+}
+
+// 그림 지도에서는 건물 그림이 핀에 가리지 않도록, 핀을 그림 높이만큼 위로 올린다.
+const spriteHeightM = new Map();      // 시설 id → 그림의 실제 높이(m)
+function updatePinOffsets() {
+  const show = map.getLayer('buildings') && map.getLayoutProperty('buildings', 'visibility') !== 'none';
+  const mpp = 156543.03392 * Math.cos(state.center[1] * Math.PI / 180) / 2 ** map.getZoom();
+  for (const [id, { marker }] of pins) {
+    // 2.5D 가 그리는 동안에는 그 건물 꼭대기만큼, 아니면 기존 그림 높이만큼 핀을 올린다.
+    const h = art25(id) ? volumeTopM.get(id) : (show ? spriteHeightM.get(id) : 0);
+    marker.setOffset([0, h ? -Math.min(h / mpp, 260) : 0]);
+  }
+}
+
+async function addBuildingLayer() {
+  if (!await loadBuildingSprites()) return;
+  map.addSource('buildings', { type: 'geojson', data: buildingFeatures() });
+  map.addLayer({
+    id: 'buildings', type: 'symbol', source: 'buildings', minzoom: 15,
+    layout: {
+      'icon-image': ['get', 'art'], 'icon-anchor': 'bottom',
+      'icon-allow-overlap': true, 'icon-ignore-placement': true,
+      'icon-pitch-alignment': 'viewport', 'icon-rotation-alignment': 'viewport',
+      'symbol-z-order': 'source',       // 위에서 정렬한 순서를 그대로 쓴다
+      // zoom은 최상위 interpolate의 입력이어야 한다. 시설별 배율(sz)은 각 단계 값에 곱한다.
+      // ['exponential', 2] 보간이라 줌 1단계마다 정확히 2배 = 땅 위 크기가 일정하다.
+      'icon-size': ['interpolate', ['exponential', 2], ['zoom'],
+        13, ['*', ['get', 'sz'], 2 ** (13 - Z_REF)],
+        20, ['*', ['get', 'sz'], 2 ** (20 - Z_REF)]]
+    },
+    paint: { 'icon-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.6, 1] }
+  });
+}
+
+// ---------------------------------------------------------------- 3D 랜드마크 (v7.3 GLB 6개, 같은 좌표계)
+const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js';
+function landmarkLayer() {
+  const models = window.ECO_LANDMARKS || [];
+  return {
+    id: 'landmarks', type: 'custom', renderingMode: '3d',
+    onAdd(m, gl) {
+      this.items = [];
+      Promise.all([import(THREE_URL), import('three/addons/loaders/GLTFLoader.js')]).then(([THREE, { GLTFLoader }]) => {
+        this.THREE = THREE;
+        this.camera = new THREE.Camera();
+        this.renderer = new THREE.WebGLRenderer({ canvas: m.getCanvas(), context: gl, antialias: true });
+        this.renderer.autoClear = false; this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        const loader = new GLTFLoader();
+        // GLB 축: X 동, Y 위, Z 남 → 메르카토르 축: X 동, Y 남, Z 위
+        const basis = new THREE.Matrix4().set(1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+        for (const cfg of models) {
+          const o = maplibregl.MercatorCoordinate.fromLngLat(cfg.origin, 0), u = o.meterInMercatorCoordinateUnits();
+          const r = cfg.orientation.map(v => v * Math.PI / 180);
+          const matrix = new THREE.Matrix4().makeTranslation(o.x, o.y, o.z).scale(new THREE.Vector3(u, u, u))
+            .multiply(new THREE.Matrix4().makeRotationZ(r[2])).multiply(new THREE.Matrix4().makeRotationX(r[0]))
+            .multiply(new THREE.Matrix4().makeRotationY(r[1])).scale(new THREE.Vector3(...cfg.scale)).multiply(basis);
+          const scene = new THREE.Scene();
+          scene.add(new THREE.AmbientLight('#ffffff', 1.9));
+          const sun = new THREE.DirectionalLight('#fff3d6', 1.7), az = (210 - r[2] * 180 / Math.PI) * Math.PI / 180, po = 35 * Math.PI / 180;
+          sun.position.set(Math.sin(az) * Math.sin(po), Math.cos(po), -Math.cos(az) * Math.sin(po)); scene.add(sun);
+          loader.load(cfg.url, g => {
+            // 모델의 회색을 지도와 같은 파스텔 톤으로 밝힌다.
+            const warm = new THREE.Color('#fff1e0'), seen = new Set();
+            g.scene.traverse(n => {
+              for (const mat of Array.isArray(n.material) ? n.material : n.material ? [n.material] : []) {
+                if (seen.has(mat) || !mat.color) continue;
+                seen.add(mat); mat.color.lerp(warm, 0.5); if ('roughness' in mat) mat.roughness = 1; if ('metalness' in mat) mat.metalness = 0;
+              }
+            });
+            scene.add(g.scene); this.items.push({ scene, matrix, name: cfg.name }); m.triggerRepaint(); },
+            undefined, () => console.warn(`3D 모델을 불러오지 못했어요: ${cfg.name}`));
+        }
+      }).catch(() => console.warn('3D 렌더러를 준비하지 못해 평면 지도로 표시합니다.'));
+    },
+    render(gl, args) {
+      if (!this.renderer || !this.items.length) return;
+      const main = new this.THREE.Matrix4().fromArray(args?.defaultProjectionData?.mainMatrix || args);
+      this.renderer.resetState();
+      for (const it of this.items) {
+        // 2.5D 가 지금 대신 세우고 있는 건물의 GLB 는 건너뛴다.
+        // 모델 파일·목록(data/landmarks.js)은 그대로 두고 여기서 그릴지만 고른다.
+        if (suppressedLandmarks.has(it.name) && volumes25?.isVisible()) continue;
+        this.camera.projectionMatrix = main.clone().multiply(it.matrix);
+        this.renderer.render(it.scene, this.camera);
+      }
+    }
+  };
+}
+
+// ------------------------------------------------- 2.5D 건물 불러오기·연결 (volumes.js)
+// volumes.js 가 확정한 계약 (qa/renderer-review.md, 2026-11-08):
+//   createVolumes({ volumes, park, onStateChange }) →
+//     { layer, scene, buildings, failed, facilityIds, renderedFacilityIds, stats, errors, setVisible, isVisible }
+//   facilityIds         GPU 준비까지 끝난 시설. 기존 그림을 끄는 근거는 이것 하나뿐이다.
+//   renderedFacilityIds 실제로 그려진 시설. 준비와 구분해서 본다.
+//   scene·buildings     준비 전에도 있으므로 끄는 근거로 쓰지 않는다.
+//   errors              치명적이지 않은 것(글자 텍스처 등)도 들어오므로 복귀 판단에 쓰지 않는다.
+//   onStateChange       준비·첫 draw·실패·제거 뒤 microtask. 호출 횟수가 아니라 넘어온 Set 을 쓴다.
+function loadScript(src) {
+  return new Promise((ok, no) => {
+    const s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload = () => ok();
+    s.onerror = () => no(new Error(`스크립트를 불러오지 못했어요: ${src}`));
+    document.head.append(s);
+  });
+}
+
+// 2.5D 가 대신 세운 시설과 같은 자리의 GLB 랜드마크 이름을 찾는다.
+// 이름이 같으면 그것, 아니면 30m 안에 있는 것. data/landmarks.js 는 고치지 않는다.
+function landmarkNameFor(facilityId) {
+  const f = byId(facilityId); if (!f) return null;
+  const models = window.ECO_LANDMARKS || [];
+  const same = models.find(m => m.name === f.name);
+  if (same) return same.name;
+  let best = null, bestD = 30;
+  for (const m of models) {
+    const d = distanceM(m.origin, [f.lng, f.lat]);
+    if (d < bestD) { bestD = d; best = m; }
+  }
+  return best?.name ?? null;
+}
+
+const sameIds = (a, b) => a.size === b.size && [...a].every(x => b.has(x));
+
+// 준비된 시설이 바뀔 때만 기존 그림을 다시 고른다. Set 에서 빠진 시설은 원래 표시로 돌아간다.
+function applyVolumeState(s) {
+  const next = s?.facilityIds ?? new Set();
+  if (sameIds(next, ready25)) return;
+  ready25.clear(); suppressedLandmarks.clear();
+  for (const id of next) {
+    ready25.add(id);
+    const name = landmarkNameFor(id);
+    if (name) suppressedLandmarks.add(name);
+  }
+  map.getSource('buildings')?.setData(buildingFeatures());
+  updatePinOffsets();
+  map.triggerRepaint();             // GLB 레이어가 새 선택으로 다시 그려지도록
+}
+
+async function start25D() {
+  try {
+    // 설정 데이터는 index.html 에 없다. 여기서 script 로 붙인다(index.html 은 건드리지 않는다).
+    if (!window.ECO_VOLUMES) await loadScript('data/volumes.js?v=20261108a');
+    if (!window.ECO_VOLUMES) throw new Error('window.ECO_VOLUMES 가 비어 있어요.');
+    const mod = await import('./volumes.js?v=20261108a');
+    const unit = mod.createVolumes({
+      volumes: window.ECO_VOLUMES, park: window.ECO_PARK, onStateChange: applyVolumeState
+    });
+    for (const b of unit.buildings) if (b.facility) volumeTopM.set(b.facility, b.top);
+    // 남은 건물 그림이 2.5D 앞에 겹치도록 그림 레이어 바로 앞에 넣는다.
+    map.addLayer(unit.layer, map.getLayer('buildings') ? 'buildings' : undefined);
+    volumes25 = unit;
+    window.ecoVolumes = unit;       // 디버그·검사용
+    unit.setVisible(viewIs3d());    // 지금 보기 방식에 맞춘다 (set3d 는 이미 지나갔다)
+    applyVolumeState({ facilityIds: unit.facilityIds });
+  } catch (err) {
+    // 2.5D 만 포기한다. 지도·핀·필터·길찾기와 기존 건물 그림은 그대로 남는다.
+    console.warn('2.5D 건물을 준비하지 못해 기존 그림으로 표시합니다.', err);
+  }
+}
+
+// 입체 보기 ↔ 위에서 보기
+const viewIs3d = () => map.getPitch() > 5;
+function set3d(on, animate = true) {
+  if (on && window.ECO_LANDMARKS?.length && !map.getLayer('landmarks')) map.addLayer(landmarkLayer());
+  // 그림 지도(위에서 보기)에서는 손으로 그린 건물 그림을, 입체 보기에서는 3D 모델을 쓴다.
+  for (const id of ['landmarks', 'building-3d']) if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  if (map.getLayer('buildings')) map.setLayoutProperty('buildings', 'visibility', on ? 'none' : 'visible');
+  // 2.5D 도 입체 보기에서만 쓴다. 위에서 내려다보면 2.5D 는 밋밋한 흰 원판이라
+  // 휴대폰 기본 화면에서 '우리 건물'로 알아보기 어렵다. 그 화면은 손으로 그린 그림이 낫다.
+  // (근거: qa 캡처 w360/w390/w430 의 위에서 보기. 코디의 pitch 0 유지 권고와 다른 선택이며
+  //  어느 쪽이든 같은 건물이 두 번 그려지지 않는 것은 art25() 로 지킨다.)
+  volumes25?.setVisible(on);
+  map.getSource('buildings')?.setData(buildingFeatures());
+  updatePinOffsets();
+  map.easeTo({ pitch: on ? CONFIG.pitch3d : 0, duration: animate ? 600 : 0 });
+  const b = $('viewToggle');
+  b.textContent = on ? '2D' : '3D';
+  b.setAttribute('aria-label', on ? '위에서 보기(2D)로 바꾸기' : '입체 보기(3D)로 바꾸기');
+  b.setAttribute('aria-pressed', String(on));
+  try { localStorage.setItem('eco-view', on ? '3d' : '2d'); } catch { /* 저장 불가 환경 */ }
+}
+
+// 지점을 '가려지지 않은 지도 영역'의 가운데로 옮긴다. 지도에 padding을 남기지 않도록 offset을 쓴다.
+function focusOn(lngLat, zoom, duration = 500) {
+  const p = cameraPadding();
+  map.easeTo({ center: lngLat, zoom, offset: [(p.left - p.right) / 2, (p.top - p.bottom) / 2], duration });
+}
+function boundsOf(list) {
+  const b = new maplibregl.LngLatBounds();
+  for (const f of list) b.extend([f.lng, f.lat]);
+  return b;
+}
+// 처음 화면: 시설 좌표의 중앙값에서 가까운, 시설이 모인 공원 중심부만 담는다.
+function coreFacilities() {
+  const median = a => a.slice().sort((x, y) => x - y)[a.length >> 1];
+  const c = [median(state.facilities.map(f => f.lng)), median(state.facilities.map(f => f.lat))];
+  const core = state.facilities.filter(f => distanceM(c, [f.lng, f.lat]) <= CONFIG.coreRadiusM);
+  return core.length >= 3 ? core : state.facilities;
+}
+function fitAll(animate = true, list = state.facilities.filter(matches)) {
+  if (!list.length) return;
+  const pad = cameraPadding(), pitch = map.getPitch(), bearing = map.getBearing();
+  const cam = map.cameraForBounds(boundsOf(list), { padding: pad, maxZoom: CONFIG.fitMaxZoom, bearing, pitch: 0 });
+  if (!cam) return;
+  let center = cam.center, zoom = cam.zoom;
+  if (pitch > 5) {
+    // 기울이면 가까운 쪽은 커지고 먼 쪽은 작아진다. 실제로 투영해 보며 모든 시설이
+    // 가려지지 않는 영역(상단 바와 시트 사이)에 들어오는 가장 큰 줌과 가운데를 찾는다.
+    const saved = { center: map.getCenter(), zoom: map.getZoom(), pitch, bearing };
+    const box = { l: pad.left, r: innerWidth - pad.right, t: pad.top, b: innerHeight - pad.bottom };
+    const extent = (c, z) => {
+      map.jumpTo({ center: c, zoom: z, pitch, bearing });
+      const ps = list.map(f => map.project([f.lng, f.lat]));
+      return { l: Math.min(...ps.map(p => p.x)), r: Math.max(...ps.map(p => p.x)), t: Math.min(...ps.map(p => p.y)) - 52, b: Math.max(...ps.map(p => p.y)) };
+    };
+    for (let pass = 0; pass < 2; pass++) {
+      for (zoom = Math.min(CONFIG.fitMaxZoom, cam.zoom + 0.8); zoom > cam.zoom - 1.5; zoom -= 0.05) {
+        const e = extent(center, zoom);
+        if (e.l >= box.l && e.r <= box.r && e.t >= box.t && e.b <= box.b) break;
+      }
+      // 시설 묶음의 화면 가운데를 가려지지 않은 영역 가운데로 옮긴다.
+      const e = extent(center, zoom);
+      const dx = (e.l + e.r) / 2 - (box.l + box.r) / 2, dy = (e.t + e.b) / 2 - (box.t + box.b) / 2;
+      center = map.unproject([innerWidth / 2 + dx, innerHeight / 2 + dy]);
+    }
+    map.jumpTo(saved);
+  }
+  map.easeTo({ center, zoom, pitch, bearing, duration: animate ? 600 : 0 });
+}
+
+function createPin(f) {
+  const b = el('button', 'pin');
+  b.type = 'button';
+  b.style.setProperty('--pin-c', CATEGORY_COLOR[f.category]);
+  b.setAttribute('aria-label', `${f.name}, ${categoryLabel(f.category)}`);
+  const head = el('span', 'pin-head'); head.append(iconNode(f));
+  b.append(head, el('span', 'pin-label', f.name));
+  if (f.waitMinutes != null) b.append(el('span', 'pin-wait', `${f.waitMinutes}분`));
+  b.addEventListener('click', e => { e.stopPropagation(); select(f.id); });
+  const marker = new maplibregl.Marker({ element: b, anchor: 'bottom' }).setLngLat([f.lng, f.lat]).addTo(map);
+  pins.set(f.id, { marker, el: b });
+}
+function updateLabels() {
+  // minzoom: 기준 줌 근처의 깜빡임을 막기 위해 0.05 히스테리시스를 둔다.
+  // 애니메이션이 16.999…에서 멈춰도 이름이 나오도록 0.01 여유를 준다.
+  const z = map.getZoom(), c = map.getContainer(), on = c.classList.contains('show-labels');
+  if (!on && z >= CONFIG.labelMinZoom - 0.01) c.classList.add('show-labels');
+  else if (on && z < CONFIG.labelMinZoom - 0.05) c.classList.remove('show-labels');
+}
+// 이름표끼리 겹치면 우선순위가 낮은 쪽을 숨긴다. 선택 시설 > 체험·전시 > 그 밖의 시설.
+const LABEL_RANK = { experience: 1, exhibition: 1, safety: 2, amenity: 3 };
+function declutterLabels() {
+  const showAll = map.getContainer().classList.contains('show-labels');
+  const items = [];
+  for (const [id, { el: b }] of pins) {
+    const label = b.querySelector('.pin-label');
+    label.classList.remove('collide');
+    if (b.hidden || (!showAll && id !== state.selected)) continue;
+    const f = byId(id);
+    items.push({ label, rank: id === state.selected ? 0 : LABEL_RANK[f.category] ?? 3, name: f.name });
+  }
+  items.sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name, 'ko'));
+  const placed = [];
+  for (const it of items) {
+    const r = it.label.getBoundingClientRect();
+    const hit = placed.some(p => r.left < p.right + 2 && r.right > p.left - 2 && r.top < p.bottom + 1 && r.bottom > p.top - 1);
+    if (hit) it.label.classList.add('collide'); else placed.push(r);
+  }
+}
+function updatePins() {
+  for (const m of clusterMarkers) m.remove();
+  clusterMarkers = [];
+  const visible = state.facilities.filter(matches);
+  const visibleIds = new Set(visible.map(f => f.id));
+  const groups = [];
+  if (map.getZoom() < CONFIG.clusterBelowZoom) {
+    // 화면 좌표 기준으로 가까운 핀을 묶는다. 선택한 시설은 묶지 않는다.
+    const pts = visible.filter(f => f.id !== state.selected).map(f => ({ f, p: map.project([f.lng, f.lat]) }));
+    const used = new Set();
+    for (const a of pts) {
+      if (used.has(a.f.id)) continue;
+      const g = pts.filter(b => !used.has(b.f.id) && Math.hypot(a.p.x - b.p.x, a.p.y - b.p.y) <= CONFIG.clusterRadiusPx);
+      g.forEach(b => used.add(b.f.id));
+      if (g.length > 1) groups.push(g.map(x => x.f));
+    }
+  }
+  const clustered = new Set(groups.flat().map(f => f.id));
+  for (const [id, { el: b }] of pins) {
+    b.hidden = !visibleIds.has(id) || clustered.has(id);
+    b.classList.toggle('selected', id === state.selected);
+    b.setAttribute('aria-pressed', String(id === state.selected));
+    b.parentElement && (b.style.zIndex = id === state.selected ? '10' : '');
+  }
+  for (const g of groups) {
+    const c = el('button', 'cluster', String(g.length));
+    c.type = 'button';
+    c.setAttribute('aria-label', `시설 ${g.length}곳 묶음, 눌러서 확대`);
+    const center = [g.reduce((s, f) => s + f.lng, 0) / g.length, g.reduce((s, f) => s + f.lat, 0) / g.length];
+    c.addEventListener('click', e => {
+      e.stopPropagation();
+      map.fitBounds(boundsOf(g), { padding: cameraPadding(), maxZoom: Math.max(CONFIG.clusterBelowZoom + 0.3, map.getZoom() + 1.5), pitch: map.getPitch(), bearing: map.getBearing(), duration: 500 });
+    });
+    clusterMarkers.push(new maplibregl.Marker({ element: c }).setLngLat(center).addTo(map));
+  }
+  requestAnimationFrame(declutterLabels);
+}
+
+// ---------------------------------------------------------------- 목록
+function renderChips() {
+  const box = $('categoryChips'); box.textContent = '';
+  const all = [{ id: 'all', label: '전체' }, ...state.categories];
+  for (const c of all) {
+    const b = el('button', 'chip'); b.type = 'button'; b.setAttribute('role', 'tab'); b.dataset.id = c.id;
+    if (c.id !== 'all') { b.style.setProperty('--chip-c', CATEGORY_COLOR[c.id]); b.append(el('span', 'dot')); }
+    b.append(document.createTextNode(c.label));
+    b.addEventListener('click', () => { state.category = c.id; refresh({ fit: true }); b.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' }); });
+    box.append(b);
+  }
+}
+function statusNode(f) { return el('span', `status ${f.status}`, STATUS_LABEL[f.status]); }
+function renderList() {
+  const list = sorted(state.facilities.filter(matches));
+  const ul = $('resultList'); ul.textContent = '';
+  for (const f of list) {
+    const li = el('li'), b = el('button', 'result'); b.type = 'button';
+    b.style.setProperty('--pin-c', CATEGORY_COLOR[f.category]);
+    const icon = el('span', 'result-icon'); icon.append(iconNode(f));
+    const text = el('span', 'result-text'); text.append(el('span', 'result-name', f.name));
+    const sub = el('span', 'result-sub', `${categoryLabel(f.category)} · `); sub.append(statusNode(f)); text.append(sub);
+    const side = el('span', 'result-side');
+    if (f.waitMinutes != null) side.append(el('span', 'wait-badge', `${f.waitMinutes}분`));
+    else if (state.user) side.textContent = formatDistance(userDistance(f));
+    b.append(icon, text, side);
+    b.addEventListener('click', () => select(f.id));
+    li.append(b); ul.append(li);
+  }
+  $('resultCount').textContent = list.length;
+  $('emptyState').hidden = list.length > 0;
+  ul.hidden = list.length === 0;
+  for (const c of $('categoryChips').children) c.setAttribute('aria-selected', String(c.dataset.id === state.category));
+  const filterN = state.tags.size + (state.onlyOpen ? 1 : 0) + (state.onlyWait ? 1 : 0);
+  $('filterCount').hidden = !filterN; $('filterCount').textContent = filterN;
+  $('filterButton').classList.toggle('active', filterN > 0);
+  $('searchClear').hidden = !state.query;
+  const distOpt = $('sortSelect').querySelector('[value=distance]');
+  distOpt.disabled = !state.user;
+  $('sortSelect').querySelector('[value=wait]').disabled = !state.facilities.some(f => f.waitMinutes != null);
+}
+
+// ---------------------------------------------------------------- 상세
+function renderDetail(f) {
+  const d = $('detailView');
+  d.style.setProperty('--pin-c', CATEGORY_COLOR[f.category]);
+  $('detailName').textContent = f.name;
+  $('detailCategory').textContent = categoryLabel(f.category);
+  const thumb = $('detailThumb'); thumb.textContent = ''; thumb.style.backgroundImage = '';
+  if (f.photo) thumb.style.backgroundImage = `url("data/${f.photo}")`; else thumb.append(iconNode(f));
+  const dist = userDistance(f);
+  const meta = [];
+  // 보행로·참고 동선으로 계산되면 그 값을, 안 되면 직선 기준임을 밝힌다.
+  const trip = wf?.travelInfo(f);
+  if (trip) meta.push(`${formatDistance(trip.distance)} · ${trip.text}`);
+  else if (dist != null) meta.push(`${formatDistance(dist)} · 직선 기준 걸어서 약 ${walkMinutes(dist)}분`);
+  if (f.hours) meta.push(f.hours);
+  $('detailMeta').textContent = meta.join(' · ') || (f.tags.map(t => TAG_LABEL[t]).filter(Boolean).join(' · ') || ' ');
+  $('detailStatus').textContent = STATUS_LABEL[f.status];
+  $('detailWait').textContent = f.waitMinutes != null ? `약 ${f.waitMinutes}분` : '정보 없음';
+  $('detailDistance').textContent = dist != null ? formatDistance(dist) : '내 위치 필요';
+  $('detailDescription').textContent = f.description || '시설 안내는 현장 안내판을 확인해 주세요.';
+  const img = $('detailPhoto');
+  img.hidden = !f.photo; if (f.photo) { img.src = `data/${f.photo}`; img.alt = `${f.name} 사진`; }
+  d.scrollTop = 0;
+}
+function showView(view) {
+  state.view = view;
+  $('listView').hidden = view !== 'list';
+  $('detailView').hidden = view !== 'detail';
+  $('routeView').hidden = view !== 'route';
+  sheet().setAttribute('aria-label', view === 'route' ? '길찾기' : view === 'detail' ? '시설 정보' : '시설 목록');
+  if (view === 'route' && !isDesktop()) setSheet('expanded');
+}
+
+// ---------------------------------------------------------------- 선택
+function select(id, { push = true, fly = true } = {}) {
+  const f = byId(id); if (!f) return;
+  const reselect = state.selected === id;
+  state.selected = id;
+  renderDetail(f); showView('detail');
+  if (!isDesktop()) setSheet(reselect && state.sheet === 'expanded' ? 'expanded' : 'half');
+  updatePins();
+  if (fly) focusOn([f.lng, f.lat], Math.max(map.getZoom(), CONFIG.selectZoom), 550);
+  writeHash(push);
+  $('detailName').tabIndex = -1;
+  setTimeout(() => $('detailName').focus({ preventScroll: true }), 0);
+}
+function deselect({ push = true } = {}) {
+  if (!state.selected) return;
+  const prev = state.selected;
+  state.selected = null;
+  wf?.close();
+  showView('list'); if (!isDesktop()) setSheet('collapsed');
+  updatePins(); writeHash(push);
+  pins.get(prev)?.el.focus({ preventScroll: true });
+}
+
+// ---------------------------------------------------------------- URL 상태 (#f=시설&c=카테고리&q=검색)
+function writeHash(push) {
+  const p = new URLSearchParams();
+  if (state.selected) p.set('f', state.selected);
+  if (state.category !== 'all') p.set('c', state.category);
+  if (state.query) p.set('q', state.query);
+  if (state.tags.size) p.set('t', [...state.tags].join(','));
+  const next = p.toString() ? `#${p}` : '';
+  if (next === location.hash) return;
+  history[push ? 'pushState' : 'replaceState'](null, '', next || location.pathname + location.search);
+}
+function readHash({ fly = false } = {}) {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const c = p.get('c');
+  state.category = c && state.categories.some(x => x.id === c) ? c : 'all';
+  state.query = p.get('q') || ''; $('searchInput').value = state.query;
+  state.tags = new Set((p.get('t') || '').split(',').filter(t => TAG_LABEL[t]));
+  refresh({ write: false });
+  const f = p.get('f');
+  if (f && byId(f)) select(f, { push: false, fly }); else deselect({ push: false });
+}
+
+// ---------------------------------------------------------------- 갱신
+function refresh({ fit = false, write = true } = {}) {
+  if (state.selected && !matches(byId(state.selected))) { state.selected = null; showView('list'); }
+  renderList();
+  updatePins();
+  if (fit) fitAll();
+  if (write) writeHash(false);
+}
+
+// ---------------------------------------------------------------- 필터 다이얼로그
+function setupFilter() {
+  const dlg = $('filterDialog'), box = $('tagOptions');
+  const present = Object.keys(TAG_LABEL).filter(t => state.facilities.some(f => f.tags.includes(t)));
+  for (const t of present) {
+    const l = el('label', 'option'), i = el('input'); i.type = 'checkbox'; i.value = t;
+    l.append(i, el('span', null, TAG_LABEL[t])); box.append(l);
+  }
+  $('optWait').closest('label').hidden = !state.facilities.some(f => f.waitMinutes != null);
+  const load = () => {
+    for (const i of box.querySelectorAll('input')) i.checked = state.tags.has(i.value);
+    $('optOpen').checked = state.onlyOpen; $('optWait').checked = state.onlyWait;
+  };
+  $('filterButton').addEventListener('click', () => { load(); dlg.showModal(); });
+  $('filterClear').addEventListener('click', () => { for (const i of dlg.querySelectorAll('input')) i.checked = false; });
+  dlg.addEventListener('close', () => {
+    if (dlg.returnValue !== 'apply') return;
+    state.tags = new Set([...box.querySelectorAll('input:checked')].map(i => i.value));
+    state.onlyOpen = $('optOpen').checked; state.onlyWait = $('optWait').checked;
+    refresh({ fit: true });
+  });
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close('cancel'); });
+}
+
+// ---------------------------------------------------------------- 내 위치 (버튼을 누를 때만, 저장·전송 없음)
+let toastTimer = 0;
+function toast(msg, ms = 3200) {
+  const t = $('toast'); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, ms);
+}
+// 길 안내 중 위치가 바뀔 때 쓴다. 지도를 움직이는 일은 길 안내 쪽이 맡는다. 저장·전송은 하지 않는다.
+function trackUser(coords, accuracy) {
+  state.user = coords; userAccuracy = accuracy;
+  if (!userMarker) { const d = el('div', 'user-dot'); d.setAttribute('aria-label', '내 위치'); userMarker = new maplibregl.Marker({ element: d }).setLngLat(coords).addTo(map); }
+  else userMarker.setLngLat(coords);
+  wf?.onLocation(coords);
+}
+function locate() {
+  const btn = $('locateButton');
+  if (!window.isSecureContext) return toast('내 위치는 HTTPS 주소에서만 확인할 수 있어요.');
+  if (!navigator.geolocation) return toast('이 브라우저는 위치 확인을 지원하지 않아요.');
+  btn.classList.add('busy');
+  navigator.geolocation.getCurrentPosition(pos => {
+    btn.classList.remove('busy'); btn.classList.add('on');
+    state.user = [pos.coords.longitude, pos.coords.latitude];
+    userAccuracy = pos.coords.accuracy;
+    if (!userMarker) { const d = el('div', 'user-dot'); d.setAttribute('aria-label', '내 위치'); userMarker = new maplibregl.Marker({ element: d }).setLngLat(state.user).addTo(map); }
+    else userMarker.setLngLat(state.user);
+    const far = distanceM(state.user, state.center);
+    if (far > CONFIG.farFromParkM) toast(`공원에서 약 ${formatDistance(far)} 떨어져 있어요. 거리는 직선 기준이에요.`);
+    else { focusOn(state.user, Math.max(map.getZoom(), CONFIG.selectZoom), 600); if (pos.coords.accuracy > 50) toast(`위치 정확도가 낮아요(약 ${Math.round(pos.coords.accuracy)}m).`); }
+    if (state.sort === 'name') { state.sort = 'distance'; $('sortSelect').value = 'distance'; }
+    wf?.onLocation(state.user);
+    renderList(); if (state.selected) renderDetail(byId(state.selected));
+  }, err => {
+    btn.classList.remove('busy');
+    toast(err.code === 1 ? '위치 권한이 꺼져 있어요. 브라우저 설정에서 허용해 주세요.' : err.code === 3 ? '위치를 찾는 데 시간이 오래 걸려요. 다시 시도해 주세요.' : '지금은 위치를 확인할 수 없어요.');
+  }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 15000 });
+}
+
+// ---------------------------------------------------------------- 시작
+async function main() {
+  await loadData();
+  renderChips(); setupFilter(); setupSheetDrag();
+
+  const lngs = state.facilities.map(f => f.lng), lats = state.facilities.map(f => f.lat), pad = 0.008;
+  map = new maplibregl.Map({
+    container: 'map', style: buildStyle(), center: state.center, zoom: 16, minZoom: CONFIG.minZoom, maxZoom: CONFIG.maxZoom,
+    maxBounds: [[Math.min(...lngs) - pad, Math.min(...lats) - pad], [Math.max(...lngs) + pad, Math.max(...lats) + pad]],
+    pitchWithRotate: false, dragRotate: false, touchPitch: false, attributionControl: false
+  });
+  map.touchZoomRotate.disableRotation();
+  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: '© OpenStreetMap' }), 'bottom-left'); // 오른쪽 지도 버튼과 겹치지 않게 왼쪽 아래
+  window.ecoMap = map; // 디버그·검사용
+  for (const f of state.facilities) createPin(f);
+  // 기울기 50°에서는 지도 엔진의 수평선이 화면 밖이라, 화면 위쪽에 하늘 그라데이션을 직접 깐다.
+  map.getCanvas().after($('sky')); // 캔버스 바로 위, 핀 아래에 놓는다.
+  const updateSky = () => { $('sky').style.opacity = String(Math.min(1, map.getPitch() / CONFIG.pitch3d)); };
+  map.on('pitch', updateSky);
+  map.on('zoom', () => { updateLabels(); updatePinOffsets(); });
+  map.on('moveend', () => { updatePins(); declutterLabels(); });
+  map.on('click', () => { if (state.selected) deselect(); else if (state.sheet !== 'collapsed' && !isDesktop()) setSheet('collapsed'); });
+  map.on('dragstart', () => { if (!isDesktop() && state.sheet === 'expanded') setSheet(state.selected ? 'half' : 'collapsed'); });
+
+  $('zoomIn').addEventListener('click', () => map.zoomIn({ duration: 250 }));
+  $('zoomOut').addEventListener('click', () => map.zoomOut({ duration: 250 }));
+  $('resetView').addEventListener('click', () => { deselect(); fitAll(); });
+  $('locateButton').addEventListener('click', locate);
+  $('detailBack').addEventListener('click', () => { deselect(); setSheet('half'); });
+  $('detailClose').addEventListener('click', () => deselect());
+  $('actionRoute').addEventListener('click', () => { if (state.selected) wf?.open(state.selected); });
+  $('actionCenter').addEventListener('click', () => { const f = byId(state.selected); if (f) { setSheet('collapsed'); focusOn([f.lng, f.lat], Math.max(map.getZoom(), CONFIG.detailZoom), 500); } });
+  $('actionShare').addEventListener('click', async () => {
+    const f = byId(state.selected); if (!f) return;
+    const url = location.href;
+    try { if (navigator.share) await navigator.share({ title: f.name, text: `에코월드 ${f.name}`, url }); else { await navigator.clipboard.writeText(url); toast('링크를 복사했어요.'); } } catch { /* 사용자가 취소 */ }
+  });
+  $('emptyReset').addEventListener('click', () => {
+    state.category = 'all'; state.query = ''; state.tags.clear(); state.onlyOpen = state.onlyWait = false;
+    $('searchInput').value = ''; refresh({ fit: true });
+  });
+  let searchTimer = 0;
+  $('searchInput').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { state.query = e.target.value.trim(); refresh(); if (!state.selected && !isDesktop() && state.query) setSheet('half'); }, 120);
+  });
+  $('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') { const first = sorted(state.facilities.filter(matches))[0]; if (first) { e.target.blur(); select(first.id); } } });
+  $('searchClear').addEventListener('click', () => { $('searchInput').value = ''; state.query = ''; refresh(); $('searchInput').focus(); });
+  $('sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderList(); });
+  addEventListener('popstate', () => readHash({ fly: true }));
+  addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || $('filterDialog').open) return;
+    if (state.selected) deselect(); else if (state.sheet !== 'collapsed') setSheet('collapsed');
+  });
+  let resizeTimer = 0;
+  addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => setSheet(state.sheet, false), 80); });
+
+  // 기본은 손으로 그린 '그림 지도'(위에서 보기)다. 3D 모델 보기는 버튼으로 바꾼다.
+  let saved3d = false;
+  try { saved3d = localStorage.getItem('eco-view') === '3d'; } catch { /* 기본은 그림 지도 */ }
+  $('viewToggle').addEventListener('click', () => set3d(!viewIs3d()));
+
+  setSheet('collapsed', false);
+  map.once('load', async () => {
+    await addBuildingLayer();
+    updatePinOffsets();
+    wf = createWayfinding({
+      map, maplibregl, el, $, toast, focusOn, formatDistance,
+      facilities: state.facilities, center: state.center,
+      byId, showView, cameraPadding, set3d, viewIs3d, trackUser, app: $('app'),
+      user: () => state.user, accuracy: () => userAccuracy,
+      selectQuiet: id => select(id, { push: false, fly: false }),
+      closeAll: () => deselect()
+    });
+    window.ecoWf = wf; // 디버그·검사용
+    set3d(saved3d, false);
+    updateSky();
+    fitAll(false, coreFacilities());
+    updateLabels();
+    readHash({ fly: true });
+    // 공유 링크에 필터가 있으면 중심부 대신 그 결과에 맞춘다.
+    if (!state.selected && (state.category !== 'all' || state.query || state.tags.size)) fitAll(false);
+    document.documentElement.dataset.ready = 'true';
+    // 2.5D 는 지도가 다 뜬 뒤에 따로 불러온다. await 하지 않으므로 여기까지의 동작을 늦추지 않는다.
+    start25D();
+  });
+}
+main().catch(err => { console.error(err); toast('시설 정보를 불러오지 못했어요. 새로고침해 주세요.', 8000); });
